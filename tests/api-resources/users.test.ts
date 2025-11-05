@@ -1,0 +1,31 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import Elicit from 'elicit-labs';
+
+const client = new Elicit({
+  apiKey: 'My API Key',
+  baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
+});
+
+describe('resource users', () => {
+  // Prism tests are disabled
+  test.skip('createOrGet: only required params', async () => {
+    const responsePromise = client.users.createOrGet({ email: 'user@example.com', name: 'John Doe' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('createOrGet: required and optional params', async () => {
+    const response = await client.users.createOrGet({
+      email: 'user@example.com',
+      name: 'John Doe',
+      org_user_id: 'org_123456',
+    });
+  });
+});
