@@ -18,12 +18,12 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Health, HealthCheckResponse } from './resources/health';
 import {
-  Machine,
-  MachineLearnParams,
-  MachineLearnResponse,
-  MachineQueryParams,
-  MachineQueryResponse,
-} from './resources/machine';
+  Modal,
+  ModalLearnParams,
+  ModalLearnResponse,
+  ModalQueryParams,
+  ModalQueryResponse,
+} from './resources/modal';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
 import { type Fetch } from './internal/builtin-types';
@@ -723,13 +723,13 @@ export class Elicit {
 
   static toFile = Uploads.toFile;
 
-  machine: API.Machine = new API.Machine(this);
+  modal: API.Modal = new API.Modal(this);
   users: API.Users = new API.Users(this);
   data: API.Data = new API.Data(this);
   health: API.Health = new API.Health(this);
 }
 
-Elicit.Machine = Machine;
+Elicit.Modal = Modal;
 Elicit.Users = Users;
 Elicit.Data = Data;
 Elicit.Health = Health;
@@ -738,11 +738,11 @@ export declare namespace Elicit {
   export type RequestOptions = Opts.RequestOptions;
 
   export {
-    Machine as Machine,
-    type MachineLearnResponse as MachineLearnResponse,
-    type MachineQueryResponse as MachineQueryResponse,
-    type MachineLearnParams as MachineLearnParams,
-    type MachineQueryParams as MachineQueryParams,
+    Modal as Modal,
+    type ModalLearnResponse as ModalLearnResponse,
+    type ModalQueryResponse as ModalQueryResponse,
+    type ModalLearnParams as ModalLearnParams,
+    type ModalQueryParams as ModalQueryParams,
   };
 
   export {

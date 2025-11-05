@@ -4,7 +4,7 @@ import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
-export class Machine extends APIResource {
+export class Modal extends APIResource {
   /**
    * Process a conversation message and update the user's memory system.
    *
@@ -40,14 +40,14 @@ export class Machine extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.machine.learn({
+   * const response = await client.modal.learn({
    *   message: { content: 'bar', role: 'bar' },
    *   user_id: '123e4567-e89b-12d3-a456-426614174000',
    * });
    * ```
    */
-  learn(body: MachineLearnParams, options?: RequestOptions): APIPromise<MachineLearnResponse> {
-    return this._client.post('/v1/machine/learn', { body, ...options });
+  learn(body: ModalLearnParams, options?: RequestOptions): APIPromise<ModalLearnResponse> {
+    return this._client.post('/v1/modal/learn', { body, ...options });
   }
 
   /**
@@ -83,21 +83,21 @@ export class Machine extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.machine.query({
+   * const response = await client.modal.query({
    *   question: 'What are my preferences for morning routines?',
    *   user_id: '123e4567-e89b-12d3-a456-426614174000',
    * });
    * ```
    */
-  query(body: MachineQueryParams, options?: RequestOptions): APIPromise<MachineQueryResponse> {
-    return this._client.post('/v1/machine/query', { body, ...options });
+  query(body: ModalQueryParams, options?: RequestOptions): APIPromise<ModalQueryResponse> {
+    return this._client.post('/v1/modal/query', { body, ...options });
   }
 }
 
 /**
  * Response model for learning processing
  */
-export interface MachineLearnResponse {
+export interface ModalLearnResponse {
   /**
    * Status message about the learning process
    */
@@ -122,7 +122,7 @@ export interface MachineLearnResponse {
 /**
  * Response model for memory query processing
  */
-export interface MachineQueryResponse {
+export interface ModalQueryResponse {
   /**
    * Edited prompt for the query
    */
@@ -139,7 +139,7 @@ export interface MachineQueryResponse {
   success?: boolean;
 }
 
-export interface MachineLearnParams {
+export interface ModalLearnParams {
   /**
    * Single message to learn from with 'role' and 'content' fields
    */
@@ -161,7 +161,7 @@ export interface MachineLearnParams {
   session_id?: string | null;
 }
 
-export interface MachineQueryParams {
+export interface ModalQueryParams {
   /**
    * The question to query against user's memories
    */
@@ -184,11 +184,11 @@ export interface MachineQueryParams {
   session_id?: string | null;
 }
 
-export declare namespace Machine {
+export declare namespace Modal {
   export {
-    type MachineLearnResponse as MachineLearnResponse,
-    type MachineQueryResponse as MachineQueryResponse,
-    type MachineLearnParams as MachineLearnParams,
-    type MachineQueryParams as MachineQueryParams,
+    type ModalLearnResponse as ModalLearnResponse,
+    type ModalQueryResponse as ModalQueryResponse,
+    type ModalLearnParams as ModalLearnParams,
+    type ModalQueryParams as ModalQueryParams,
   };
 }

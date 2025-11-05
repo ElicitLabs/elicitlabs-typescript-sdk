@@ -7,10 +7,10 @@ const client = new Elicit({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource machine', () => {
+describe('resource modal', () => {
   // Prism tests are disabled
   test.skip('learn: only required params', async () => {
-    const responsePromise = client.machine.learn({
+    const responsePromise = client.modal.learn({
       message: { content: 'bar', role: 'bar' },
       user_id: '123e4567-e89b-12d3-a456-426614174000',
     });
@@ -25,7 +25,7 @@ describe('resource machine', () => {
 
   // Prism tests are disabled
   test.skip('learn: required and optional params', async () => {
-    const response = await client.machine.learn({
+    const response = await client.modal.learn({
       message: { content: 'bar', role: 'bar' },
       user_id: '123e4567-e89b-12d3-a456-426614174000',
       datetime_input: '2024-01-01T10:00:00Z',
@@ -35,7 +35,7 @@ describe('resource machine', () => {
 
   // Prism tests are disabled
   test.skip('query: only required params', async () => {
-    const responsePromise = client.machine.query({
+    const responsePromise = client.modal.query({
       question: 'What are my preferences for morning routines?',
       user_id: '123e4567-e89b-12d3-a456-426614174000',
     });
@@ -50,7 +50,7 @@ describe('resource machine', () => {
 
   // Prism tests are disabled
   test.skip('query: required and optional params', async () => {
-    const response = await client.machine.query({
+    const response = await client.modal.query({
       question: 'What are my preferences for morning routines?',
       user_id: '123e4567-e89b-12d3-a456-426614174000',
       filter_memory_types: ['episodic', 'identity'],

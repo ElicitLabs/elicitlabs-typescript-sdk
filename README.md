@@ -26,7 +26,7 @@ const client = new Elicit({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.machine.learn({
+const response = await client.modal.learn({
   message: { content: 'bar', role: 'bar' },
   user_id: '123e4567-e89b-12d3-a456-426614174000',
 });
@@ -46,11 +46,11 @@ const client = new Elicit({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const params: Elicit.MachineLearnParams = {
+const params: Elicit.ModalLearnParams = {
   message: { content: 'bar', role: 'bar' },
   user_id: '123e4567-e89b-12d3-a456-426614174000',
 };
-const response: Elicit.MachineLearnResponse = await client.machine.learn(params);
+const response: Elicit.ModalLearnResponse = await client.modal.learn(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -63,7 +63,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.machine
+const response = await client.modal
   .learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' })
   .catch(async (err) => {
     if (err instanceof Elicit.APIError) {
@@ -105,7 +105,7 @@ const client = new Elicit({
 });
 
 // Or, configure per-request:
-await client.machine.learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' }, {
+await client.modal.learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' }, {
   maxRetries: 5,
 });
 ```
@@ -122,7 +122,7 @@ const client = new Elicit({
 });
 
 // Override per-request:
-await client.machine.learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' }, {
+await client.modal.learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -145,13 +145,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Elicit();
 
-const response = await client.machine
+const response = await client.modal
   .learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.machine
+const { data: response, response: raw } = await client.modal
   .learn({ message: { content: 'bar', role: 'bar' }, user_id: '123e4567-e89b-12d3-a456-426614174000' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
@@ -235,7 +235,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.machine.learn({
+client.modal.learn({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
