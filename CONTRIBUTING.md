@@ -42,15 +42,15 @@ If you’d like to use the repository from source, you can either install from g
 To install via git:
 
 ```sh
-$ npm install git+ssh://git@github.com:stainless-sdks/elicit-labs-typescript.git
+$ npm install git+ssh://git@github.com:ElicitLabs/elicitlabs-typescript-sdk.git
 ```
 
 Alternatively, to link a local copy of the repo:
 
 ```sh
 # Clone
-$ git clone https://www.github.com/stainless-sdks/elicit-labs-typescript
-$ cd elicit-labs-typescript
+$ git clone https://www.github.com/ElicitLabs/elicitlabs-typescript-sdk
+$ cd elicitlabs-typescript-sdk
 
 # With yarn
 $ yarn link
