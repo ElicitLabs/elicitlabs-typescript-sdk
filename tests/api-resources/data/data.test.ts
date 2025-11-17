@@ -11,7 +11,7 @@ describe('resource data', () => {
   // Prism tests are disabled
   test.skip('ingest: only required params', async () => {
     const responsePromise = client.data.ingest({
-      content_type: 'email',
+      content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'abc-123',
     });
@@ -27,7 +27,7 @@ describe('resource data', () => {
   // Prism tests are disabled
   test.skip('ingest: required and optional params', async () => {
     const response = await client.data.ingest({
-      content_type: 'email',
+      content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'abc-123',
       filename: 'filename',
