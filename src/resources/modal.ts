@@ -35,8 +35,8 @@ export class Modal extends APIResource {
    *     ```
    *
    *     Returns 200 OK immediately. Memory extraction runs asynchronously in background.
-   *     Use this endpoint for conversation messages. Use /v1/data/ingest for files and documents.
-   *     Requires JWT authentication.
+   *     Use this endpoint for conversation messages. Use /v1/data/* for files and documents.
+   *     Requires authentication.
    *
    * @example
    * ```ts
@@ -79,7 +79,7 @@ export class Modal extends APIResource {
    *     ```
    *
    *     Returns 200 OK with memory data. Use filter_memory_types to optimize performance.
-   *     Requires JWT authentication.
+   *     Requires authentication.
    *
    * @example
    * ```ts

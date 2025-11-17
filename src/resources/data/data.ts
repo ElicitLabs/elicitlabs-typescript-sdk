@@ -17,7 +17,7 @@ export class Data extends APIResource {
    *
    *     **Request Parameters:**
    *     - user_id (str, required): User or persona ID
-   *     - content_type (str, required): One of: "text", "text/plain", "text/markdown", "messages", "application/json", "file:application/pdf", "file:image/png", "file:image/jpeg"
+   *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "audio", "file"
    *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
    *     - session_id (str, optional): Groups related content for session-based retrieval
    *     - timestamp (str, optional): ISO-8601 timestamp for historical data
@@ -47,7 +47,7 @@ export class Data extends APIResource {
    * @example
    * ```ts
    * const response = await client.data.ingest({
-   *   content_type: 'email',
+   *   content_type: 'text',
    *   payload:
    *     'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
    *   user_id: 'abc-123',
@@ -101,7 +101,8 @@ export interface DataIngestResponse {
 
 export interface DataIngestParams {
   /**
-   * MIME-ish content type string (e.g., 'email', 'text', 'file:text/plain')
+   * Content type (e.g., 'text', 'image', 'video', 'pdf', 'word', 'audio',
+   * 'messages', 'file')
    */
   content_type: string;
 

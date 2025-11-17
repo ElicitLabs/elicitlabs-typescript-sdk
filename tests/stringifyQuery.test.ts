@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Elicit } from 'elicit-labs';
+import { ElicitClient } from 'elicit-labs';
 
-const { stringifyQuery } = Elicit.prototype as any;
+const { stringifyQuery } = ElicitClient.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [
