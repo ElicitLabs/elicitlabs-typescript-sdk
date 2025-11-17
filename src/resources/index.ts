@@ -2,5 +2,11 @@
 
 export { Data, type DataIngestResponse, type DataIngestParams } from './data/data';
 export { Health, type HealthCheckResponse } from './health';
-export { Modal } from './modal';
+export {
+  Modal,
+  type ModalLearnResponse,
+  type ModalQueryResponse,
+  type ModalLearnParams,
+  type ModalQueryParams,
+} from './modal';
 export { Users, type UserCreateOrGetResponse, type UserCreateOrGetParams } from './users';

@@ -1,5 +1,15 @@
 # Modal
 
+Types:
+
+- <code><a href="./src/resources/modal.ts">ModalLearnResponse</a></code>
+- <code><a href="./src/resources/modal.ts">ModalQueryResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/modal/learn">client.modal.<a href="./src/resources/modal.ts">learn</a>({ ...params }) -> ModalLearnResponse</code>
+- <code title="post /v1/modal/query">client.modal.<a href="./src/resources/modal.ts">query</a>({ ...params }) -> ModalQueryResponse</code>
+
 # Users
 
 Types:
