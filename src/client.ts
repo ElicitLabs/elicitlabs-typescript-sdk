@@ -17,7 +17,13 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import { Health, HealthCheckResponse } from './resources/health';
-import { Modal } from './resources/modal';
+import {
+  Modal,
+  ModalLearnParams,
+  ModalLearnResponse,
+  ModalQueryParams,
+  ModalQueryResponse,
+} from './resources/modal';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
 import { type Fetch } from './internal/builtin-types';
@@ -731,7 +737,13 @@ Elicit.Health = Health;
 export declare namespace Elicit {
   export type RequestOptions = Opts.RequestOptions;
 
-  export { Modal as Modal };
+  export {
+    Modal as Modal,
+    type ModalLearnResponse as ModalLearnResponse,
+    type ModalQueryResponse as ModalQueryResponse,
+    type ModalLearnParams as ModalLearnParams,
+    type ModalQueryParams as ModalQueryParams,
+  };
 
   export {
     Users as Users,
