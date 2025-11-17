@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type Elicit } from '../client';
+import { type ElicitClient } from '../client';
 
 import { type PromiseOrValue } from '../internal/types';
 import { APIResponseProps, defaultParseResponse } from '../internal/parse';
@@ -11,13 +11,13 @@ import { APIResponseProps, defaultParseResponse } from '../internal/parse';
  */
 export class APIPromise<T> extends Promise<T> {
   private parsedPromise: Promise<T> | undefined;
-  #client: Elicit;
+  #client: ElicitClient;
 
   constructor(
-    client: Elicit,
+    client: ElicitClient,
     private responsePromise: Promise<APIResponseProps>,
     private parseResponse: (
-      client: Elicit,
+      client: ElicitClient,
       props: APIResponseProps,
     ) => PromiseOrValue<T> = defaultParseResponse,
   ) {
