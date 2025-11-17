@@ -7,13 +7,10 @@ const client = new ElicitClient({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource modal', () => {
+describe('resource personas', () => {
   // Prism tests are disabled
-  test.skip('learn: only required params', async () => {
-    const responsePromise = client.modal.learn({
-      message: { content: 'bar', role: 'bar' },
-      user_id: '123e4567-e89b-12d3-a456-426614174000',
-    });
+  test.skip('create: only required params', async () => {
+    const responsePromise = client.personas.create({ name: 'Creative Writer' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,21 +21,16 @@ describe('resource modal', () => {
   });
 
   // Prism tests are disabled
-  test.skip('learn: required and optional params', async () => {
-    const response = await client.modal.learn({
-      message: { content: 'bar', role: 'bar' },
-      user_id: '123e4567-e89b-12d3-a456-426614174000',
-      datetime_input: '2024-01-01T10:00:00Z',
-      session_id: 'session_123',
+  test.skip('create: required and optional params', async () => {
+    const response = await client.personas.create({
+      name: 'Creative Writer',
+      description: 'A persona specialized in creative writing and storytelling',
     });
   });
 
   // Prism tests are disabled
-  test.skip('query: only required params', async () => {
-    const responsePromise = client.modal.query({
-      question: 'What are my preferences for morning routines?',
-      user_id: '123e4567-e89b-12d3-a456-426614174000',
-    });
+  test.skip('retrieve', async () => {
+    const responsePromise = client.personas.retrieve('persona_id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -49,12 +41,14 @@ describe('resource modal', () => {
   });
 
   // Prism tests are disabled
-  test.skip('query: required and optional params', async () => {
-    const response = await client.modal.query({
-      question: 'What are my preferences for morning routines?',
-      user_id: '123e4567-e89b-12d3-a456-426614174000',
-      filter_memory_types: ['episodic', 'identity'],
-      session_id: 'session_123',
-    });
+  test.skip('list', async () => {
+    const responsePromise = client.personas.list();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });
