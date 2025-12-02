@@ -57,4 +57,29 @@ describe('resource modal', () => {
       session_id: 'session_123',
     });
   });
+
+  // Prism tests are disabled
+  test.skip('queryMultimodality: only required params', async () => {
+    const responsePromise = client.modal.queryMultimodality({
+      user_id: '123e4567-e89b-12d3-a456-426614174000',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('queryMultimodality: required and optional params', async () => {
+    const response = await client.modal.queryMultimodality({
+      user_id: '123e4567-e89b-12d3-a456-426614174000',
+      audio_base64: 'audio_base64',
+      image_base64: 'image_base64',
+      session_id: 'session_123',
+      video_base64: 'base64_encoded_video_content...',
+    });
+  });
 });
