@@ -41,6 +41,38 @@ describe('resource inference', () => {
   });
 
   // Prism tests are disabled
+  test.skip('generateMultimodalityCompletion: only required params', async () => {
+    const responsePromise = client.inference.generateMultimodalityCompletion({
+      user_id: '123e4567-e89b-12d3-a456-426614174000',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Prism tests are disabled
+  test.skip('generateMultimodalityCompletion: required and optional params', async () => {
+    const response = await client.inference.generateMultimodalityCompletion({
+      user_id: '123e4567-e89b-12d3-a456-426614174000',
+      audio_base64: 'base64_encoded_audio...',
+      context: 'context',
+      disabled_learning: false,
+      image_base64: 'base64_encoded_image...',
+      model: 'gemini-2.5-flash',
+      output_type: 'text',
+      question: 'What do you see?',
+      session_id: 'session_123',
+      speed: 1,
+      video_base64: 'base64_encoded_video...',
+      voice: 'alloy',
+    });
+  });
+
+  // Prism tests are disabled
   test.skip('generatePersonaChat: only required params', async () => {
     const responsePromise = client.inference.generatePersonaChat({
       content: [

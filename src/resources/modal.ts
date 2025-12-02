@@ -92,6 +92,55 @@ export class Modal extends APIResource {
   query(body: ModalQueryParams, options?: RequestOptions): APIPromise<ModalQueryResponse> {
     return this._client.post('/v1/modal/query', { body, ...options });
   }
+
+  /**
+   * Query user's stored memories using multimodal inputs (video, image, or audio).
+   *
+   *     This endpoint accepts video, image, or audio content as base64-encoded strings and
+   *     searches for relevant memories. The AI will:
+   *     1. Understand the content of the multimodal input
+   *     2. Search for related episodic memories
+   *     3. Return formatted results with context
+   *
+   *     **Request Parameters:**
+   *     - user_id (str, required): User or persona ID
+   *     - video_base64 (str, optional): Base64 encoded video content
+   *     - image_base64 (str, optional): Base64 encoded image content
+   *     - audio_base64 (str, optional): Base64 encoded audio content (supports webm, wav, mp3, mp4, and other formats)
+   *     - session_id (str, optional): Session identifier for conversation context
+   *
+   *     **Note:** At least one multimodal input (video, image, or audio) is required.
+   *     Audio will be automatically converted to WAV format for processing.
+   *
+   *     **Response:**
+   *     - new_prompt (str): Formatted string containing retrieved memories
+   *     - raw_results (dict): Raw results from the memory retrieval
+   *     - image_base64 (str, optional): Base64 encoded image - the original image or a representative frame from video
+   *     - success (bool): True if query succeeded
+   *
+   *     **Example:**
+   *     ```json
+   *     {
+   *         "user_id": "user-123",
+   *         "video_base64": "base64_encoded_video...",
+   *     }
+   *     ```
+   *
+   *     Returns 200 OK with memory data. Requires JWT authentication.
+   *
+   * @example
+   * ```ts
+   * const response = await client.modal.queryMultimodality({
+   *   user_id: '123e4567-e89b-12d3-a456-426614174000',
+   * });
+   * ```
+   */
+  queryMultimodality(
+    body: ModalQueryMultimodalityParams,
+    options?: RequestOptions,
+  ): APIPromise<ModalQueryMultimodalityResponse> {
+    return this._client.post('/v1/modal/multimodal-query', { body, ...options });
+  }
 }
 
 /**
@@ -132,6 +181,32 @@ export interface ModalQueryResponse {
    * Raw results from the retrieval process
    */
   raw_results: { [key: string]: unknown };
+
+  /**
+   * Whether the query was processed successfully
+   */
+  success?: boolean;
+}
+
+/**
+ * Response model for multimodal memory query
+ */
+export interface ModalQueryMultimodalityResponse {
+  /**
+   * Formatted string containing retrieved memories
+   */
+  new_prompt: string;
+
+  /**
+   * Base64 encoded image - either the original image or a representative frame from
+   * video
+   */
+  image_base64?: string | null;
+
+  /**
+   * Raw results from the memory retrieval
+   */
+  raw_results?: { [key: string]: unknown };
 
   /**
    * Whether the query was processed successfully
@@ -184,11 +259,40 @@ export interface ModalQueryParams {
   session_id?: string | null;
 }
 
+export interface ModalQueryMultimodalityParams {
+  /**
+   * Unique identifier for the user
+   */
+  user_id: string;
+
+  /**
+   * Base64 encoded audio content (supports webm, wav, mp3, mp4, and other formats)
+   */
+  audio_base64?: string | null;
+
+  /**
+   * Base64 encoded image content
+   */
+  image_base64?: string | null;
+
+  /**
+   * Optional session identifier for conversation context
+   */
+  session_id?: string | null;
+
+  /**
+   * Base64 encoded video content
+   */
+  video_base64?: string | null;
+}
+
 export declare namespace Modal {
   export {
     type ModalLearnResponse as ModalLearnResponse,
     type ModalQueryResponse as ModalQueryResponse,
+    type ModalQueryMultimodalityResponse as ModalQueryMultimodalityResponse,
     type ModalLearnParams as ModalLearnParams,
     type ModalQueryParams as ModalQueryParams,
+    type ModalQueryMultimodalityParams as ModalQueryMultimodalityParams,
   };
 }
