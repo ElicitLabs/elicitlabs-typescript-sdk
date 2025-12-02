@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0 (2025-12-02)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** manual updates ([f682d66](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/f682d6642bae5abfeff0b1a79d5bfc92e46d544e))
+
 ## 0.5.0 (2025-11-17)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.4.0...v0.5.0)
