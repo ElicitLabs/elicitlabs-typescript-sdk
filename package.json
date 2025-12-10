@@ -1,6 +1,6 @@
 {
   "name": "elicit-labs",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "The official TypeScript library for the Elicit Client API",
   "author": "Elicit Client <elias@elicitlabs.ai>",
   "types": "dist/index.d.ts",
