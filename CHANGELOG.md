@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.7.0 (2025-12-10)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **api:** api update ([63b15e3](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/63b15e31d4029086448882633ea1c79c6224c378))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([1c3155c](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/1c3155c75b9629ad25c2b27447e8fbc7e18ca96a))
+* **mcp:** return correct lines on typescript errors ([5d26c2d](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/5d26c2dbd16467c586522fa0aa44d6d1b0c26c9c))
+
+
+### Chores
+
+* **client:** fix logger property type ([ab82339](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/ab82339f25c13f5001810fd530fc9793055510f1))
+* **internal:** codegen related update ([0fdc47c](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/0fdc47c6c6d10fecd0d742f04017bd1b6a874360))
+* **internal:** codegen related update ([a1e0736](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/a1e0736d848abfb2eb81f6739c13d1d9aa11e383))
+* **internal:** configure pnpm minimumReleaseAge to 1 day ([96e6313](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/96e6313076fea2e9058af4ceb5febfb0cb15f1ca))
+* **internal:** upgrade eslint ([75328f6](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/75328f6088b11496c3e5f06fa6de6225a374be6c))
+
 ## 0.6.0 (2025-12-02)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.5.0...v0.6.0)

@@ -6,7 +6,7 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Health extends APIResource {
   /**
-   * Health Check
+   * Health check endpoint to verify API and database connectivity
    */
   check(options?: RequestOptions): APIPromise<unknown> {
     return this._client.get('/health', options);

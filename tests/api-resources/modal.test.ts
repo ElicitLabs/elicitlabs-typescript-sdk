@@ -28,8 +28,8 @@ describe('resource modal', () => {
     const response = await client.modal.learn({
       message: { content: 'bar', role: 'bar' },
       user_id: '123e4567-e89b-12d3-a456-426614174000',
-      datetime_input: '2024-01-01T10:00:00Z',
       session_id: 'session_123',
+      timestamp: '2024-01-01T10:00:00Z',
     });
   });
 

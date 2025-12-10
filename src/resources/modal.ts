@@ -226,14 +226,14 @@ export interface ModalLearnParams {
   user_id: string;
 
   /**
-   * ISO format datetime string for the message timestamp
-   */
-  datetime_input?: string | null;
-
-  /**
    * Optional session identifier for conversation context
    */
   session_id?: string | null;
+
+  /**
+   * ISO format datetime string for the message timestamp
+   */
+  timestamp?: string | null;
 }
 
 export interface ModalQueryParams {
