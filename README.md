@@ -56,9 +56,8 @@ const params: ElicitClient.InferenceGenerateCompletionParams = {
   ],
   user_id: 'user-123',
 };
-const response: ElicitClient.InferenceGenerateCompletionResponse = await client.inference.generateCompletion(
-  params,
-);
+const response: ElicitClient.InferenceGenerateCompletionResponse =
+  await client.inference.generateCompletion(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
