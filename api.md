@@ -96,44 +96,18 @@ Methods:
 - <code title="post /v1/inference/multimodality-completion">client.inference.<a href="./src/resources/inference.ts">generateMultimodalityCompletion</a>({ ...params }) -> InferenceGenerateMultimodalityCompletionResponse</code>
 - <code title="post /v1/inference/persona-chat">client.inference.<a href="./src/resources/inference.ts">generatePersonaChat</a>({ ...params }) -> InferenceGeneratePersonaChatResponse</code>
 
-# Demo
+# Projects
 
 Types:
 
-- <code><a href="./src/resources/demo/demo.ts">DemoCreateUserResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoGenerateResetLinkResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoRequestPasswordResetResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoResetPasswordResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoRetrieveCurrentUserResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoSignInResponse</a></code>
-- <code><a href="./src/resources/demo/demo.ts">DemoSubmitEarlyAccessRequestResponse</a></code>
+- <code><a href="./src/resources/projects.ts">ProjectCreateResponse</a></code>
+- <code><a href="./src/resources/projects.ts">ProjectRetrieveResponse</a></code>
+- <code><a href="./src/resources/projects.ts">ProjectListResponse</a></code>
+- <code><a href="./src/resources/projects.ts">ProjectDeleteResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/demo/signup">client.demo.<a href="./src/resources/demo/demo.ts">createUser</a>({ ...params }) -> DemoCreateUserResponse</code>
-- <code title="post /v1/demo/get-reset-link">client.demo.<a href="./src/resources/demo/demo.ts">generateResetLink</a>({ ...params }) -> DemoGenerateResetLinkResponse</code>
-- <code title="post /v1/demo/forgot-password">client.demo.<a href="./src/resources/demo/demo.ts">requestPasswordReset</a>({ ...params }) -> DemoRequestPasswordResetResponse</code>
-- <code title="post /v1/demo/reset-password">client.demo.<a href="./src/resources/demo/demo.ts">resetPassword</a>({ ...params }) -> DemoResetPasswordResponse</code>
-- <code title="get /v1/demo/me">client.demo.<a href="./src/resources/demo/demo.ts">retrieveCurrentUser</a>() -> DemoRetrieveCurrentUserResponse</code>
-- <code title="post /v1/demo/signin">client.demo.<a href="./src/resources/demo/demo.ts">signIn</a>({ ...params }) -> DemoSignInResponse</code>
-- <code title="post /v1/demo/early-access">client.demo.<a href="./src/resources/demo/demo.ts">submitEarlyAccessRequest</a>({ ...params }) -> DemoSubmitEarlyAccessRequestResponse</code>
-
-## Auth
-
-Types:
-
-- <code><a href="./src/resources/demo/auth.ts">AuthAuthenticateWithGoogleResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/demo/auth/google">client.demo.auth.<a href="./src/resources/demo/auth.ts">authenticateWithGoogle</a>({ ...params }) -> AuthAuthenticateWithGoogleResponse</code>
-
-## Org
-
-Types:
-
-- <code><a href="./src/resources/demo/org.ts">OrgListOrganizationMembersResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/demo/org/users">client.demo.org.<a href="./src/resources/demo/org.ts">listOrganizationMembers</a>({ ...params }) -> OrgListOrganizationMembersResponse</code>
+- <code title="post /v1/projects">client.projects.<a href="./src/resources/projects.ts">create</a>({ ...params }) -> ProjectCreateResponse</code>
+- <code title="get /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">retrieve</a>(projectID) -> ProjectRetrieveResponse</code>
+- <code title="get /v1/projects">client.projects.<a href="./src/resources/projects.ts">list</a>() -> ProjectListResponse</code>
+- <code title="delete /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">delete</a>(projectID) -> ProjectDeleteResponse</code>

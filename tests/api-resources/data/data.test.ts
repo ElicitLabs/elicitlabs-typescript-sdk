@@ -13,7 +13,7 @@ describe('resource data', () => {
     const responsePromise = client.data.ingest({
       content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
-      user_id: 'abc-123',
+      user_id: 'user-123',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -29,8 +29,10 @@ describe('resource data', () => {
     const response = await client.data.ingest({
       content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
-      user_id: 'abc-123',
+      user_id: 'user-123',
       filename: 'filename',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       session_id: 'session_id',
       timestamp: '2024-01-01T12:00:00Z',
     });
