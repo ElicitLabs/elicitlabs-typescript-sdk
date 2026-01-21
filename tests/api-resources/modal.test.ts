@@ -28,6 +28,8 @@ describe('resource modal', () => {
     const response = await client.modal.learn({
       message: { content: 'bar', role: 'bar' },
       user_id: '123e4567-e89b-12d3-a456-426614174000',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       session_id: 'session_123',
       timestamp: '2024-01-01T10:00:00Z',
     });
@@ -54,6 +56,8 @@ describe('resource modal', () => {
       question: 'What are my preferences for morning routines?',
       user_id: '123e4567-e89b-12d3-a456-426614174000',
       filter_memory_types: ['episodic', 'identity'],
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       session_id: 'session_123',
     });
   });
@@ -78,6 +82,8 @@ describe('resource modal', () => {
       user_id: '123e4567-e89b-12d3-a456-426614174000',
       audio_base64: 'audio_base64',
       image_base64: 'image_base64',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       session_id: 'session_123',
       video_base64: 'base64_encoded_video_content...',
     });

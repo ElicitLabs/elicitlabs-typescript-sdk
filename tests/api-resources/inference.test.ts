@@ -36,6 +36,8 @@ describe('resource inference', () => {
       user_id: 'user-123',
       disabled_learning: false,
       model: 'gpt-4.1-mini',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       session_id: 'session-abc',
     });
   });
@@ -64,6 +66,8 @@ describe('resource inference', () => {
       image_base64: 'base64_encoded_image...',
       model: 'gemini-2.5-flash',
       output_type: 'text',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
       question: 'What do you see?',
       session_id: 'session_123',
       speed: 1,
@@ -79,7 +83,8 @@ describe('resource inference', () => {
         { content: 'You are a helpful AI assistant.', role: 'system' },
         { content: 'Hello, how are you?', role: 'user' },
       ],
-      user_id: 'persona-123',
+      persona_id: 'persona-456',
+      user_id: 'user-123',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -97,7 +102,8 @@ describe('resource inference', () => {
         { content: 'You are a helpful AI assistant.', role: 'system' },
         { content: 'Hello, how are you?', role: 'user' },
       ],
-      user_id: 'persona-123',
+      persona_id: 'persona-456',
+      user_id: 'user-123',
       disabled_learning: true,
       model: 'gpt-4.1-mini',
       session_id: 'session-abc',

@@ -11,10 +11,15 @@ export class Modal extends APIResource {
    *     Stores the message in conversation history and triggers memory extraction when thresholds are met.
    *     Returns immediately after storing the message, with memory processing happening in the background.
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, learning is scoped to this persona instead of user
+   *     - project_id (str, optional): If provided, learning is scoped to this project (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Request Parameters:**
-   *     - user_id (str, required): User or persona ID
-   *     - message (str, required): User message content
-   *     - role (str, required): Message role - "user" or "assistant"
+   *     - message (dict, required): Message with 'role' and 'content' fields
    *     - session_id (str, optional): Session identifier for conversation grouping
    *     - timestamp (str, optional): ISO-8601 timestamp for the message
    *
@@ -22,14 +27,15 @@ export class Modal extends APIResource {
    *     - success (bool): True if message was stored
    *     - message (str): Status message
    *     - session_id (str): Confirmed session ID
-   *     - turn_id (str): Unique identifier for this conversation turn
+   *     - job_id (str): Unique identifier for this learning job
    *
    *     **Example:**
    *     ```json
    *     {
    *         "user_id": "user-123",
-   *         "message": "I prefer working in the morning",
-   *         "role": "user",
+   *         "persona_id": null,
+   *         "project_id": null,
+   *         "message": {"role": "user", "content": "I prefer working in the morning"},
    *         "session_id": "session-abc"
    *     }
    *     ```
@@ -57,9 +63,15 @@ export class Modal extends APIResource {
    *     Retrieves relevant information from the user's memory system using semantic search across
    *     all memory types: episodic memories, preferences, identity attributes, and short-term context.
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, query uses persona's context instead of user
+   *     - project_id (str, optional): If provided, query uses project's context (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Request Parameters:**
    *     - question (str, required): Natural language question to query
-   *     - user_id (str, required): User or persona ID
    *     - session_id (str, optional): Session identifier for conversation context
    *     - filter_memory_types (list[str], optional): Memory types to exclude - valid values: "episodic", "preference", "identity", "short_term"
    *
@@ -73,6 +85,8 @@ export class Modal extends APIResource {
    *     {
    *         "question": "What are my preferences for morning routines?",
    *         "user_id": "user-123",
+   *         "persona_id": null,
+   *         "project_id": null,
    *         "session_id": "session-abc",
    *         "filter_memory_types": ["episodic"]
    *     }
@@ -102,8 +116,14 @@ export class Modal extends APIResource {
    *     2. Search for related episodic memories
    *     3. Return formatted results with context
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, query uses persona's context instead of user
+   *     - project_id (str, optional): If provided, query uses project's context (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Request Parameters:**
-   *     - user_id (str, required): User or persona ID
    *     - video_base64 (str, optional): Base64 encoded video content
    *     - image_base64 (str, optional): Base64 encoded image content
    *     - audio_base64 (str, optional): Base64 encoded audio content (supports webm, wav, mp3, mp4, and other formats)
@@ -122,7 +142,9 @@ export class Modal extends APIResource {
    *     ```json
    *     {
    *         "user_id": "user-123",
-   *         "video_base64": "base64_encoded_video...",
+   *         "persona_id": null,
+   *         "project_id": null,
+   *         "video_base64": "base64_encoded_video..."
    *     }
    *     ```
    *
@@ -221,9 +243,21 @@ export interface ModalLearnParams {
   message: { [key: string]: unknown };
 
   /**
-   * Unique identifier for the user
+   * Unique identifier for the user (always required)
    */
   user_id: string;
+
+  /**
+   * Optional persona ID. If provided, learning is scoped to this persona instead of
+   * the user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, learning is scoped to this project (inherits
+   * from user)
+   */
+  project_id?: string | null;
 
   /**
    * Optional session identifier for conversation context
@@ -243,7 +277,7 @@ export interface ModalQueryParams {
   question: string;
 
   /**
-   * Unique identifier for the user
+   * Unique identifier for the user (always required)
    */
   user_id: string;
 
@@ -254,6 +288,18 @@ export interface ModalQueryParams {
   filter_memory_types?: Array<string> | null;
 
   /**
+   * Optional persona ID. If provided, query is scoped to this persona instead of the
+   * user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, query is scoped to this project (inherits from
+   * user)
+   */
+  project_id?: string | null;
+
+  /**
    * Optional session identifier for conversation context
    */
   session_id?: string | null;
@@ -261,7 +307,7 @@ export interface ModalQueryParams {
 
 export interface ModalQueryMultimodalityParams {
   /**
-   * Unique identifier for the user
+   * Unique identifier for the user (always required)
    */
   user_id: string;
 
@@ -274,6 +320,18 @@ export interface ModalQueryMultimodalityParams {
    * Base64 encoded image content
    */
   image_base64?: string | null;
+
+  /**
+   * Optional persona ID. If provided, query is scoped to this persona instead of the
+   * user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, query is scoped to this project (inherits from
+   * user)
+   */
+  project_id?: string | null;
 
   /**
    * Optional session identifier for conversation context

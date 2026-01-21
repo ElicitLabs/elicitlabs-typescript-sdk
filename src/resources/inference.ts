@@ -15,6 +15,13 @@ export class Inference extends APIResource {
    *     - Optionally learns from the conversation (disabled_learning=False)
    *     - Returns formatted messages with AI response
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, inference uses persona's context instead of user
+   *     - project_id (str, optional): If provided, inference uses project's context (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Authentication**: Requires valid API key or JWT token in Authorization header
    *
    * @example
@@ -50,8 +57,14 @@ export class Inference extends APIResource {
    *     5. Based on output_type: returns text only, converts to speech (TTS), or generates an image
    *     6. Returns text response, audio/image (based on output_type), and memory context
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, uses persona's context instead of user
+   *     - project_id (str, optional): If provided, uses project's context (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Request Parameters:**
-   *     - user_id (str, required): User or persona ID
    *     - question (str, optional): User's question or prompt (can be extracted from audio if not provided)
    *     - context (str, optional): Additional context for the question
    *     - session_id (str, optional): Session identifier for conversation context
@@ -82,6 +95,8 @@ export class Inference extends APIResource {
    *     ```json
    *     {
    *         "user_id": "user-123",
+   *         "persona_id": null,
+   *         "project_id": null,
    *         "question": "What do you see?",
    *         "video_base64": "base64_encoded_video...",
    *         "voice": "alloy",
@@ -119,6 +134,10 @@ export class Inference extends APIResource {
    *     - Optionally learns from the conversation (disabled_learning=False)
    *     - Returns synchronous response with formatted messages
    *
+   *     **Required Parameters:**
+   *     - user_id (str, required): The owning user ID
+   *     - persona_id (str, required): The persona ID to chat as
+   *
    *     **Authentication**: Requires valid API key or JWT token in Authorization header
    *
    * @example
@@ -132,7 +151,8 @@ export class Inference extends APIResource {
    *       },
    *       { content: 'Hello, how are you?', role: 'user' },
    *     ],
-   *     user_id: 'persona-123',
+   *     persona_id: 'persona-456',
+   *     user_id: 'user-123',
    *   },
    * );
    * ```
@@ -227,7 +247,7 @@ export interface InferenceGenerateCompletionParams {
   content: string | Array<{ [key: string]: string }>;
 
   /**
-   * User ID
+   * User ID (always required)
    */
   user_id: string;
 
@@ -242,6 +262,18 @@ export interface InferenceGenerateCompletionParams {
   model?: string;
 
   /**
+   * Optional persona ID. If provided, inference uses this persona's context instead
+   * of the user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, inference uses project context (inherits from
+   * user)
+   */
+  project_id?: string | null;
+
+  /**
    * Session ID
    */
   session_id?: string | null;
@@ -249,7 +281,7 @@ export interface InferenceGenerateCompletionParams {
 
 export interface InferenceGenerateMultimodalityCompletionParams {
   /**
-   * Unique identifier for the user
+   * Unique identifier for the user (always required)
    */
   user_id: string;
 
@@ -285,6 +317,18 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   output_type?: 'text' | 'audio' | 'image';
 
   /**
+   * Optional persona ID. If provided, inference uses this persona's context instead
+   * of the user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, inference uses project context (inherits from
+   * user)
+   */
+  project_id?: string | null;
+
+  /**
    * User's question or prompt (optional if audio provided)
    */
   question?: string | null;
@@ -317,7 +361,12 @@ export interface InferenceGeneratePersonaChatParams {
   content: string | Array<{ [key: string]: string }>;
 
   /**
-   * User ID (persona ID)
+   * Persona ID to chat as (required for persona chat)
+   */
+  persona_id: string;
+
+  /**
+   * User ID (always required)
    */
   user_id: string;
 
