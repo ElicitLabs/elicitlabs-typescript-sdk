@@ -7,11 +7,11 @@ import { path } from '../internal/utils/path';
 
 export class Projects extends APIResource {
   /**
-   * Create a new project for the authenticated user.
+   * Create a new project for a user.
    *
    *     This endpoint:
    *     - Creates a new project with the provided name and description
-   *     - Associates the project with the authenticated user
+   *     - Associates the project with the specified user_id, or the authenticated user if not provided
    *     - The project will have access to user's preferences, episodes, and identity
    *     - Returns the created project with all metadata
    *
@@ -218,6 +218,12 @@ export interface ProjectCreateParams {
    * Optional project description
    */
   description?: string | null;
+
+  /**
+   * User ID to associate the project with. If not provided, uses the authenticated
+   * user's ID.
+   */
+  user_id?: string | null;
 }
 
 export declare namespace Projects {
