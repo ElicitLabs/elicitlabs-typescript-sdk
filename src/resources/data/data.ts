@@ -15,8 +15,14 @@ export class Data extends APIResource {
    *     Accepts various content types (text, messages, files) and processes them to extract information
    *     and integrate it into the user's memory system. Returns a job_id for tracking status.
    *
+   *     **Entity Resolution:**
+   *     - user_id (str, required): Always required - the main user identifier
+   *     - persona_id (str, optional): If provided, data is ingested to this persona instead of user
+   *     - project_id (str, optional): If provided, data is ingested to this project (inherits from user)
+   *
+   *     Priority: persona_id > project_id > user_id
+   *
    *     **Request Parameters:**
-   *     - user_id (str, required): User or persona ID
    *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "audio", "file"
    *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
    *     - session_id (str, optional): Groups related content for session-based retrieval
@@ -25,7 +31,7 @@ export class Data extends APIResource {
    *
    *     **Response:**
    *     - job_id (str): Unique identifier for tracking the processing job
-   *     - user_id (str): Confirmed user ID
+   *     - user_id (str): Confirmed entity ID (user, persona, or project)
    *     - content_type (str): Confirmed content type
    *     - status (str): Job status ('queued', 'accepted')
    *     - message (str): Status message
@@ -36,6 +42,8 @@ export class Data extends APIResource {
    *     ```json
    *     {
    *         "user_id": "user-123",
+   *         "persona_id": null,
+   *         "project_id": "project-456",
    *         "content_type": "text",
    *         "payload": "Meeting notes from today's discussion"
    *     }
@@ -50,7 +58,7 @@ export class Data extends APIResource {
    *   content_type: 'text',
    *   payload:
    *     'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
-   *   user_id: 'abc-123',
+   *   user_id: 'user-123',
    * });
    * ```
    */
@@ -112,7 +120,7 @@ export interface DataIngestParams {
   payload: string | { [key: string]: unknown } | Array<unknown>;
 
   /**
-   * User ID to associate the data with
+   * User ID (always required)
    */
   user_id: string;
 
@@ -120,6 +128,18 @@ export interface DataIngestParams {
    * Filename of the uploaded file
    */
   filename?: string | null;
+
+  /**
+   * Optional persona ID. If provided, data is ingested to this persona instead of
+   * the user
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, data is ingested to this project (inherits
+   * from user)
+   */
+  project_id?: string | null;
 
   /**
    * Session ID for grouping related ingested content and enabling session-based
