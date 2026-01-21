@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.8.0 (2026-01-21)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** api update ([66abfaf](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/66abfafe8b68d90da3119da75e584d017666efc6))
+* **api:** manual updates ([b0ad68c](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/b0ad68cefb6dc9552c8f9985d448667720efe57e))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([f80f02e](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/f80f02e41e259378ecae0358cbd06f5bdaaf7db0))
+* **internal:** codegen related update ([bdc474b](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/bdc474b8f493136a6fb7b6868693682f7682566f))
+* **internal:** update `actions/checkout` version ([e6d831b](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/e6d831bec4e4d81854b64032c22c8944b51755d2))
+* **internal:** update lock file ([e4e9204](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/e4e920449912ba7006a5859b5ba039ad1ec8311d))
+* **internal:** upgrade babel, qs, js-yaml ([ed4500a](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/ed4500aeb42e156b050bba15bae5e93246e644d4))
+* **internal:** upgrade brace-expansion and @babel/helpers ([becdc64](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/becdc64ea4b52fc15d48b36284cacde2aab94411))
+
 ## 0.7.0 (2025-12-10)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.6.0...v0.7.0)
