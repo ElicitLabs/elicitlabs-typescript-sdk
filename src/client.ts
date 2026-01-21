@@ -42,25 +42,17 @@ import {
   PersonaRetrieveResponse,
   Personas,
 } from './resources/personas';
+import {
+  ProjectCreateParams,
+  ProjectCreateResponse,
+  ProjectDeleteResponse,
+  ProjectListResponse,
+  ProjectRetrieveResponse,
+  Projects,
+} from './resources/projects';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
 import { Auth } from './resources/auth/auth';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
-import {
-  Demo,
-  DemoCreateUserParams,
-  DemoCreateUserResponse,
-  DemoGenerateResetLinkParams,
-  DemoGenerateResetLinkResponse,
-  DemoRequestPasswordResetParams,
-  DemoRequestPasswordResetResponse,
-  DemoResetPasswordParams,
-  DemoResetPasswordResponse,
-  DemoRetrieveCurrentUserResponse,
-  DemoSignInParams,
-  DemoSignInResponse,
-  DemoSubmitEarlyAccessRequestParams,
-  DemoSubmitEarlyAccessRequestResponse,
-} from './resources/demo/demo';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -765,7 +757,7 @@ export class ElicitClient {
   auth: API.Auth = new API.Auth(this);
   personas: API.Personas = new API.Personas(this);
   inference: API.Inference = new API.Inference(this);
-  demo: API.Demo = new API.Demo(this);
+  projects: API.Projects = new API.Projects(this);
 }
 
 ElicitClient.Modal = Modal;
@@ -775,7 +767,7 @@ ElicitClient.Health = Health;
 ElicitClient.Auth = Auth;
 ElicitClient.Personas = Personas;
 ElicitClient.Inference = Inference;
-ElicitClient.Demo = Demo;
+ElicitClient.Projects = Projects;
 
 export declare namespace ElicitClient {
   export type RequestOptions = Opts.RequestOptions;
@@ -825,19 +817,11 @@ export declare namespace ElicitClient {
   };
 
   export {
-    Demo as Demo,
-    type DemoCreateUserResponse as DemoCreateUserResponse,
-    type DemoGenerateResetLinkResponse as DemoGenerateResetLinkResponse,
-    type DemoRequestPasswordResetResponse as DemoRequestPasswordResetResponse,
-    type DemoResetPasswordResponse as DemoResetPasswordResponse,
-    type DemoRetrieveCurrentUserResponse as DemoRetrieveCurrentUserResponse,
-    type DemoSignInResponse as DemoSignInResponse,
-    type DemoSubmitEarlyAccessRequestResponse as DemoSubmitEarlyAccessRequestResponse,
-    type DemoCreateUserParams as DemoCreateUserParams,
-    type DemoGenerateResetLinkParams as DemoGenerateResetLinkParams,
-    type DemoRequestPasswordResetParams as DemoRequestPasswordResetParams,
-    type DemoResetPasswordParams as DemoResetPasswordParams,
-    type DemoSignInParams as DemoSignInParams,
-    type DemoSubmitEarlyAccessRequestParams as DemoSubmitEarlyAccessRequestParams,
+    Projects as Projects,
+    type ProjectCreateResponse as ProjectCreateResponse,
+    type ProjectRetrieveResponse as ProjectRetrieveResponse,
+    type ProjectListResponse as ProjectListResponse,
+    type ProjectDeleteResponse as ProjectDeleteResponse,
+    type ProjectCreateParams as ProjectCreateParams,
   };
 }
