@@ -2,22 +2,6 @@
 
 export { Auth } from './auth/auth';
 export { Data, type DataIngestResponse, type DataIngestParams } from './data/data';
-export {
-  Demo,
-  type DemoCreateUserResponse,
-  type DemoGenerateResetLinkResponse,
-  type DemoRequestPasswordResetResponse,
-  type DemoResetPasswordResponse,
-  type DemoRetrieveCurrentUserResponse,
-  type DemoSignInResponse,
-  type DemoSubmitEarlyAccessRequestResponse,
-  type DemoCreateUserParams,
-  type DemoGenerateResetLinkParams,
-  type DemoRequestPasswordResetParams,
-  type DemoResetPasswordParams,
-  type DemoSignInParams,
-  type DemoSubmitEarlyAccessRequestParams,
-} from './demo/demo';
 export { Health, type HealthCheckResponse } from './health';
 export {
   Inference,
@@ -44,4 +28,12 @@ export {
   type PersonaListResponse,
   type PersonaCreateParams,
 } from './personas';
+export {
+  Projects,
+  type ProjectCreateResponse,
+  type ProjectRetrieveResponse,
+  type ProjectListResponse,
+  type ProjectDeleteResponse,
+  type ProjectCreateParams,
+} from './projects';
 export { Users, type UserCreateOrGetResponse, type UserCreateOrGetParams } from './users';
