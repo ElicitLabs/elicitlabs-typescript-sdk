@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.9.0 (2026-01-26)
+
+Full Changelog: [v0.8.0...v0.9.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.8.0...v0.9.0)
+
+### Features
+
+* **api:** api update ([72a18d0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/72a18d00c685d24816ce707b5edd267b49d50660))
+* **api:** api update ([a2b7208](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/a2b72088fc7746d670fcd18cb6fdfac183a7ac37))
+
+
+### Chores
+
+* **ci:** upgrade `actions/github-script` ([3140242](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/3140242866a58a5dad72ef38e521a65bf4480918))
+
 ## 0.8.0 (2026-01-21)
 
 Full Changelog: [v0.7.0...v0.8.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.7.0...v0.8.0)
