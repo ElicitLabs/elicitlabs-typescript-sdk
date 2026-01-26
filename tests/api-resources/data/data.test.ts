@@ -30,6 +30,7 @@ describe('resource data', () => {
       content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'user-123',
+      content_description: 'Email correspondence about project updates',
       filename: 'filename',
       persona_id: 'persona_id',
       project_id: 'project_id',

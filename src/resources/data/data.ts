@@ -25,6 +25,7 @@ export class Data extends APIResource {
    *     **Request Parameters:**
    *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "audio", "file"
    *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
+   *     - content_description (str, optional): Description of the content being ingested (e.g., 'Logo design concepts', 'Meeting notes')
    *     - session_id (str, optional): Groups related content for session-based retrieval
    *     - timestamp (str, optional): ISO-8601 timestamp for historical data
    *     - filename (str, optional): Original filename for file uploads
@@ -45,7 +46,8 @@ export class Data extends APIResource {
    *         "persona_id": null,
    *         "project_id": "project-456",
    *         "content_type": "text",
-   *         "payload": "Meeting notes from today's discussion"
+   *         "payload": "Meeting notes from today's discussion",
+   *         "content_description": "Meeting notes from today's discussion"
    *     }
    *     ```
    *
@@ -123,6 +125,12 @@ export interface DataIngestParams {
    * User ID (always required)
    */
   user_id: string;
+
+  /**
+   * Optional description of the content being ingested (e.g., 'Logo design
+   * concepts', 'Meeting notes')
+   */
+  content_description?: string | null;
 
   /**
    * Filename of the uploaded file

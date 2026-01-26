@@ -220,6 +220,11 @@ export interface ModalQueryMultimodalityResponse {
   new_prompt: string;
 
   /**
+   * Reference images for matched entities (entity_name -> base64 image)
+   */
+  entity_images?: { [key: string]: string } | null;
+
+  /**
    * Base64 encoded image - either the original image or a representative frame from
    * video
    */
