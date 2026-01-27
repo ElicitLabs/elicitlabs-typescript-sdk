@@ -200,6 +200,12 @@ export interface InferenceGenerateMultimodalityCompletionResponse {
   audio_format?: string | null;
 
   /**
+   * Reference images for matched entities used in generation (entity_name -> base64
+   * image)
+   */
+  entity_images?: { [key: string]: string } | null;
+
+  /**
    * Base64 encoded AI-generated image (if output_type='image')
    */
   image_base64?: string | null;
