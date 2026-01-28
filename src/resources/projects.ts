@@ -126,6 +126,12 @@ export namespace ProjectCreateResponse {
     user_id: string;
 
     user_name: string | null;
+
+    /**
+     * Project type override: 'creative_design' or 'general'. When set, skips LLM
+     * classification.
+     */
+    project_type?: string | null;
   }
 }
 
@@ -148,6 +154,12 @@ export interface ProjectRetrieveResponse {
   user_id: string;
 
   user_name: string | null;
+
+  /**
+   * Project type override: 'creative_design' or 'general'. When set, skips LLM
+   * classification.
+   */
+  project_type?: string | null;
 }
 
 /**
@@ -190,6 +202,12 @@ export namespace ProjectListResponse {
     user_id: string;
 
     user_name: string | null;
+
+    /**
+     * Project type override: 'creative_design' or 'general'. When set, skips LLM
+     * classification.
+     */
+    project_type?: string | null;
   }
 }
 
@@ -218,6 +236,13 @@ export interface ProjectCreateParams {
    * Optional project description
    */
   description?: string | null;
+
+  /**
+   * Optional project type override. When set, skips LLM classification during
+   * content ingestion. Use 'creative_design' for artistic/design projects, 'general'
+   * for documentation/business content.
+   */
+  project_type?: 'creative_design' | 'general' | null;
 
   /**
    * User ID to associate the project with. If not provided, uses the authenticated
