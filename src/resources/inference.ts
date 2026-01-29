@@ -71,10 +71,12 @@ export class Inference extends APIResource {
    *     - video_base64 (str, optional): Base64 encoded video content
    *     - image_base64 (str, optional): Base64 encoded image content
    *     - audio_base64 (str, optional): Base64 encoded audio content (supports webm, wav, mp3, etc.)
+   *     - audio_type (str, optional): Type of audio output - 'tts' (default), 'music', or 'sfx'
    *     - voice (str, optional): Voice to use for TTS - options: alloy (default), echo, fable, onyx, nova, shimmer
-   *     - speed (float, optional): Speech speed from 0.25 to 4.0 (default: 1.0)
+   *     - speed (float, optional): Speech speed from 0.25 to 4.0 (default: 1.0). Only for TTS.
+   *     - audio_duration (float, optional): Duration in seconds for music/sfx (default: 10 for music, 5 for sfx)
    *     - model (str, optional): LLM model to use (defaults to gemini-2.5-flash)
-   *     - output_type (str, optional): Output type - 'text' (default), 'audio' (TTS), or 'image' (AI-generated)
+   *     - output_type (str, optional): Output type - 'text' (default), 'audio', or 'image' (AI-generated)
    *     - disabled_learning (bool, optional): Whether to disable ingestion/learning from the content (default: false)
    *
    *     **Note:** At least one multimodal input (video, image, or audio) is required for memory retrieval.
@@ -82,9 +84,9 @@ export class Inference extends APIResource {
    *
    *     **Response:**
    *     - text_response (str): Generated text response from the LLM
-   *     - audio_base64 (str, optional): Base64 encoded audio (MP3 format) if output_type='audio'
-   *     - audio_format (str, optional): Format of the audio
-   *     - voice_used (str, optional): Voice used for TTS
+   *     - audio_base64 (str, optional): Base64 encoded audio if output_type='audio' (MP3 for TTS, WAV for music/sfx)
+   *     - audio_format (str, optional): Format of the audio (mp3 or wav)
+   *     - voice_used (str, optional): Voice used for TTS (only for audio_type='tts')
    *     - image_base64 (str, optional): Representative image from input
    *     - generated_image_base64 (str, optional): AI-generated image if output_type='image'
    *     - memory_context (str, optional): Formatted memory context used for generation
@@ -297,6 +299,17 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   audio_base64?: string | null;
 
   /**
+   * Duration in seconds for music/sfx generation. Default: 5s for sfx, 10s for music
+   */
+  audio_duration?: number | null;
+
+  /**
+   * Type of audio output: 'tts' for text-to-speech, 'music' for AI music, 'sfx' for
+   * sound effects
+   */
+  audio_type?: 'tts' | 'music' | 'sfx';
+
+  /**
    * Additional context for the question
    */
   context?: string | null;
@@ -345,7 +358,7 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   session_id?: string | null;
 
   /**
-   * Speed of the speech (0.25 to 4.0)
+   * Speed of the speech (0.25 to 4.0). Only used when audio_type='tts'
    */
   speed?: number;
 
@@ -355,7 +368,8 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   video_base64?: string | null;
 
   /**
-   * Voice to use for TTS (alloy, echo, fable, onyx, nova, shimmer)
+   * Voice to use for TTS (alloy, echo, fable, onyx, nova, shimmer). Only used when
+   * audio_type='tts'
    */
   voice?: string;
 }

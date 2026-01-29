@@ -61,6 +61,8 @@ describe('resource inference', () => {
     const response = await client.inference.generateMultimodalityCompletion({
       user_id: '123e4567-e89b-12d3-a456-426614174000',
       audio_base64: 'base64_encoded_audio...',
+      audio_duration: 0,
+      audio_type: 'tts',
       context: 'context',
       disabled_learning: false,
       image_base64: 'base64_encoded_image...',
