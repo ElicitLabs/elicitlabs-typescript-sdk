@@ -23,15 +23,11 @@ import {
   InferenceGenerateCompletionResponse,
   InferenceGenerateMultimodalityCompletionParams,
   InferenceGenerateMultimodalityCompletionResponse,
-  InferenceGeneratePersonaChatParams,
-  InferenceGeneratePersonaChatResponse,
 } from './resources/inference';
 import {
   Modal,
   ModalLearnParams,
   ModalLearnResponse,
-  ModalQueryMultimodalityParams,
-  ModalQueryMultimodalityResponse,
   ModalQueryParams,
   ModalQueryResponse,
 } from './resources/modal';
@@ -783,10 +779,8 @@ export declare namespace ElicitClient {
     Modal as Modal,
     type ModalLearnResponse as ModalLearnResponse,
     type ModalQueryResponse as ModalQueryResponse,
-    type ModalQueryMultimodalityResponse as ModalQueryMultimodalityResponse,
     type ModalLearnParams as ModalLearnParams,
     type ModalQueryParams as ModalQueryParams,
-    type ModalQueryMultimodalityParams as ModalQueryMultimodalityParams,
   };
 
   export {
@@ -817,10 +811,8 @@ export declare namespace ElicitClient {
     Inference as Inference,
     type InferenceGenerateCompletionResponse as InferenceGenerateCompletionResponse,
     type InferenceGenerateMultimodalityCompletionResponse as InferenceGenerateMultimodalityCompletionResponse,
-    type InferenceGeneratePersonaChatResponse as InferenceGeneratePersonaChatResponse,
     type InferenceGenerateCompletionParams as InferenceGenerateCompletionParams,
     type InferenceGenerateMultimodalityCompletionParams as InferenceGenerateMultimodalityCompletionParams,
-    type InferenceGeneratePersonaChatParams as InferenceGeneratePersonaChatParams,
   };
 
   export {

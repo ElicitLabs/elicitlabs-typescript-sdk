@@ -6,49 +6,49 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Modal extends APIResource {
   /**
-   * Process a conversation message and update the user's memory system.
+   * Ingests a list of messages (conversation history) into long-term memory.
    *
-   *     Stores the message in conversation history and triggers memory extraction when thresholds are met.
-   *     Returns immediately after storing the message, with memory processing happening in the background.
+   *     The system automatically handles different modalities embedded in the messages:
+   *     - **Text** is embedded directly
+   *     - **Images/Video** are captioned/described by vision models, then embedded
+   *     - **Audio** is transcribed, then embedded
    *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, learning is scoped to this persona instead of user
-   *     - project_id (str, optional): If provided, learning is scoped to this project (inherits from user)
+   *     **Universal Base Params:**
+   *     - user_id (str, required): The user these memories belong to
+   *     - project_id (str, optional): The project bucket (optional)
+   *     - persona_id (str, optional): Link these memories to a specific persona
    *
-   *     Priority: persona_id > project_id > user_id
-   *
-   *     **Request Parameters:**
-   *     - message (dict, required): Message with 'role' and 'content' fields
-   *     - session_id (str, optional): Session identifier for conversation grouping
-   *     - timestamp (str, optional): ISO-8601 timestamp for the message
-   *
-   *     **Response:**
-   *     - success (bool): True if message was stored
-   *     - message (str): Status message
-   *     - session_id (str): Confirmed session ID
-   *     - job_id (str): Unique identifier for this learning job
+   *     **Input (Multimodal):**
+   *     - messages (array, required): A standard chat history list. Can contain Text, Image, Video, and Audio.
+   *     - session_id (str, optional): Optional session identifier for conversation context
    *
    *     **Example:**
    *     ```json
    *     {
-   *         "user_id": "user-123",
-   *         "persona_id": null,
-   *         "project_id": null,
-   *         "message": {"role": "user", "content": "I prefer working in the morning"},
-   *         "session_id": "session-abc"
-   *     }
-   *     ```
-   *
-   *     Returns 200 OK immediately. Memory extraction runs asynchronously in background.
-   *     Use this endpoint for conversation messages. Use /v1/data/* for files and documents.
-   *     Requires authentication.
+   *         "user_id": "user_123",
+   *         "project_id": "proj_ABC",
+   *         "session_id": "session_123",
+   *         "messages": [
+   *             {"role": "user", "type": "image", "content": "<base64 encoded image data>"},
+   *             {"role": "assistant","type": "text", "content": "The animation is too slow"},
+   *             {"role": "user", "content": "Good catch. Let's speed it up to 200ms."}
+   *             ],
+   *             "timestamp": "2026-02-07T12:00:00Z"
+   *         }
+   *         ```
    *
    * @example
    * ```ts
    * const response = await client.modal.learn({
-   *   message: { content: 'bar', role: 'bar' },
-   *   user_id: '123e4567-e89b-12d3-a456-426614174000',
+   *   messages: [
+   *     { content: 'job_id_123' },
+   *     { content: 'The animation is too slow' },
+   *     {
+   *       content:
+   *         "Good catch. Let's remember to speed it up to 200ms for the next sprint.",
+   *     },
+   *   ],
+   *   user_id: 'user_123',
    * });
    * ```
    */
@@ -57,111 +57,43 @@ export class Modal extends APIResource {
   }
 
   /**
-   * Query user's stored memories, preferences, and identity based on a natural
-   * language question.
+   * Retrieves relevant memories based on text conversation context and/or multimodal
+   * inputs.
    *
-   *     Retrieves relevant information from the user's memory system using semantic search across
-   *     all memory types: episodic memories, preferences, identity attributes, and short-term context.
+   *     You can provide **text messages**, **images**, **video**, **audio**, or any combination.
+   *     The system finds memories semantically relevant to the provided inputs.
    *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, query uses persona's context instead of user
-   *     - project_id (str, optional): If provided, query uses project's context (inherits from user)
+   *     **Universal Base Params:**
+   *     - user_id (str, required): Restrict search to this user
+   *     - project_id (str, required): Restrict search to this project
+   *     - persona_id (str, optional): Use persona's context if provided
    *
-   *     Priority: persona_id > project_id > user_id
+   *     **Input — at least one required:**
+   *     - messages (array, optional): Text conversation context
+   *     - video_base64 (str, optional): Base64 encoded video
+   *     - image_base64 (str, optional): Base64 encoded image
+   *     - audio_base64 (str, optional): Base64 encoded audio
    *
-   *     **Request Parameters:**
-   *     - question (str, required): Natural language question to query
-   *     - session_id (str, optional): Session identifier for conversation context
-   *     - filter_memory_types (list[str], optional): Memory types to exclude - valid values: "episodic", "preference", "identity", "short_term"
+   *     **Search Config:**
+   *     - include_modalities (array, optional): Filter results by type: ["text", "image", "video"]
    *
    *     **Response:**
    *     - new_prompt (str): Enhanced prompt with retrieved memory context
    *     - raw_results (dict): Structured memory data from retrieval
+   *     - entity_images (dict, optional): Reference images for matched entities
    *     - success (bool): True if query succeeded
    *
-   *     **Example:**
-   *     ```json
-   *     {
-   *         "question": "What are my preferences for morning routines?",
-   *         "user_id": "user-123",
-   *         "persona_id": null,
-   *         "project_id": null,
-   *         "session_id": "session-abc",
-   *         "filter_memory_types": ["episodic"]
-   *     }
-   *     ```
-   *
-   *     Returns 200 OK with memory data. Use filter_memory_types to optimize performance.
-   *     Requires authentication.
+   *     Returns 200 OK with memory data. Requires authentication.
    *
    * @example
    * ```ts
    * const response = await client.modal.query({
-   *   question: 'What are my preferences for morning routines?',
-   *   user_id: '123e4567-e89b-12d3-a456-426614174000',
+   *   user_id: 'user_123',
    * });
    * ```
    */
   query(body: ModalQueryParams, options?: RequestOptions): APIPromise<ModalQueryResponse> {
     return this._client.post('/v1/modal/query', { body, ...options });
-  }
-
-  /**
-   * Query user's stored memories using multimodal inputs (video, image, or audio).
-   *
-   *     This endpoint accepts video, image, or audio content as base64-encoded strings and
-   *     searches for relevant memories. The AI will:
-   *     1. Understand the content of the multimodal input
-   *     2. Search for related episodic memories
-   *     3. Return formatted results with context
-   *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, query uses persona's context instead of user
-   *     - project_id (str, optional): If provided, query uses project's context (inherits from user)
-   *
-   *     Priority: persona_id > project_id > user_id
-   *
-   *     **Request Parameters:**
-   *     - video_base64 (str, optional): Base64 encoded video content
-   *     - image_base64 (str, optional): Base64 encoded image content
-   *     - audio_base64 (str, optional): Base64 encoded audio content (supports webm, wav, mp3, mp4, and other formats)
-   *     - session_id (str, optional): Session identifier for conversation context
-   *
-   *     **Note:** At least one multimodal input (video, image, or audio) is required.
-   *     Audio will be automatically converted to WAV format for processing.
-   *
-   *     **Response:**
-   *     - new_prompt (str): Formatted string containing retrieved memories
-   *     - raw_results (dict): Raw results from the memory retrieval
-   *     - image_base64 (str, optional): Base64 encoded image - the original image or a representative frame from video
-   *     - success (bool): True if query succeeded
-   *
-   *     **Example:**
-   *     ```json
-   *     {
-   *         "user_id": "user-123",
-   *         "persona_id": null,
-   *         "project_id": null,
-   *         "video_base64": "base64_encoded_video..."
-   *     }
-   *     ```
-   *
-   *     Returns 200 OK with memory data. Requires JWT authentication.
-   *
-   * @example
-   * ```ts
-   * const response = await client.modal.queryMultimodality({
-   *   user_id: '123e4567-e89b-12d3-a456-426614174000',
-   * });
-   * ```
-   */
-  queryMultimodality(
-    body: ModalQueryMultimodalityParams,
-    options?: RequestOptions,
-  ): APIPromise<ModalQueryMultimodalityResponse> {
-    return this._client.post('/v1/modal/multimodal-query', { body, ...options });
   }
 }
 
@@ -170,19 +102,9 @@ export class Modal extends APIResource {
  */
 export interface ModalLearnResponse {
   /**
-   * Status message about the learning process
-   */
-  message: string;
-
-  /**
    * Session identifier used for the learning
    */
   session_id: string;
-
-  /**
-   * Job identifier if processed asynchronously
-   */
-  job_id?: string | null;
 
   /**
    * Whether the learning was processed successfully
@@ -191,31 +113,11 @@ export interface ModalLearnResponse {
 }
 
 /**
- * Response model for memory query processing
+ * Unified response model for memory query (text + multimodal)
  */
 export interface ModalQueryResponse {
   /**
-   * Edited prompt for the query
-   */
-  new_prompt: string;
-
-  /**
-   * Raw results from the retrieval process
-   */
-  raw_results: { [key: string]: unknown };
-
-  /**
-   * Whether the query was processed successfully
-   */
-  success?: boolean;
-}
-
-/**
- * Response model for multimodal memory query
- */
-export interface ModalQueryMultimodalityResponse {
-  /**
-   * Formatted string containing retrieved memories
+   * Enhanced prompt with retrieved memory context
    */
   new_prompt: string;
 
@@ -225,13 +127,7 @@ export interface ModalQueryMultimodalityResponse {
   entity_images?: { [key: string]: string } | null;
 
   /**
-   * Base64 encoded image - either the original image or a representative frame from
-   * video
-   */
-  image_base64?: string | null;
-
-  /**
-   * Raw results from the memory retrieval
+   * Raw results from the retrieval process
    */
   raw_results?: { [key: string]: unknown };
 
@@ -243,24 +139,22 @@ export interface ModalQueryMultimodalityResponse {
 
 export interface ModalLearnParams {
   /**
-   * Single message to learn from with 'role' and 'content' fields
+   * A standard chat history list. Can contain Text, Image, Video, and Audio.
    */
-  message: { [key: string]: unknown };
+  messages: Array<ModalLearnParams.Message>;
 
   /**
-   * Unique identifier for the user (always required)
+   * The user these memories belong to (required)
    */
   user_id: string;
 
   /**
-   * Optional persona ID. If provided, learning is scoped to this persona instead of
-   * the user
+   * Optional persona ID. Link these memories to a specific persona.
    */
   persona_id?: string | null;
 
   /**
-   * Optional project ID. If provided, learning is scoped to this project (inherits
-   * from user)
+   * The project bucket (optional)
    */
   project_id?: string | null;
 
@@ -275,44 +169,31 @@ export interface ModalLearnParams {
   timestamp?: string | null;
 }
 
-export interface ModalQueryParams {
+export namespace ModalLearnParams {
   /**
-   * The question to query against user's memories
+   * A single message in the learning context
    */
-  question: string;
+  export interface Message {
+    /**
+     * Message content or Link
+     */
+    content: string;
 
-  /**
-   * Unique identifier for the user (always required)
-   */
-  user_id: string;
+    /**
+     * Message role: 'user', 'assistant', or 'system'
+     */
+    role?: string | null;
 
-  /**
-   * Optional list of memory types to exclude from retrieval. Valid types:
-   * 'episodic', 'preference', 'identity', 'short_term'
-   */
-  filter_memory_types?: Array<string> | null;
-
-  /**
-   * Optional persona ID. If provided, query is scoped to this persona instead of the
-   * user
-   */
-  persona_id?: string | null;
-
-  /**
-   * Optional project ID. If provided, query is scoped to this project (inherits from
-   * user)
-   */
-  project_id?: string | null;
-
-  /**
-   * Optional session identifier for conversation context
-   */
-  session_id?: string | null;
+    /**
+     * Content type for multimodal: 'text', 'image', 'video', 'audio'
+     */
+    type?: string | null;
+  }
 }
 
-export interface ModalQueryMultimodalityParams {
+export interface ModalQueryParams {
   /**
-   * Unique identifier for the user (always required)
+   * Restrict search to this user (required)
    */
   user_id: string;
 
@@ -327,14 +208,17 @@ export interface ModalQueryMultimodalityParams {
   image_base64?: string | null;
 
   /**
-   * Optional persona ID. If provided, query is scoped to this persona instead of the
-   * user
+   * Filter results by type: ['text', 'image', 'video']
+   */
+  include_modalities?: Array<string> | null;
+
+  /**
+   * Optional persona ID. If provided, query uses persona's context
    */
   persona_id?: string | null;
 
   /**
-   * Optional project ID. If provided, query is scoped to this project (inherits from
-   * user)
+   * Restrict search to this project (required)
    */
   project_id?: string | null;
 
@@ -342,6 +226,11 @@ export interface ModalQueryMultimodalityParams {
    * Optional session identifier for conversation context
    */
   session_id?: string | null;
+
+  /**
+   * Text input to search against. The system finds memories _relevant_ to this text.
+   */
+  text_input?: string | null;
 
   /**
    * Base64 encoded video content
@@ -353,9 +242,7 @@ export declare namespace Modal {
   export {
     type ModalLearnResponse as ModalLearnResponse,
     type ModalQueryResponse as ModalQueryResponse,
-    type ModalQueryMultimodalityResponse as ModalQueryMultimodalityResponse,
     type ModalLearnParams as ModalLearnParams,
     type ModalQueryParams as ModalQueryParams,
-    type ModalQueryMultimodalityParams as ModalQueryMultimodalityParams,
   };
 }

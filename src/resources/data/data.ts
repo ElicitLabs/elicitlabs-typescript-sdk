@@ -10,7 +10,7 @@ export class Data extends APIResource {
   job: JobAPI.Job = new JobAPI.Job(this._client);
 
   /**
-   * Ingest data for asynchronous processing and memory integration.
+   * Ingest data for asynchronous processing
    *
    *     Accepts various content types (text, messages, files) and processes them to extract information
    *     and integrate it into the user's memory system. Returns a job_id for tracking status.
@@ -74,16 +74,6 @@ export class Data extends APIResource {
  */
 export interface DataIngestResponse {
   /**
-   * Content type that was processed
-   */
-  content_type: string;
-
-  /**
-   * Timestamp when job was created
-   */
-  created_at: string;
-
-  /**
    * Unique job identifier for tracking
    */
   job_id: string;
@@ -92,11 +82,6 @@ export interface DataIngestResponse {
    * Processing status ('accepted', 'queued', 'failed')
    */
   status: string;
-
-  /**
-   * User ID associated with the data
-   */
-  user_id: string;
 
   /**
    * Additional status or error message
