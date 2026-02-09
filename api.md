@@ -4,13 +4,11 @@ Types:
 
 - <code><a href="./src/resources/modal.ts">ModalLearnResponse</a></code>
 - <code><a href="./src/resources/modal.ts">ModalQueryResponse</a></code>
-- <code><a href="./src/resources/modal.ts">ModalQueryMultimodalityResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/modal/learn">client.modal.<a href="./src/resources/modal.ts">learn</a>({ ...params }) -> ModalLearnResponse</code>
 - <code title="post /v1/modal/query">client.modal.<a href="./src/resources/modal.ts">query</a>({ ...params }) -> ModalQueryResponse</code>
-- <code title="post /v1/modal/multimodal-query">client.modal.<a href="./src/resources/modal.ts">queryMultimodality</a>({ ...params }) -> ModalQueryMultimodalityResponse</code>
 
 # Users
 
@@ -88,13 +86,11 @@ Types:
 
 - <code><a href="./src/resources/inference.ts">InferenceGenerateCompletionResponse</a></code>
 - <code><a href="./src/resources/inference.ts">InferenceGenerateMultimodalityCompletionResponse</a></code>
-- <code><a href="./src/resources/inference.ts">InferenceGeneratePersonaChatResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/inference/completion">client.inference.<a href="./src/resources/inference.ts">generateCompletion</a>({ ...params }) -> InferenceGenerateCompletionResponse</code>
 - <code title="post /v1/inference/multimodality-completion">client.inference.<a href="./src/resources/inference.ts">generateMultimodalityCompletion</a>({ ...params }) -> InferenceGenerateMultimodalityCompletionResponse</code>
-- <code title="post /v1/inference/persona-chat">client.inference.<a href="./src/resources/inference.ts">generatePersonaChat</a>({ ...params }) -> InferenceGeneratePersonaChatResponse</code>
 
 # Projects
 

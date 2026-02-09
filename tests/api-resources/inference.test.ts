@@ -66,49 +66,19 @@ describe('resource inference', () => {
       context: 'context',
       disabled_learning: false,
       image_base64: 'base64_encoded_image...',
+      max_reasoning_iterations: 1,
       model: 'gemini-2.5-flash',
+      num_images: 1,
       output_type: 'text',
       persona_id: 'persona_id',
       project_id: 'project_id',
       question: 'What do you see?',
+      seed: 0,
       session_id: 'session_123',
       speed: 1,
+      use_reasoning: true,
       video_base64: 'base64_encoded_video...',
       voice: 'alloy',
-    });
-  });
-
-  // Prism tests are disabled
-  test.skip('generatePersonaChat: only required params', async () => {
-    const responsePromise = client.inference.generatePersonaChat({
-      content: [
-        { content: 'You are a helpful AI assistant.', role: 'system' },
-        { content: 'Hello, how are you?', role: 'user' },
-      ],
-      persona_id: 'persona-456',
-      user_id: 'user-123',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('generatePersonaChat: required and optional params', async () => {
-    const response = await client.inference.generatePersonaChat({
-      content: [
-        { content: 'You are a helpful AI assistant.', role: 'system' },
-        { content: 'Hello, how are you?', role: 'user' },
-      ],
-      persona_id: 'persona-456',
-      user_id: 'user-123',
-      disabled_learning: true,
-      model: 'gpt-4.1-mini',
-      session_id: 'session-abc',
     });
   });
 });

@@ -238,11 +238,11 @@ export interface ProjectCreateParams {
   description?: string | null;
 
   /**
-   * Optional project type override. When set, skips LLM classification during
-   * content ingestion. Use 'creative_design' for artistic/design projects, 'general'
-   * for documentation/business content.
+   * Project type override. When set, skips LLM classification during content
+   * ingestion. Use 'creative_design' for artistic/design projects, 'general' for
+   * documentation/business content.
    */
-  project_type?: 'creative_design' | 'general' | null;
+  project_type?: 'creative_design' | 'general';
 
   /**
    * User ID to associate the project with. If not provided, uses the authenticated

@@ -6,37 +6,13 @@ import { RequestOptions } from '../internal/request-options';
 
 export class Inference extends APIResource {
   /**
-   * Generate personalized AI completion using the Elicit Labs Modal System.
+   * **⚠️ DEPRECATED** — Use `POST /v1/chat/completions` or
+   * `POST /v1/text/generations` instead.
    *
-   *     This endpoint:
-   *     - Takes raw messages or user query
-   *     - Retrieves relevant memories and personalizes the context
-   *     - Generates personalized AI response using the specified LLM model
-   *     - Optionally learns from the conversation (disabled_learning=False)
-   *     - Returns formatted messages with AI response
+   *     This endpoint is kept for backward compatibility and internally delegates to
+   *     the new text generation handler.
    *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, inference uses persona's context instead of user
-   *     - project_id (str, optional): If provided, inference uses project's context (inherits from user)
-   *
-   *     Priority: persona_id > project_id > user_id
-   *
-   *     **Authentication**: Requires valid API key or JWT token in Authorization header
-   *
-   * @example
-   * ```ts
-   * const response = await client.inference.generateCompletion({
-   *   content: [
-   *     {
-   *       content: 'You are a helpful AI assistant.',
-   *       role: 'system',
-   *     },
-   *     { content: 'Hello, how are you?', role: 'user' },
-   *   ],
-   *   user_id: 'user-123',
-   * });
-   * ```
+   * @deprecated
    */
   generateCompletion(
     body: InferenceGenerateCompletionParams,
@@ -46,124 +22,20 @@ export class Inference extends APIResource {
   }
 
   /**
-   * Generate an AI response using multimodal memory retrieval with flexible output
-   * types.
+   * **DEPRECATED** — Use the new dedicated endpoints instead: - Text →
+   * `POST /v1/text/generations` - Image → `POST /v1/images/generations` - Audio →
+   * `POST /v1/audio/generations` - All → `POST /v1/chat/completions`
    *
-   *     This endpoint:
-   *     1. Accepts multimodal inputs (video, image, audio) - same as multimodal-query
-   *     2. Processes the multimodal input to extract faces, voices, and transcripts
-   *     3. Retrieves relevant memories based on matched identities and transcripts
-   *     4. Generates an LLM response using the memory context and multimodal data
-   *     5. Based on output_type: returns text only, converts to speech (TTS), or generates an image
-   *     6. Returns text response, audio/image (based on output_type), and memory context
+   *     This endpoint is kept for backward compatibility and internally delegates to
+   *     the appropriate new generation handler based on `output_type`.
    *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, uses persona's context instead of user
-   *     - project_id (str, optional): If provided, uses project's context (inherits from user)
-   *
-   *     Priority: persona_id > project_id > user_id
-   *
-   *     **Request Parameters:**
-   *     - question (str, optional): User's question or prompt (can be extracted from audio if not provided)
-   *     - context (str, optional): Additional context for the question
-   *     - session_id (str, optional): Session identifier for conversation context
-   *     - video_base64 (str, optional): Base64 encoded video content
-   *     - image_base64 (str, optional): Base64 encoded image content
-   *     - audio_base64 (str, optional): Base64 encoded audio content (supports webm, wav, mp3, etc.)
-   *     - audio_type (str, optional): Type of audio output - 'tts' (default), 'music', or 'sfx'
-   *     - voice (str, optional): Voice to use for TTS - options: alloy (default), echo, fable, onyx, nova, shimmer
-   *     - speed (float, optional): Speech speed from 0.25 to 4.0 (default: 1.0). Only for TTS.
-   *     - audio_duration (float, optional): Duration in seconds for music/sfx (default: 10 for music, 5 for sfx)
-   *     - model (str, optional): LLM model to use (defaults to gemini-2.5-flash)
-   *     - output_type (str, optional): Output type - 'text' (default), 'audio', or 'image' (AI-generated)
-   *     - disabled_learning (bool, optional): Whether to disable ingestion/learning from the content (default: false)
-   *
-   *     **Note:** At least one multimodal input (video, image, or audio) is required for memory retrieval.
-   *     When disabled_learning is false, the multimodal content will also be ingested for future memory retrieval.
-   *
-   *     **Response:**
-   *     - text_response (str): Generated text response from the LLM
-   *     - audio_base64 (str, optional): Base64 encoded audio if output_type='audio' (MP3 for TTS, WAV for music/sfx)
-   *     - audio_format (str, optional): Format of the audio (mp3 or wav)
-   *     - voice_used (str, optional): Voice used for TTS (only for audio_type='tts')
-   *     - image_base64 (str, optional): Representative image from input
-   *     - generated_image_base64 (str, optional): AI-generated image if output_type='image'
-   *     - memory_context (str, optional): Formatted memory context used for generation
-   *     - raw_results (dict, optional): Raw results from memory retrieval
-   *     - success (bool): True if request succeeded
-   *
-   *     **Example:**
-   *     ```json
-   *     {
-   *         "user_id": "user-123",
-   *         "persona_id": null,
-   *         "project_id": null,
-   *         "question": "What do you see?",
-   *         "video_base64": "base64_encoded_video...",
-   *         "voice": "alloy",
-   *         "speed": 1.0,
-   *         "model": "gemini-2.5-flash",
-   *         "output_type": "audio",
-   *         "disabled_learning": false
-   *     }
-   *     ```
-   *
-   *     Returns 200 OK with text, audio/image (based on output_type), and memory context. Requires JWT authentication.
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.inference.generateMultimodalityCompletion({
-   *     user_id: '123e4567-e89b-12d3-a456-426614174000',
-   *   });
-   * ```
+   * @deprecated
    */
   generateMultimodalityCompletion(
     body: InferenceGenerateMultimodalityCompletionParams,
     options?: RequestOptions,
   ): APIPromise<InferenceGenerateMultimodalityCompletionResponse> {
     return this._client.post('/v1/inference/multimodality-completion', { body, ...options });
-  }
-
-  /**
-   * Generate AI response as a specific persona with Elicit Labs Modal System.
-   *
-   *     This endpoint:
-   *     - Retrieves persona information and characteristics
-   *     - Formats messages with persona-specific context and memories
-   *     - Generates response in the persona's unique style and voice
-   *     - Optionally learns from the conversation (disabled_learning=False)
-   *     - Returns synchronous response with formatted messages
-   *
-   *     **Required Parameters:**
-   *     - user_id (str, required): The owning user ID
-   *     - persona_id (str, required): The persona ID to chat as
-   *
-   *     **Authentication**: Requires valid API key or JWT token in Authorization header
-   *
-   * @example
-   * ```ts
-   * const response = await client.inference.generatePersonaChat(
-   *   {
-   *     content: [
-   *       {
-   *         content: 'You are a helpful AI assistant.',
-   *         role: 'system',
-   *       },
-   *       { content: 'Hello, how are you?', role: 'user' },
-   *     ],
-   *     persona_id: 'persona-456',
-   *     user_id: 'user-123',
-   *   },
-   * );
-   * ```
-   */
-  generatePersonaChat(
-    body: InferenceGeneratePersonaChatParams,
-    options?: RequestOptions,
-  ): APIPromise<InferenceGeneratePersonaChatResponse> {
-    return this._client.post('/v1/inference/persona-chat', { body, ...options });
   }
 }
 
@@ -208,7 +80,14 @@ export interface InferenceGenerateMultimodalityCompletionResponse {
   entity_images?: { [key: string]: string } | null;
 
   /**
-   * Base64 encoded AI-generated image (if output_type='image')
+   * List of all generated images as base64 (when num_images > 1). Each image is
+   * generated with a different seed for variation
+   */
+  generated_images?: Array<string> | null;
+
+  /**
+   * Base64 encoded AI-generated image (if output_type='image'). First image when
+   * num_images > 1
    */
   image_base64?: string | null;
 
@@ -223,6 +102,12 @@ export interface InferenceGenerateMultimodalityCompletionResponse {
   raw_results?: { [key: string]: unknown } | null;
 
   /**
+   * Complete reasoning trace (if use_reasoning=True) with blueprint, grounding,
+   * constraints, verification, and repair steps
+   */
+  reasoning_trace?: { [key: string]: unknown } | null;
+
+  /**
    * Whether the request was successful
    */
   success?: boolean;
@@ -231,21 +116,6 @@ export interface InferenceGenerateMultimodalityCompletionResponse {
    * Voice used for TTS
    */
   voice_used?: string | null;
-}
-
-/**
- * Response model for persona chat
- */
-export interface InferenceGeneratePersonaChatResponse {
-  /**
-   * Formatted messages with memory context
-   */
-  messages: Array<{ [key: string]: string }> | null;
-
-  /**
-   * Generated response content
-   */
-  response?: string | null;
 }
 
 export interface InferenceGenerateCompletionParams {
@@ -325,9 +195,20 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   image_base64?: string | null;
 
   /**
+   * Maximum repair iterations in reasoning loop
+   */
+  max_reasoning_iterations?: number;
+
+  /**
    * LLM model to use for generating the response
    */
   model?: string | null;
+
+  /**
+   * Number of images to generate (each with a different seed for variation). Only
+   * used when output_type='image'
+   */
+  num_images?: number;
 
   /**
    * Output type: 'text' for text only, 'audio' for TTS audio, 'image' for
@@ -353,6 +234,12 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   question?: string | null;
 
   /**
+   * Base seed for reproducible image generation. If not provided, a random seed is
+   * used. Only used when output_type='image'
+   */
+  seed?: number | null;
+
+  /**
    * Optional session identifier for conversation context
    */
   session_id?: string | null;
@@ -361,6 +248,12 @@ export interface InferenceGenerateMultimodalityCompletionParams {
    * Speed of the speech (0.25 to 4.0). Only used when audio_type='tts'
    */
   speed?: number;
+
+  /**
+   * Use creative reasoning loop for constraint-satisfying generation (only for
+   * creative_design projects with output_type='image')
+   */
+  use_reasoning?: boolean;
 
   /**
    * Base64 encoded video content
@@ -374,45 +267,11 @@ export interface InferenceGenerateMultimodalityCompletionParams {
   voice?: string;
 }
 
-export interface InferenceGeneratePersonaChatParams {
-  /**
-   * Content to process
-   */
-  content: string | Array<{ [key: string]: string }>;
-
-  /**
-   * Persona ID to chat as (required for persona chat)
-   */
-  persona_id: string;
-
-  /**
-   * User ID (always required)
-   */
-  user_id: string;
-
-  /**
-   * Whether to disable learning
-   */
-  disabled_learning?: boolean;
-
-  /**
-   * LLM model to use for generation
-   */
-  model?: string;
-
-  /**
-   * Session identifier
-   */
-  session_id?: string | null;
-}
-
 export declare namespace Inference {
   export {
     type InferenceGenerateCompletionResponse as InferenceGenerateCompletionResponse,
     type InferenceGenerateMultimodalityCompletionResponse as InferenceGenerateMultimodalityCompletionResponse,
-    type InferenceGeneratePersonaChatResponse as InferenceGeneratePersonaChatResponse,
     type InferenceGenerateCompletionParams as InferenceGenerateCompletionParams,
     type InferenceGenerateMultimodalityCompletionParams as InferenceGenerateMultimodalityCompletionParams,
-    type InferenceGeneratePersonaChatParams as InferenceGeneratePersonaChatParams,
   };
 }

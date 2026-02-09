@@ -7,19 +7,15 @@ export {
   Inference,
   type InferenceGenerateCompletionResponse,
   type InferenceGenerateMultimodalityCompletionResponse,
-  type InferenceGeneratePersonaChatResponse,
   type InferenceGenerateCompletionParams,
   type InferenceGenerateMultimodalityCompletionParams,
-  type InferenceGeneratePersonaChatParams,
 } from './inference';
 export {
   Modal,
   type ModalLearnResponse,
   type ModalQueryResponse,
-  type ModalQueryMultimodalityResponse,
   type ModalLearnParams,
   type ModalQueryParams,
-  type ModalQueryMultimodalityParams,
 } from './modal';
 export {
   Personas,
