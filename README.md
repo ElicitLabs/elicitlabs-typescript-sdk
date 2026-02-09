@@ -114,13 +114,13 @@ await client.chat.createCompletion({ messages: [{ content: 'string', role: 'role
 
 ### Timeouts
 
-Requests time out after 10 minutes by default. You can configure this with a `timeout` option:
+Requests time out after 11.67 minutes by default. You can configure this with a `timeout` option:
 
 <!-- prettier-ignore -->
 ```ts
 // Configure the default for all requests:
 const client = new ElicitClient({
-  timeout: 20 * 1000, // 20 seconds (default is 10 minutes)
+  timeout: 20 * 1000, // 20 seconds (default is 11.67 minutes)
 });
 
 // Override per-request:
