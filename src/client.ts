@@ -16,7 +16,10 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/audio';
+import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
+import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
 import {
   Inference,
   InferenceGenerateCompletionParams,
@@ -46,7 +49,9 @@ import {
   ProjectRetrieveResponse,
   Projects,
 } from './resources/projects';
+import { Text, TextGenerateParams, TextGenerateResponse } from './resources/text';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
+import { Video, VideoGenerateParams, VideoGenerateResponse } from './resources/video';
 import { Auth } from './resources/auth/auth';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
 import { type Fetch } from './internal/builtin-types';
@@ -761,6 +766,11 @@ export class ElicitClient {
   personas: API.Personas = new API.Personas(this);
   inference: API.Inference = new API.Inference(this);
   projects: API.Projects = new API.Projects(this);
+  chat: API.Chat = new API.Chat(this);
+  text: API.Text = new API.Text(this);
+  images: API.Images = new API.Images(this);
+  audio: API.Audio = new API.Audio(this);
+  video: API.Video = new API.Video(this);
 }
 
 ElicitClient.Modal = Modal;
@@ -771,6 +781,11 @@ ElicitClient.Auth = Auth;
 ElicitClient.Personas = Personas;
 ElicitClient.Inference = Inference;
 ElicitClient.Projects = Projects;
+ElicitClient.Chat = Chat;
+ElicitClient.Text = Text;
+ElicitClient.Images = Images;
+ElicitClient.Audio = Audio;
+ElicitClient.Video = Video;
 
 export declare namespace ElicitClient {
   export type RequestOptions = Opts.RequestOptions;
@@ -822,5 +837,35 @@ export declare namespace ElicitClient {
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
     type ProjectCreateParams as ProjectCreateParams,
+  };
+
+  export {
+    Chat as Chat,
+    type ChatCreateCompletionResponse as ChatCreateCompletionResponse,
+    type ChatCreateCompletionParams as ChatCreateCompletionParams,
+  };
+
+  export {
+    Text as Text,
+    type TextGenerateResponse as TextGenerateResponse,
+    type TextGenerateParams as TextGenerateParams,
+  };
+
+  export {
+    Images as Images,
+    type ImageGenerateResponse as ImageGenerateResponse,
+    type ImageGenerateParams as ImageGenerateParams,
+  };
+
+  export {
+    Audio as Audio,
+    type AudioGenerateResponse as AudioGenerateResponse,
+    type AudioGenerateParams as AudioGenerateParams,
+  };
+
+  export {
+    Video as Video,
+    type VideoGenerateResponse as VideoGenerateResponse,
+    type VideoGenerateParams as VideoGenerateParams,
   };
 }
