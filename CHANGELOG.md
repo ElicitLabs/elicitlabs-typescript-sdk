@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.11.0 (2026-02-09)
+
+Full Changelog: [v0.10.0...v0.11.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.10.0...v0.11.0)
+
+### Features
+
+* **api:** api update ([fc03045](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/fc0304545c15ffdbb8a9985edf12dc63f9e718c0))
+* **api:** manual updates ([8e80a38](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/8e80a3822c9c0b556b93447f1398e61ea2f575e8))
+* **api:** manual updates ([9888930](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/9888930e6ea83dc9bbed2840022e607724579220))
+
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([1a8da4c](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/1a8da4c4462b1b09699bedcb8dc070d137dfe55b))
+* **client:** avoid removing abort listener too early ([3f0bdba](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/3f0bdbae739d902ed25c9a18ae8eaeedd7e8ca23))
+
+
+### Chores
+
+* **client:** do not parse responses with empty content-length ([ca05aa5](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/ca05aa512a3b93d9e330b9cfd67eb9a18a494041))
+* **client:** restructure abort controller binding ([174cb6f](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/174cb6f8cd24e94f82855cf83100c6efa1d6c349))
+* **internal:** upgrade pnpm ([5582a21](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/5582a2145f9fb822f0f6ed73a0f8ce8073c406ba))
+
 ## 0.10.0 (2026-01-29)
 
 Full Changelog: [v0.9.0...v0.10.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.9.0...v0.10.0)

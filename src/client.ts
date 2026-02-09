@@ -16,22 +16,21 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
+import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/audio';
+import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
+import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
 import {
   Inference,
   InferenceGenerateCompletionParams,
   InferenceGenerateCompletionResponse,
   InferenceGenerateMultimodalityCompletionParams,
   InferenceGenerateMultimodalityCompletionResponse,
-  InferenceGeneratePersonaChatParams,
-  InferenceGeneratePersonaChatResponse,
 } from './resources/inference';
 import {
   Modal,
   ModalLearnParams,
   ModalLearnResponse,
-  ModalQueryMultimodalityParams,
-  ModalQueryMultimodalityResponse,
   ModalQueryParams,
   ModalQueryResponse,
 } from './resources/modal';
@@ -50,7 +49,9 @@ import {
   ProjectRetrieveResponse,
   Projects,
 } from './resources/projects';
+import { Text, TextGenerateParams, TextGenerateResponse } from './resources/text';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
+import { Video, VideoGenerateParams, VideoGenerateResponse } from './resources/video';
 import { Auth } from './resources/auth/auth';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
 import { type Fetch } from './internal/builtin-types';
@@ -106,7 +107,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 0
    */
   maxRetries?: number | undefined;
 
@@ -164,10 +165,10 @@ export class ElicitClient {
    *
    * @param {string | undefined} [opts.apiKey=process.env['ELICIT_LABS_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['ELICIT_CLIENT_BASE_URL'] ?? https://api.elicitlabs.ai] - Override the default base URL for the API.
-   * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=0] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
@@ -189,7 +190,7 @@ export class ElicitClient {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 10 minutes */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -199,7 +200,7 @@ export class ElicitClient {
       parseLogLevel(readEnv('ELICIT_CLIENT_LOG'), "process.env['ELICIT_CLIENT_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.maxRetries = options.maxRetries ?? 2;
+    this.maxRetries = options.maxRetries ?? 0;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
@@ -525,9 +526,10 @@ export class ElicitClient {
     controller: AbortController,
   ): Promise<Response> {
     const { signal, method, ...options } = init || {};
-    if (signal) signal.addEventListener('abort', () => controller.abort());
+    const abort = this._makeAbort(controller);
+    if (signal) signal.addEventListener('abort', abort, { once: true });
 
-    const timeout = setTimeout(() => controller.abort(), ms);
+    const timeout = setTimeout(abort, ms);
 
     const isReadableBody =
       ((globalThis as any).ReadableStream && options.body instanceof (globalThis as any).ReadableStream) ||
@@ -616,8 +618,8 @@ export class ElicitClient {
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
-    const initialRetryDelay = 0.5;
-    const maxRetryDelay = 8.0;
+    const initialRetryDelay = 0.0;
+    const maxRetryDelay = 0.0;
 
     const numRetries = maxRetries - retriesRemaining;
 
@@ -694,6 +696,12 @@ export class ElicitClient {
     return headers.values;
   }
 
+  private _makeAbort(controller: AbortController) {
+    // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+    //       would capture all request options, and cause a memory leak.
+    return () => controller.abort();
+  }
+
   private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
@@ -732,7 +740,7 @@ export class ElicitClient {
   }
 
   static ElicitClient = this;
-  static DEFAULT_TIMEOUT = 60000; // 1 minute
+  static DEFAULT_TIMEOUT = 600000; // 10 minutes
 
   static ElicitClientError = Errors.ElicitClientError;
   static APIError = Errors.APIError;
@@ -758,6 +766,11 @@ export class ElicitClient {
   personas: API.Personas = new API.Personas(this);
   inference: API.Inference = new API.Inference(this);
   projects: API.Projects = new API.Projects(this);
+  chat: API.Chat = new API.Chat(this);
+  text: API.Text = new API.Text(this);
+  images: API.Images = new API.Images(this);
+  audio: API.Audio = new API.Audio(this);
+  video: API.Video = new API.Video(this);
 }
 
 ElicitClient.Modal = Modal;
@@ -768,6 +781,11 @@ ElicitClient.Auth = Auth;
 ElicitClient.Personas = Personas;
 ElicitClient.Inference = Inference;
 ElicitClient.Projects = Projects;
+ElicitClient.Chat = Chat;
+ElicitClient.Text = Text;
+ElicitClient.Images = Images;
+ElicitClient.Audio = Audio;
+ElicitClient.Video = Video;
 
 export declare namespace ElicitClient {
   export type RequestOptions = Opts.RequestOptions;
@@ -776,10 +794,8 @@ export declare namespace ElicitClient {
     Modal as Modal,
     type ModalLearnResponse as ModalLearnResponse,
     type ModalQueryResponse as ModalQueryResponse,
-    type ModalQueryMultimodalityResponse as ModalQueryMultimodalityResponse,
     type ModalLearnParams as ModalLearnParams,
     type ModalQueryParams as ModalQueryParams,
-    type ModalQueryMultimodalityParams as ModalQueryMultimodalityParams,
   };
 
   export {
@@ -810,10 +826,8 @@ export declare namespace ElicitClient {
     Inference as Inference,
     type InferenceGenerateCompletionResponse as InferenceGenerateCompletionResponse,
     type InferenceGenerateMultimodalityCompletionResponse as InferenceGenerateMultimodalityCompletionResponse,
-    type InferenceGeneratePersonaChatResponse as InferenceGeneratePersonaChatResponse,
     type InferenceGenerateCompletionParams as InferenceGenerateCompletionParams,
     type InferenceGenerateMultimodalityCompletionParams as InferenceGenerateMultimodalityCompletionParams,
-    type InferenceGeneratePersonaChatParams as InferenceGeneratePersonaChatParams,
   };
 
   export {
@@ -823,5 +837,35 @@ export declare namespace ElicitClient {
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
     type ProjectCreateParams as ProjectCreateParams,
+  };
+
+  export {
+    Chat as Chat,
+    type ChatCreateCompletionResponse as ChatCreateCompletionResponse,
+    type ChatCreateCompletionParams as ChatCreateCompletionParams,
+  };
+
+  export {
+    Text as Text,
+    type TextGenerateResponse as TextGenerateResponse,
+    type TextGenerateParams as TextGenerateParams,
+  };
+
+  export {
+    Images as Images,
+    type ImageGenerateResponse as ImageGenerateResponse,
+    type ImageGenerateParams as ImageGenerateParams,
+  };
+
+  export {
+    Audio as Audio,
+    type AudioGenerateResponse as AudioGenerateResponse,
+    type AudioGenerateParams as AudioGenerateParams,
+  };
+
+  export {
+    Video as Video,
+    type VideoGenerateResponse as VideoGenerateResponse,
+    type VideoGenerateParams as VideoGenerateParams,
   };
 }
