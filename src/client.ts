@@ -107,7 +107,7 @@ export interface ClientOptions {
    * The maximum number of times that the client will retry a request in case of a
    * temporary failure, like a network error or a 5XX error from the server.
    *
-   * @default 2
+   * @default 0
    */
   maxRetries?: number | undefined;
 
@@ -165,10 +165,10 @@ export class ElicitClient {
    *
    * @param {string | undefined} [opts.apiKey=process.env['ELICIT_LABS_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['ELICIT_CLIENT_BASE_URL'] ?? https://api.elicitlabs.ai] - Override the default base URL for the API.
-   * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-   * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+   * @param {number} [opts.maxRetries=0] - The maximum number of times the client will retry a request.
    * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
@@ -190,7 +190,7 @@ export class ElicitClient {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 10 minutes */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -200,7 +200,7 @@ export class ElicitClient {
       parseLogLevel(readEnv('ELICIT_CLIENT_LOG'), "process.env['ELICIT_CLIENT_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
-    this.maxRetries = options.maxRetries ?? 2;
+    this.maxRetries = options.maxRetries ?? 0;
     this.fetch = options.fetch ?? Shims.getDefaultFetch();
     this.#encoder = Opts.FallbackEncoder;
 
@@ -618,8 +618,8 @@ export class ElicitClient {
   }
 
   private calculateDefaultRetryTimeoutMillis(retriesRemaining: number, maxRetries: number): number {
-    const initialRetryDelay = 0.5;
-    const maxRetryDelay = 8.0;
+    const initialRetryDelay = 0.0;
+    const maxRetryDelay = 0.0;
 
     const numRetries = maxRetries - retriesRemaining;
 
@@ -740,7 +740,7 @@ export class ElicitClient {
   }
 
   static ElicitClient = this;
-  static DEFAULT_TIMEOUT = 60000; // 1 minute
+  static DEFAULT_TIMEOUT = 600000; // 10 minutes
 
   static ElicitClientError = Errors.ElicitClientError;
   static APIError = Errors.APIError;
