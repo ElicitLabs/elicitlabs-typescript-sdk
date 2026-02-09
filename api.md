@@ -107,3 +107,53 @@ Methods:
 - <code title="get /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">retrieve</a>(projectID) -> ProjectRetrieveResponse</code>
 - <code title="get /v1/projects">client.projects.<a href="./src/resources/projects.ts">list</a>() -> ProjectListResponse</code>
 - <code title="delete /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">delete</a>(projectID) -> ProjectDeleteResponse</code>
+
+# Chat
+
+Types:
+
+- <code><a href="./src/resources/chat.ts">ChatCreateCompletionResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/chat/completions">client.chat.<a href="./src/resources/chat.ts">createCompletion</a>({ ...params }) -> ChatCreateCompletionResponse</code>
+
+# Text
+
+Types:
+
+- <code><a href="./src/resources/text.ts">TextGenerateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/text/generations">client.text.<a href="./src/resources/text.ts">generate</a>({ ...params }) -> TextGenerateResponse</code>
+
+# Images
+
+Types:
+
+- <code><a href="./src/resources/images.ts">ImageGenerateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/images/generations">client.images.<a href="./src/resources/images.ts">generate</a>({ ...params }) -> ImageGenerateResponse</code>
+
+# Audio
+
+Types:
+
+- <code><a href="./src/resources/audio.ts">AudioGenerateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/audio/generations">client.audio.<a href="./src/resources/audio.ts">generate</a>({ ...params }) -> AudioGenerateResponse</code>
+
+# Video
+
+Types:
+
+- <code><a href="./src/resources/video.ts">VideoGenerateResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/video/generations">client.video.<a href="./src/resources/video.ts">generate</a>({ ...params }) -> VideoGenerateResponse</code>

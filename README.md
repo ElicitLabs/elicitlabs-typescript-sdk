@@ -26,15 +26,12 @@ const client = new ElicitClient({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.inference.generateCompletion({
-  content: [
-    { content: 'You are a helpful AI assistant.', role: 'system' },
-    { content: 'Hello, how are you?', role: 'user' },
-  ],
-  user_id: 'user-123',
+const response = await client.chat.createCompletion({
+  messages: [{ content: 'string', role: 'role' }],
+  user_id: 'user_id',
 });
 
-console.log(response.messages);
+console.log(response.session_id);
 ```
 
 ### Request & Response types
@@ -49,15 +46,13 @@ const client = new ElicitClient({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const params: ElicitClient.InferenceGenerateCompletionParams = {
-  content: [
-    { content: 'You are a helpful AI assistant.', role: 'system' },
-    { content: 'Hello, how are you?', role: 'user' },
-  ],
-  user_id: 'user-123',
+const params: ElicitClient.ChatCreateCompletionParams = {
+  messages: [{ content: 'string', role: 'role' }],
+  user_id: 'user_id',
 };
-const response: ElicitClient.InferenceGenerateCompletionResponse =
-  await client.inference.generateCompletion(params);
+const response: ElicitClient.ChatCreateCompletionResponse = await client.chat.createCompletion(
+  params,
+);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -70,14 +65,8 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.inference
-  .generateCompletion({
-    content: [
-      { content: 'You are a helpful AI assistant.', role: 'system' },
-      { content: 'Hello, how are you?', role: 'user' },
-    ],
-    user_id: 'user-123',
-  })
+const response = await client.chat
+  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
   .catch(async (err) => {
     if (err instanceof ElicitClient.APIError) {
       console.log(err.status); // 400
@@ -118,7 +107,7 @@ const client = new ElicitClient({
 });
 
 // Or, configure per-request:
-await client.inference.generateCompletion({ content: [{ content: 'You are a helpful AI assistant.', role: 'system' }, { content: 'Hello, how are you?', role: 'user' }], user_id: 'user-123' }, {
+await client.chat.createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' }, {
   maxRetries: 5,
 });
 ```
@@ -135,7 +124,7 @@ const client = new ElicitClient({
 });
 
 // Override per-request:
-await client.inference.generateCompletion({ content: [{ content: 'You are a helpful AI assistant.', role: 'system' }, { content: 'Hello, how are you?', role: 'user' }], user_id: 'user-123' }, {
+await client.chat.createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -158,29 +147,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new ElicitClient();
 
-const response = await client.inference
-  .generateCompletion({
-    content: [
-      { content: 'You are a helpful AI assistant.', role: 'system' },
-      { content: 'Hello, how are you?', role: 'user' },
-    ],
-    user_id: 'user-123',
-  })
+const response = await client.chat
+  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.inference
-  .generateCompletion({
-    content: [
-      { content: 'You are a helpful AI assistant.', role: 'system' },
-      { content: 'Hello, how are you?', role: 'user' },
-    ],
-    user_id: 'user-123',
-  })
+const { data: response, response: raw } = await client.chat
+  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.messages);
+console.log(response.session_id);
 ```
 
 ### Logging
@@ -260,7 +237,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.inference.generateCompletion({
+client.chat.createCompletion({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
