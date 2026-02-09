@@ -165,7 +165,7 @@ export class ElicitClient {
    *
    * @param {string | undefined} [opts.apiKey=process.env['ELICIT_LABS_API_KEY'] ?? undefined]
    * @param {string} [opts.baseURL=process.env['ELICIT_CLIENT_BASE_URL'] ?? https://api.elicitlabs.ai] - Override the default base URL for the API.
-   * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+   * @param {number} [opts.timeout=11.67 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
    * @param {number} [opts.maxRetries=0] - The maximum number of times the client will retry a request.
@@ -190,7 +190,7 @@ export class ElicitClient {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 10 minutes */;
+    this.timeout = options.timeout ?? ElicitClient.DEFAULT_TIMEOUT /* 11.67 minutes */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
@@ -740,7 +740,7 @@ export class ElicitClient {
   }
 
   static ElicitClient = this;
-  static DEFAULT_TIMEOUT = 600000; // 10 minutes
+  static DEFAULT_TIMEOUT = 700000; // 11.67 minutes
 
   static ElicitClientError = Errors.ElicitClientError;
   static APIError = Errors.APIError;
