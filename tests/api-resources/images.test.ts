@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource images', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
     const responsePromise = client.images.generate({
       text_input: 'A golden retriever in a space suit',
@@ -23,7 +23,7 @@ describe('resource images', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.images.generate({
       text_input: 'A golden retriever in a space suit',

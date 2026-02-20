@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource inference', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateCompletion: only required params', async () => {
     const responsePromise = client.inference.generateCompletion({
       content: [
@@ -26,7 +26,7 @@ describe('resource inference', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateCompletion: required and optional params', async () => {
     const response = await client.inference.generateCompletion({
       content: [
@@ -42,7 +42,7 @@ describe('resource inference', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateMultimodalityCompletion: only required params', async () => {
     const responsePromise = client.inference.generateMultimodalityCompletion({
       user_id: '123e4567-e89b-12d3-a456-426614174000',
@@ -56,7 +56,7 @@ describe('resource inference', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generateMultimodalityCompletion: required and optional params', async () => {
     const response = await client.inference.generateMultimodalityCompletion({
       user_id: '123e4567-e89b-12d3-a456-426614174000',

@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource data', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('ingest: only required params', async () => {
     const responsePromise = client.data.ingest({
       content_type: 'text',
@@ -24,7 +24,7 @@ describe('resource data', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('ingest: required and optional params', async () => {
     const response = await client.data.ingest({
       content_type: 'text',
