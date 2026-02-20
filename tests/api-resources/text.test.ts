@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource text', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
     const responsePromise = client.text.generate({ user_id: 'user_123' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource text', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.text.generate({
       user_id: 'user_123',

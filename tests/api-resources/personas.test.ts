@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource personas', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.personas.create({ name: 'Creative Writer' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource personas', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.personas.create({
       name: 'Creative Writer',
@@ -28,7 +28,7 @@ describe('resource personas', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.personas.retrieve('persona_id');
     const rawResponse = await responsePromise.asResponse();
@@ -40,7 +40,7 @@ describe('resource personas', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.personas.list();
     const rawResponse = await responsePromise.asResponse();

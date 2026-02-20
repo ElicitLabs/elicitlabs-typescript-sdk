@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource modal', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('learn: only required params', async () => {
     const responsePromise = client.modal.learn({
       messages: [
@@ -27,7 +27,7 @@ describe('resource modal', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('learn: required and optional params', async () => {
     const response = await client.modal.learn({
       messages: [
@@ -55,7 +55,7 @@ describe('resource modal', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('query: only required params', async () => {
     const responsePromise = client.modal.query({ user_id: 'user_123' });
     const rawResponse = await responsePromise.asResponse();
@@ -67,7 +67,7 @@ describe('resource modal', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('query: required and optional params', async () => {
     const response = await client.modal.query({
       user_id: 'user_123',
