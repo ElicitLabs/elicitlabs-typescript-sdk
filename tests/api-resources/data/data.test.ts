@@ -11,7 +11,6 @@ describe('resource data', () => {
   // Mock server tests are disabled
   test.skip('ingest: only required params', async () => {
     const responsePromise = client.data.ingest({
-      content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'user-123',
     });
@@ -27,10 +26,10 @@ describe('resource data', () => {
   // Mock server tests are disabled
   test.skip('ingest: required and optional params', async () => {
     const response = await client.data.ingest({
-      content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'user-123',
       content_description: 'Email correspondence about project updates',
+      content_type: 'text',
       filename: 'filename',
       persona_id: 'persona_id',
       project_id: 'project_id',

@@ -57,7 +57,6 @@ export class Data extends APIResource {
    * @example
    * ```ts
    * const response = await client.data.ingest({
-   *   content_type: 'text',
    *   payload:
    *     'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
    *   user_id: 'user-123',
@@ -96,12 +95,6 @@ export interface DataIngestResponse {
 
 export interface DataIngestParams {
   /**
-   * Content type (e.g., 'text', 'image', 'video', 'pdf', 'word', 'audio',
-   * 'messages', 'file')
-   */
-  content_type: string;
-
-  /**
    * Raw content as string, object, list (for messages), or base64 encoded data
    */
   payload: string | { [key: string]: unknown } | Array<unknown>;
@@ -116,6 +109,12 @@ export interface DataIngestParams {
    * concepts', 'Meeting notes')
    */
   content_description?: string | null;
+
+  /**
+   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
+   * If omitted, the category is auto-detected from the uploaded file bytes.
+   */
+  content_type?: string | null;
 
   /**
    * Filename of the uploaded file
