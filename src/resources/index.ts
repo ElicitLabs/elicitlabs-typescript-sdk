@@ -6,13 +6,7 @@ export { Chat, type ChatCreateCompletionResponse, type ChatCreateCompletionParam
 export { Data, type DataIngestResponse, type DataIngestParams } from './data/data';
 export { Health, type HealthCheckResponse } from './health';
 export { Images, type ImageGenerateResponse, type ImageGenerateParams } from './images';
-export {
-  Inference,
-  type InferenceGenerateCompletionResponse,
-  type InferenceGenerateMultimodalityCompletionResponse,
-  type InferenceGenerateCompletionParams,
-  type InferenceGenerateMultimodalityCompletionParams,
-} from './inference';
+export { Inference } from './inference';
 export {
   Modal,
   type ModalLearnResponse,

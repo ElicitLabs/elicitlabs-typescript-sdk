@@ -20,13 +20,7 @@ import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/a
 import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
 import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
-import {
-  Inference,
-  InferenceGenerateCompletionParams,
-  InferenceGenerateCompletionResponse,
-  InferenceGenerateMultimodalityCompletionParams,
-  InferenceGenerateMultimodalityCompletionResponse,
-} from './resources/inference';
+import { Inference } from './resources/inference';
 import {
   Modal,
   ModalLearnParams,
@@ -830,13 +824,7 @@ export declare namespace ElicitClient {
     type PersonaCreateParams as PersonaCreateParams,
   };
 
-  export {
-    Inference as Inference,
-    type InferenceGenerateCompletionResponse as InferenceGenerateCompletionResponse,
-    type InferenceGenerateMultimodalityCompletionResponse as InferenceGenerateMultimodalityCompletionResponse,
-    type InferenceGenerateCompletionParams as InferenceGenerateCompletionParams,
-    type InferenceGenerateMultimodalityCompletionParams as InferenceGenerateMultimodalityCompletionParams,
-  };
+  export { Inference as Inference };
 
   export {
     Projects as Projects,

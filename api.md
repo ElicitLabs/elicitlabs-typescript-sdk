@@ -82,16 +82,6 @@ Methods:
 
 # Inference
 
-Types:
-
-- <code><a href="./src/resources/inference.ts">InferenceGenerateCompletionResponse</a></code>
-- <code><a href="./src/resources/inference.ts">InferenceGenerateMultimodalityCompletionResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/inference/completion">client.inference.<a href="./src/resources/inference.ts">generateCompletion</a>({ ...params }) -> InferenceGenerateCompletionResponse</code>
-- <code title="post /v1/inference/multimodality-completion">client.inference.<a href="./src/resources/inference.ts">generateMultimodalityCompletion</a>({ ...params }) -> InferenceGenerateMultimodalityCompletionResponse</code>
-
 # Projects
 
 Types:
