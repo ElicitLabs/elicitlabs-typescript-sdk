@@ -60,7 +60,7 @@ $ yarn link elicit-labs
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global elicit-labs
+$ pnpm link --global elicit-labs
 ```
 
 ## Running tests
