@@ -51,9 +51,20 @@ export class Images extends APIResource {
  */
 export interface ImageGenerateResponse {
   /**
-   * Base64 encoded image
+   * Base64 encoded image. Present when the output is under 32 MB.
    */
-  image_base64: string;
+  image_base64?: string | null;
+
+  /**
+   * Signed URL to download the image. Present when the output is 32 MB or larger.
+   * Expires after 1 hour.
+   */
+  image_url?: string | null;
+
+  /**
+   * Delivery method for the generated content: 'base64' or 'url'
+   */
+  output_type?: string;
 
   /**
    * Whether the request succeeded

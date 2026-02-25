@@ -59,11 +59,6 @@ export class Audio extends APIResource {
  */
 export interface AudioGenerateResponse {
   /**
-   * Base64 encoded audio content
-   */
-  audio_base64: string;
-
-  /**
    * Audio format (mp3, wav)
    */
   audio_format: string;
@@ -74,9 +69,25 @@ export interface AudioGenerateResponse {
   audio_type: string;
 
   /**
+   * Base64 encoded audio content. Present when the output is under 32 MB.
+   */
+  audio_base64?: string | null;
+
+  /**
+   * Signed URL to download the audio. Present when the output is 32 MB or larger.
+   * Expires after 1 hour.
+   */
+  audio_url?: string | null;
+
+  /**
    * Duration of generated audio in seconds
    */
   duration_seconds?: number | null;
+
+  /**
+   * Delivery method for the generated content: 'base64' or 'url'
+   */
+  output_type?: string;
 
   /**
    * Whether the request succeeded
