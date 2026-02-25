@@ -6,67 +6,190 @@ import { Job, JobRetrieveStatusParams, JobRetrieveStatusResponse } from './job';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+const _UPLOAD_THRESHOLD = 20 * 1024 * 1024; // 20 MB
+
+function _isUrl(value: unknown): value is string {
+  return typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'));
+}
+
+function _looksLikePath(value: string): boolean {
+  return value.includes('/') || value.includes('\\') || value.startsWith('.') || value.startsWith('~');
+}
+
+async function _isFilePath(value: string): Promise<boolean> {
+  if (!_looksLikePath(value)) return false;
+  try {
+    const fs = await import('node:fs');
+    return fs.existsSync(value);
+  } catch {
+    return false;
+  }
+}
+
+async function _readFile(filePath: string): Promise<Buffer> {
+  const fs = await import('node:fs');
+  return fs.readFileSync(filePath) as Buffer;
+}
+
 export class Data extends APIResource {
   job: JobAPI.Job = new JobAPI.Job(this._client);
 
   /**
-   * Ingest data for asynchronous processing
+   * Ingest data for asynchronous processing.
    *
-   *     Accepts various content types (text, messages, files) and processes them to extract information
-   *     and integrate it into the user's memory system. Returns a job_id for tracking status.
+   * Accepts various content types (text, messages, files) and processes them
+   * to extract information and integrate it into the user's memory system.
    *
-   *     **Entity Resolution:**
-   *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, data is ingested to this persona instead of user
-   *     - project_id (str, optional): If provided, data is ingested to this project (inherits from user)
+   * **Smart payload handling:** The `payload` parameter accepts:
    *
-   *     Priority: persona_id > project_id > user_id
-   *
-   *     **Request Parameters:**
-   *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "audio", "file"
-   *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
-   *     - content_description (str, optional): Description of the content being ingested (e.g., 'Logo design concepts', 'Meeting notes')
-   *     - session_id (str, optional): Groups related content for session-based retrieval
-   *     - timestamp (str, optional): ISO-8601 timestamp for historical data
-   *     - filename (str, optional): Original filename for file uploads
-   *
-   *     **Response:**
-   *     - job_id (str): Unique identifier for tracking the processing job
-   *     - user_id (str): Confirmed entity ID (user, persona, or project)
-   *     - content_type (str): Confirmed content type
-   *     - status (str): Job status ('queued', 'accepted')
-   *     - message (str): Status message
-   *     - created_at (str): ISO-8601 timestamp
-   *     - success (bool): True if accepted
-   *
-   *     **Example:**
-   *     ```json
-   *     {
-   *         "user_id": "user-123",
-   *         "persona_id": null,
-   *         "project_id": "project-456",
-   *         "content_type": "text",
-   *         "payload": "Meeting notes from today's discussion",
-   *         "content_description": "Meeting notes from today's discussion"
-   *     }
-   *     ```
-   *
-   *     Returns 202 Accepted with job_id. Use /job/status to check processing status.
-   *     Max payload: 5MB (JSON), 20MB (multipart). Requires JWT authentication.
+   * - **Plain text or structured data** — passed directly to the API.
+   * - **A local file path** (Node.js only) — the SDK reads the file,
+   *   base64-encodes it for small files (< 20 MB), or uses a signed-URL
+   *   upload for larger files.
+   * - **A URL** (`http://` / `https://`) — the SDK downloads the content
+   *   and uploads it the same way.
    *
    * @example
    * ```ts
-   * const response = await client.data.ingest({
-   *   payload:
-   *     'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
+   * // Plain text
+   * const r1 = await client.data.ingest({
+   *   content_type: 'text',
+   *   payload: 'Meeting notes from today',
+   *   user_id: 'user-123',
+   * });
+   *
+   * // Local file path (Node.js)
+   * const r2 = await client.data.ingest({
+   *   content_type: 'pdf',
+   *   payload: './documents/report.pdf',
+   *   user_id: 'user-123',
+   * });
+   *
+   * // URL
+   * const r3 = await client.data.ingest({
+   *   content_type: 'pdf',
+   *   payload: 'https://example.com/report.pdf',
    *   user_id: 'user-123',
    * });
    * ```
    */
-  ingest(body: DataIngestParams, options?: RequestOptions): APIPromise<DataIngestResponse> {
-    return this._client.post('/v1/data/ingest', { body, ...options });
+  async ingest(body: DataIngestParams, options?: RequestOptions): Promise<DataIngestResponse> {
+    let { payload } = body;
+    let fileBytes: ArrayBuffer | null = null;
+    let resolvedFilename: string | null = null;
+
+    if (typeof payload === 'string') {
+      if (_isUrl(payload)) {
+        const downloadResp = await fetch(payload, { redirect: 'follow' });
+        if (!downloadResp.ok) {
+          throw new Error(`Failed to download from URL (${downloadResp.status}): ${await downloadResp.text()}`);
+        }
+        fileBytes = await downloadResp.arrayBuffer();
+        const urlPath = new URL(payload).pathname;
+        resolvedFilename = urlPath.split('/').pop() || 'downloaded_file';
+      } else if (await _isFilePath(payload)) {
+        const buf = await _readFile(payload);
+        fileBytes = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+        resolvedFilename = (payload as string).split(/[\\/]/).pop() || 'uploaded_file';
+      }
+    }
+
+    if (fileBytes !== null) {
+      const actualFilename =
+        body.filename != null ? body.filename : resolvedFilename;
+
+      if (fileBytes.byteLength >= _UPLOAD_THRESHOLD) {
+        return this._ingestViaSignedUrl({
+          fileBytes,
+          filename: actualFilename || 'uploaded_file',
+          user_id: body.user_id,
+          persona_id: body.persona_id ?? undefined,
+          project_id: body.project_id ?? undefined,
+        });
+      }
+
+      const base64 = _arrayBufferToBase64(fileBytes);
+      payload = base64;
+      if (actualFilename) {
+        body = { ...body, filename: actualFilename };
+      }
+    }
+
+    return this._client.post('/v1/data/ingest', {
+      body: { ...body, payload },
+      ...options,
+    });
+  }
+
+  // ── Private helpers for the signed-URL upload flow ───────────────────
+
+  private _getUploadUrl(
+    body: DataUploadUrlParams,
+    options?: RequestOptions,
+  ): APIPromise<DataUploadUrlResponse> {
+    return this._client.post('/v1/data/ingest/upload-url', { body, ...options });
+  }
+
+  private _confirmUpload(
+    body: DataConfirmUploadParams,
+    options?: RequestOptions,
+  ): APIPromise<DataConfirmUploadResponse> {
+    return this._client.post('/v1/data/ingest/confirm-upload', { body, ...options });
+  }
+
+  private async _ingestViaSignedUrl(params: {
+    fileBytes: ArrayBuffer;
+    filename: string;
+    user_id: string;
+    persona_id?: string | undefined;
+    project_id?: string | undefined;
+  }): Promise<DataIngestResponse> {
+    const { fileBytes, filename, user_id, persona_id, project_id } = params;
+
+    const uploadInfo = await this._getUploadUrl({
+      user_id,
+      filename,
+      ...(project_id != null ? { project_id } : {}),
+      ...(persona_id != null ? { persona_id } : {}),
+    });
+
+    const putResp = await fetch(uploadInfo.upload_url, {
+      method: 'PUT',
+      body: fileBytes,
+    });
+    if (!putResp.ok) {
+      throw new Error(
+        `File upload to signed URL failed with status ${putResp.status}: ${await putResp.text()}`,
+      );
+    }
+
+    const confirm = await this._confirmUpload({
+      job_id: uploadInfo.job_id,
+      object_key: uploadInfo.object_key,
+      user_id,
+      ...(project_id != null ? { project_id } : {}),
+      ...(persona_id != null ? { persona_id } : {}),
+    });
+
+    return {
+      job_id: confirm.job_id,
+      status: confirm.status,
+      message: confirm.message ?? null,
+      success: true,
+    };
   }
 }
+
+function _arrayBufferToBase64(buffer: ArrayBuffer): string {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i++) {
+    binary += String.fromCharCode(bytes[i]!);
+  }
+  return btoa(binary);
+}
+
+// ── Response types ──────────────────────────────────────────────────────
 
 /**
  * Response model for data ingestion
@@ -93,9 +216,37 @@ export interface DataIngestResponse {
   success?: boolean;
 }
 
+/**
+ * Response from requesting a signed upload URL (internal)
+ */
+interface DataUploadUrlResponse {
+  upload_url: string;
+  job_id: string;
+  object_key: string;
+  expires_in: number;
+}
+
+/**
+ * Response from confirming an upload (internal)
+ */
+interface DataConfirmUploadResponse {
+  job_id: string;
+  status: string;
+  message?: string | null;
+}
+
+// ── Request types ───────────────────────────────────────────────────────
+
 export interface DataIngestParams {
   /**
-   * Raw content as string, object, list (for messages), or base64 encoded data
+   * Content type (e.g., 'text', 'image', 'video', 'pdf', 'word', 'audio',
+   * 'messages', 'file')
+   */
+  content_type: string;
+
+  /**
+   * Text string, message list, base64 data, a local file path, or a URL.
+   * File paths and URLs are resolved automatically by the SDK.
    */
   payload: string | { [key: string]: unknown } | Array<unknown>;
 
@@ -111,13 +262,7 @@ export interface DataIngestParams {
   content_description?: string | null;
 
   /**
-   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
-   * If omitted, the category is auto-detected from the uploaded file bytes.
-   */
-  content_type?: string | null;
-
-  /**
-   * Filename of the uploaded file
+   * Filename for file uploads (auto-detected from path/URL when omitted)
    */
   filename?: string | null;
 
@@ -143,6 +288,29 @@ export interface DataIngestParams {
    * ISO-8601 timestamp to preserve original data moment
    */
   timestamp?: string | null;
+}
+
+/**
+ * Parameters for requesting a signed upload URL (internal)
+ */
+interface DataUploadUrlParams {
+  user_id: string;
+  filename: string;
+  content_type?: string | null;
+  project_id?: string | null;
+  persona_id?: string | null;
+}
+
+/**
+ * Parameters for confirming an upload (internal)
+ */
+interface DataConfirmUploadParams {
+  job_id: string;
+  object_key: string;
+  user_id: string;
+  content_type?: string | null;
+  project_id?: string | null;
+  persona_id?: string | null;
 }
 
 Data.Job = Job;
