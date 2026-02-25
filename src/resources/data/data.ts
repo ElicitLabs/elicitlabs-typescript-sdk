@@ -8,6 +8,54 @@ import { RequestOptions } from '../../internal/request-options';
 
 const _UPLOAD_THRESHOLD = 20 * 1024 * 1024; // 20 MB
 
+const _MIME_TYPES: Record<string, string> = {
+  '.pdf': 'application/pdf',
+  '.doc': 'application/msword',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.webp': 'image/webp',
+  '.svg': 'image/svg+xml',
+  '.mp4': 'video/mp4',
+  '.webm': 'video/webm',
+  '.mov': 'video/quicktime',
+  '.avi': 'video/x-msvideo',
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
+  '.m4a': 'audio/mp4',
+  '.txt': 'text/plain',
+  '.csv': 'text/csv',
+  '.html': 'text/html',
+  '.json': 'application/json',
+  '.xml': 'application/xml',
+  '.pptx': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  '.xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+};
+
+function _guessMimeType(filename: string): string {
+  const dotIdx = filename.lastIndexOf('.');
+  if (dotIdx === -1) return 'application/octet-stream';
+  const ext = filename.slice(dotIdx).toLowerCase();
+  return _MIME_TYPES[ext] || 'application/octet-stream';
+}
+
+function _mimeToContentCategory(mime: string): string {
+  if (mime.startsWith('image/')) return 'image';
+  if (mime.startsWith('video/')) return 'video';
+  if (mime.startsWith('audio/')) return 'audio';
+  if (mime === 'application/pdf') return 'pdf';
+  if (
+    mime === 'application/msword' ||
+    mime === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  )
+    return 'word';
+  if (mime.startsWith('text/')) return 'text';
+  return 'file';
+}
+
 function _isUrl(value: unknown): value is string {
   return typeof value === 'string' && (value.startsWith('http://') || value.startsWith('https://'));
 }
@@ -27,8 +75,8 @@ async function _isFilePath(value: string): Promise<boolean> {
 }
 
 async function _readFile(filePath: string): Promise<Buffer> {
-  const fs = await import('node:fs');
-  return fs.readFileSync(filePath) as Buffer;
+  const { readFile } = await import('node:fs/promises');
+  return readFile(filePath);
 }
 
 export class Data extends APIResource {
@@ -146,10 +194,13 @@ export class Data extends APIResource {
     project_id?: string | undefined;
   }): Promise<DataIngestResponse> {
     const { fileBytes, filename, user_id, persona_id, project_id } = params;
+    const mimeType = _guessMimeType(filename);
+    const contentCategory = _mimeToContentCategory(mimeType);
 
     const uploadInfo = await this._getUploadUrl({
       user_id,
       filename,
+      content_type: contentCategory,
       ...(project_id != null ? { project_id } : {}),
       ...(persona_id != null ? { persona_id } : {}),
     });
@@ -157,6 +208,7 @@ export class Data extends APIResource {
     const putResp = await fetch(uploadInfo.upload_url, {
       method: 'PUT',
       body: fileBytes,
+      headers: { 'Content-Type': mimeType },
     });
     if (!putResp.ok) {
       throw new Error(
@@ -168,6 +220,7 @@ export class Data extends APIResource {
       job_id: uploadInfo.job_id,
       object_key: uploadInfo.object_key,
       user_id,
+      content_type: contentCategory,
       ...(project_id != null ? { project_id } : {}),
       ...(persona_id != null ? { persona_id } : {}),
     });
