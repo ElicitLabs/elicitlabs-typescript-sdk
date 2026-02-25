@@ -82,7 +82,9 @@ export class Data extends APIResource {
       if (_isUrl(payload)) {
         const downloadResp = await fetch(payload, { redirect: 'follow' });
         if (!downloadResp.ok) {
-          throw new Error(`Failed to download from URL (${downloadResp.status}): ${await downloadResp.text()}`);
+          throw new Error(
+            `Failed to download from URL (${downloadResp.status}): ${await downloadResp.text()}`,
+          );
         }
         fileBytes = await downloadResp.arrayBuffer();
         const urlPath = new URL(payload).pathname;
@@ -95,8 +97,7 @@ export class Data extends APIResource {
     }
 
     if (fileBytes !== null) {
-      const actualFilename =
-        body.filename != null ? body.filename : resolvedFilename;
+      const actualFilename = body.filename != null ? body.filename : resolvedFilename;
 
       if (fileBytes.byteLength >= _UPLOAD_THRESHOLD) {
         return this._ingestViaSignedUrl({
