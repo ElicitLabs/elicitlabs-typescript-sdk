@@ -26,8 +26,9 @@ export class Images extends APIResource {
    *     - audio_base64 (str, optional): Base64 encoded reference audio for context
    *
    *     **Image Params (Flat):**
-   *     - model (str, required): Model ID (e.g., flux-pro, dall-e-3)
-   *     - size (str, optional): Image dimensions
+   *     - model (str, optional): Model ID (default: gemini-3-flash)
+   *     - size (str, optional): Image dimensions as WxH, e.g. "1024x1024", "1920x1080" (default: 1024x1024).
+   *       Automatically mapped to the nearest aspect ratio and resolution tier.
    *     - seed (int, optional): Random seed for reproducibility
    *
    *     **Authentication**: Requires valid API key or JWT token
@@ -50,9 +51,20 @@ export class Images extends APIResource {
  */
 export interface ImageGenerateResponse {
   /**
-   * Base64 encoded image
+   * Base64 encoded image. Present when the output is under 32 MB.
    */
-  image_base64: string;
+  image_base64?: string | null;
+
+  /**
+   * Signed URL to download the image. Present when the output is 32 MB or larger.
+   * Expires after 1 hour.
+   */
+  image_url?: string | null;
+
+  /**
+   * Delivery method for the generated content: 'base64' or 'url'
+   */
+  output_type?: string;
 
   /**
    * Whether the request succeeded
@@ -107,6 +119,13 @@ export interface ImageGenerateParams {
   project_id?: string | null;
 
   /**
+   * Override the resolution tier derived from 'size'. Accepted values: '1K', '2K',
+   * '4K'. When set, this takes precedence over the resolution inferred from the size
+   * parameter.
+   */
+  resolution?: '1K' | '2K' | '4K' | null;
+
+  /**
    * Random seed for reproducibility
    */
   seed?: number | null;
@@ -117,7 +136,9 @@ export interface ImageGenerateParams {
   session_id?: string | null;
 
   /**
-   * Image dimensions (e.g., 1024x1024)
+   * Image dimensions as WxH, e.g. '1024x1024', '1920x1080', '1080x1920'.
+   * Automatically converted to the nearest supported aspect ratio (1:1, 16:9, 9:16,
+   * …) and resolution tier (1K / 2K / 4K).
    */
   size?: string | null;
 

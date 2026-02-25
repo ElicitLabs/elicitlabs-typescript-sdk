@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource video', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
     const responsePromise = client.video.generate({
       text_input: 'A golden retriever running on a beach at sunset',
@@ -23,7 +23,7 @@ describe('resource video', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.video.generate({
       text_input: 'A golden retriever running on a beach at sunset',

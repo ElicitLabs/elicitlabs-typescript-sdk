@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.13.0 (2026-02-25)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **api:** api update ([b156b3f](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/b156b3f3906a8efc02f8013f1e0c33ee35307612))
+* **api:** api update ([21073a0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/21073a0f92a0fc2d0f1560c86233b0b40a6ee313))
+* **api:** api update ([a79c741](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/a79c741307256e535c793790ebaafa1a435b4360))
+* **data:** support file paths and URLs in ingest payload ([a07dd56](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/a07dd5655a21b128e48549becb427cdb2054666a))
+
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([221a715](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/221a7159417c6d4580c42c7e33c9d5147143da66))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([7f3f2ab](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/7f3f2ab250196ebb22aa912b09b2f2e9726fa333))
+* **internal:** avoid type checking errors with ts-reset ([78d11c0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/78d11c0c2a418b521dc2f7fc13ee0031c6c40b5b))
+* **internal:** remove mock server code ([477c6a0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/477c6a04a427bcf60dd37e675317a2fc576d4d17))
+* **internal:** upgrade pnpm version ([8cfaeec](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/8cfaeecc32ae12a7520251d8a777669bb83e6474))
+* update mock server docs ([2fb675b](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/2fb675bb77a1c23f2d55728dcc779a2728bd137e))
+
+
+### Styles
+
+* **data:** fix prettier formatting in ingest method ([008da3b](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/008da3bb673a8ccb5feeea99e6f4f0965bf6094d))
+
 ## 0.12.0 (2026-02-09)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.11.0...v0.12.0)

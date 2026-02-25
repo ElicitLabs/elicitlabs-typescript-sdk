@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource audio', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
     const responsePromise = client.audio.generate({
       text_input: 'Hello world, this is a test.',
@@ -23,7 +23,7 @@ describe('resource audio', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.audio.generate({
       text_input: 'Hello world, this is a test.',

@@ -48,14 +48,25 @@ export class Video extends APIResource {
  */
 export interface VideoGenerateResponse {
   /**
-   * Base64 encoded video
+   * Delivery method for the generated content: 'base64' or 'url'
    */
-  video_base64: string;
+  output_type?: string;
 
   /**
    * Whether the request succeeded
    */
   success?: boolean;
+
+  /**
+   * Base64 encoded video. Present when the output is under 32 MB.
+   */
+  video_base64?: string | null;
+
+  /**
+   * Signed URL to download the video. Present when the output is 32 MB or larger.
+   * Expires after 1 hour.
+   */
+  video_url?: string | null;
 }
 
 export interface VideoGenerateParams {

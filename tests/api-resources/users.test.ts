@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource users', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createOrGet: only required params', async () => {
     const responsePromise = client.users.createOrGet({ email: 'user@example.com', name: 'John Doe' });
     const rawResponse = await responsePromise.asResponse();
@@ -20,7 +20,7 @@ describe('resource users', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createOrGet: required and optional params', async () => {
     const response = await client.users.createOrGet({
       email: 'user@example.com',

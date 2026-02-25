@@ -10,18 +10,13 @@ const client = new ElicitClient({
 describe('resource data', () => {
   // Prism tests are disabled
   test.skip('ingest: only required params', async () => {
-    const responsePromise = client.data.ingest({
+    const response = await client.data.ingest({
       content_type: 'text',
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
       user_id: 'user-123',
     });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
     expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
+    expect(response.job_id).toBeDefined();
   });
 
   // Prism tests are disabled

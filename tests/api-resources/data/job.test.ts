@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource job', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieveStatus: only required params', async () => {
     const responsePromise = client.data.job.retrieveStatus({
       job_id: '456e7890-e89b-12d3-a456-426614174001',
@@ -22,7 +22,7 @@ describe('resource job', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieveStatus: required and optional params', async () => {
     const response = await client.data.job.retrieveStatus({ job_id: '456e7890-e89b-12d3-a456-426614174001' });
   });

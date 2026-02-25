@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource chat', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createCompletion: only required params', async () => {
     const responsePromise = client.chat.createCompletion({
       messages: [{ content: 'string', role: 'role' }],
@@ -23,7 +23,7 @@ describe('resource chat', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createCompletion: required and optional params', async () => {
     const response = await client.chat.createCompletion({
       messages: [{ content: 'string', role: 'role' }],

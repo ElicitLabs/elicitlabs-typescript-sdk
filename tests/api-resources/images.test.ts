@@ -8,7 +8,7 @@ const client = new ElicitClient({
 });
 
 describe('resource images', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
     const responsePromise = client.images.generate({
       text_input: 'A golden retriever in a space suit',
@@ -23,7 +23,7 @@ describe('resource images', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.images.generate({
       text_input: 'A golden retriever in a space suit',
@@ -32,9 +32,10 @@ describe('resource images', () => {
       disabled_learning: true,
       image_base64: 'image_base64',
       max_reasoning_iterations: 1,
-      model: 'flux-pro',
+      model: 'gemini-3-pro',
       persona_id: 'persona_id',
       project_id: 'proj_ABC',
+      resolution: '2K',
       seed: 12345,
       session_id: 'session_id',
       size: '1024x1024',
