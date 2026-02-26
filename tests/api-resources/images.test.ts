@@ -32,7 +32,7 @@ describe('resource images', () => {
       disabled_learning: true,
       image_base64: 'image_base64',
       max_reasoning_iterations: 1,
-      model: 'gemini-3-pro',
+      model: 'gemini-3.1-flash',
       persona_id: 'persona_id',
       project_id: 'proj_ABC',
       resolution: '2K',
