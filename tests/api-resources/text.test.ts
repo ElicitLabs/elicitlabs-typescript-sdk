@@ -29,6 +29,7 @@ describe('resource text', () => {
       image_base64: 'image_base64',
       max_reasoning_iterations: 1,
       model: 'gpt-4.1-mini',
+      output_schema: { foo: 'bar' },
       persona_id: 'persona_id',
       project_id: 'proj_ABC',
       session_id: 'session_id',
