@@ -28,6 +28,7 @@ describe('resource images', () => {
     const response = await client.images.generate({
       text_input: 'A golden retriever in a space suit',
       user_id: 'user_123',
+      aspect_ratio: '1:1',
       audio_base64: 'audio_base64',
       disabled_learning: true,
       image_base64: 'image_base64',
@@ -38,7 +39,6 @@ describe('resource images', () => {
       resolution: '2K',
       seed: 12345,
       session_id: 'session_id',
-      size: '1024x1024',
       use_reasoning: false,
       video_base64: 'video_base64',
     });

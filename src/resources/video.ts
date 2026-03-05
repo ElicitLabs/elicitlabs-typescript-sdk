@@ -48,7 +48,8 @@ export class Video extends APIResource {
  */
 export interface VideoGenerateResponse {
   /**
-   * Delivery method for the generated content: 'base64' or 'url'
+   * Delivery method: 'both' (base64 + url), 'url' (url only, base64 omitted due to
+   * size), or 'base64' (GCS upload failed).
    */
   output_type?: string;
 
@@ -58,13 +59,19 @@ export interface VideoGenerateResponse {
   success?: boolean;
 
   /**
-   * Base64 encoded video. Present when the output is under 32 MB.
+   * Base64 encoded video. Present when the payload is under ~30 MB. May be absent
+   * for very large outputs.
    */
   video_base64?: string | null;
 
   /**
-   * Signed URL to download the video. Present when the output is 32 MB or larger.
-   * Expires after 1 hour.
+   * Video format, e.g. mp4, webm
+   */
+  video_format?: string;
+
+  /**
+   * Signed GCS URL to download the video (expires after 24 h). Always present when
+   * the upload succeeds.
    */
   video_url?: string | null;
 }
