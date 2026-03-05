@@ -21,7 +21,6 @@ import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/a
 import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
 import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
-import { Inference } from './resources/inference';
 import {
   Modal,
   ModalLearnParams,
@@ -37,6 +36,8 @@ import {
   Personas,
 } from './resources/personas';
 import {
+  ProjectCloneParams,
+  ProjectCloneResponse,
   ProjectCreateParams,
   ProjectCreateResponse,
   ProjectDeleteResponse,
@@ -754,7 +755,6 @@ export class ElicitClient {
   health: API.Health = new API.Health(this);
   auth: API.Auth = new API.Auth(this);
   personas: API.Personas = new API.Personas(this);
-  inference: API.Inference = new API.Inference(this);
   projects: API.Projects = new API.Projects(this);
   chat: API.Chat = new API.Chat(this);
   text: API.Text = new API.Text(this);
@@ -769,7 +769,6 @@ ElicitClient.Data = Data;
 ElicitClient.Health = Health;
 ElicitClient.Auth = Auth;
 ElicitClient.Personas = Personas;
-ElicitClient.Inference = Inference;
 ElicitClient.Projects = Projects;
 ElicitClient.Chat = Chat;
 ElicitClient.Text = Text;
@@ -812,15 +811,15 @@ export declare namespace ElicitClient {
     type PersonaCreateParams as PersonaCreateParams,
   };
 
-  export { Inference as Inference };
-
   export {
     Projects as Projects,
     type ProjectCreateResponse as ProjectCreateResponse,
     type ProjectRetrieveResponse as ProjectRetrieveResponse,
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
+    type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
+    type ProjectCloneParams as ProjectCloneParams,
   };
 
   export {

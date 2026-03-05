@@ -89,6 +89,33 @@ export class Projects extends APIResource {
   delete(projectID: string, options?: RequestOptions): APIPromise<ProjectDeleteResponse> {
     return this._client.delete(path`/v1/projects/${projectID}`, options);
   }
+
+  /**
+   * Deep-clone a project, including all its Neo4j memory graph data and referenced
+   * GCS assets, into a new independent project.
+   *
+   *     This endpoint:
+   *     - Creates a new project in PostgreSQL with the source project's metadata
+   *     - Copies all GCS files (images, objects) under a new project path
+   *     - Deep-copies all Neo4j nodes (episodes, entities, preferences, identity,
+   *       hierarchical data, multimodal nodes) with new UUIDs
+   *     - Rewrites GCS URLs in ImageNode/ObjectNode to point at the copied files
+   *     - Recreates all inter-node relationships
+   *
+   *     The clone is fully independent — changes to one project do not affect the other.
+   *
+   *     **Authentication**: Requires valid API key or JWT token
+   *
+   * @example
+   * ```ts
+   * const response = await client.projects.clone({
+   *   project_id: 'project_id',
+   * });
+   * ```
+   */
+  clone(body: ProjectCloneParams, options?: RequestOptions): APIPromise<ProjectCloneResponse> {
+    return this._client.post('/v1/projects/clone', { body, ...options });
+  }
 }
 
 /**
@@ -226,6 +253,55 @@ export interface ProjectDeleteResponse {
   project_id: string;
 }
 
+/**
+ * Response model for cloning a project
+ */
+export interface ProjectCloneResponse {
+  /**
+   * Success message
+   */
+  message: string;
+
+  /**
+   * The newly cloned project
+   */
+  project: ProjectCloneResponse.Project;
+
+  /**
+   * ID of the original project that was cloned
+   */
+  source_project_id: string;
+}
+
+export namespace ProjectCloneResponse {
+  /**
+   * The newly cloned project
+   */
+  export interface Project {
+    created_at: string;
+
+    description: string | null;
+
+    name: string;
+
+    project_id: string;
+
+    updated_at: string | null;
+
+    user_email: string | null;
+
+    user_id: string;
+
+    user_name: string | null;
+
+    /**
+     * Project type override: 'creative_design' or 'general'. When set, skips LLM
+     * classification.
+     */
+    project_type?: string | null;
+  }
+}
+
 export interface ProjectCreateParams {
   /**
    * Project name
@@ -251,12 +327,43 @@ export interface ProjectCreateParams {
   user_id?: string | null;
 }
 
+export interface ProjectCloneParams {
+  /**
+   * ID of the project to clone
+   */
+  project_id: string;
+
+  /**
+   * Description for the cloned project. Defaults to the original's description.
+   */
+  description?: string | null;
+
+  /**
+   * Name for the cloned project. Defaults to '{original_name} (Copy)'.
+   */
+  name?: string | null;
+
+  /**
+   * User ID of the source project owner. If not provided, uses the authenticated
+   * user's ID.
+   */
+  source_user_id?: string;
+
+  /**
+   * Target user ID to own the cloned project. If not provided, uses the
+   * authenticated user.
+   */
+  target_user_id?: string | null;
+}
+
 export declare namespace Projects {
   export {
     type ProjectCreateResponse as ProjectCreateResponse,
     type ProjectRetrieveResponse as ProjectRetrieveResponse,
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
+    type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
+    type ProjectCloneParams as ProjectCloneParams,
   };
 }

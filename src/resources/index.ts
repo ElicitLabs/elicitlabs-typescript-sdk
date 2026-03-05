@@ -6,7 +6,6 @@ export { Chat, type ChatCreateCompletionResponse, type ChatCreateCompletionParam
 export { Data, type DataIngestResponse, type DataIngestParams } from './data/data';
 export { Health, type HealthCheckResponse } from './health';
 export { Images, type ImageGenerateResponse, type ImageGenerateParams } from './images';
-export { Inference } from './inference';
 export {
   Modal,
   type ModalLearnResponse,
@@ -27,7 +26,9 @@ export {
   type ProjectRetrieveResponse,
   type ProjectListResponse,
   type ProjectDeleteResponse,
+  type ProjectCloneResponse,
   type ProjectCreateParams,
+  type ProjectCloneParams,
 } from './projects';
 export { Text, type TextGenerateResponse, type TextGenerateParams } from './text';
 export { Users, type UserCreateOrGetResponse, type UserCreateOrGetParams } from './users';

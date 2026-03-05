@@ -80,8 +80,6 @@ Methods:
 - <code title="get /v1/personas/{persona_id}">client.personas.<a href="./src/resources/personas.ts">retrieve</a>(personaID) -> PersonaRetrieveResponse</code>
 - <code title="get /v1/personas">client.personas.<a href="./src/resources/personas.ts">list</a>() -> PersonaListResponse</code>
 
-# Inference
-
 # Projects
 
 Types:
@@ -90,6 +88,7 @@ Types:
 - <code><a href="./src/resources/projects.ts">ProjectRetrieveResponse</a></code>
 - <code><a href="./src/resources/projects.ts">ProjectListResponse</a></code>
 - <code><a href="./src/resources/projects.ts">ProjectDeleteResponse</a></code>
+- <code><a href="./src/resources/projects.ts">ProjectCloneResponse</a></code>
 
 Methods:
 
@@ -97,6 +96,7 @@ Methods:
 - <code title="get /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">retrieve</a>(projectID) -> ProjectRetrieveResponse</code>
 - <code title="get /v1/projects">client.projects.<a href="./src/resources/projects.ts">list</a>() -> ProjectListResponse</code>
 - <code title="delete /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">delete</a>(projectID) -> ProjectDeleteResponse</code>
+- <code title="post /v1/projects/clone">client.projects.<a href="./src/resources/projects.ts">clone</a>({ ...params }) -> ProjectCloneResponse</code>
 
 # Chat
 
