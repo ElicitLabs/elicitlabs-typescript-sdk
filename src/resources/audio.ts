@@ -124,7 +124,7 @@ export interface AudioGenerateParams {
   disabled_learning?: boolean;
 
   /**
-   * Max duration in seconds for music/sfx
+   * Max duration in seconds for music/sfx (Lyria 2 always generates 30s)
    */
   duration?: number | null;
 
@@ -134,7 +134,14 @@ export interface AudioGenerateParams {
   image_base64?: string | null;
 
   /**
-   * Audio generation model ID
+   * Max reasoning steps if reasoning is enabled
+   */
+  max_reasoning_iterations?: number;
+
+  /**
+   * Audio generation model: 'lyria-2' (Google Lyria 2 on Vertex AI, default for
+   * music — 30s 48kHz WAV), 'audiocraft' (MusicGen/AudioGen on Cloud Run), or
+   * 'eleven-turbo' (ElevenLabs TTS for speech)
    */
   model?: string;
 
@@ -149,7 +156,8 @@ export interface AudioGenerateParams {
   project_id?: string | null;
 
   /**
-   * Random seed for reproducibility
+   * Random seed for deterministic generation (Lyria 2 only, cannot be combined with
+   * sample_count)
    */
   seed?: number | null;
 
@@ -162,6 +170,11 @@ export interface AudioGenerateParams {
    * Playback speed (0.5-2.0), only for speech
    */
   speed?: number;
+
+  /**
+   * Enable Chain-of-Thought/Reasoning steps before answering
+   */
+  use_reasoning?: boolean;
 
   /**
    * Base64 encoded reference video for context
