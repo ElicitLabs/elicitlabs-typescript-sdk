@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.14.0 (2026-03-09)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* **api:** api update ([c674ffd](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/c674ffdc6a3b41dad206d46e2f6baa4f374a602e))
+* **api:** api update ([ce71b38](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/ce71b38124a0954d8b2fa20bd31fcd162f0f7e81))
+* **api:** api update ([11c479c](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/11c479cf091ba3f8c5a0b91fdcfb9e3c7aa1b11a))
+* **api:** api update ([23f2bdb](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/23f2bdb9f44b265cf2685e2f474f2d8f608423bc))
+* **api:** manual updates ([c5246f7](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/c5246f7f6f7d3d6e04fc9696db2f0c54e4b19834))
+
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([d901733](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/d9017332d0e7305379e13d5eb68cfd9ab5a130da))
+* **data:** fix content_type validation and add MIME detection in ingest ([0d6d0fd](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/0d6d0fd2fbf25a3f36967a12824a225ef4171622))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([f78fe06](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/f78fe0691f175d47bdcd31c2f291e4d0cd804985))
+* **internal:** codegen related update ([d4caee1](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/d4caee1bebd074bcb00f8791a0eedf799f5644e4))
+* **internal:** move stringifyQuery implementation to internal function ([b61956a](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/commit/b61956afecb41aca759ad46d47792e76c17396f7))
+
 ## 0.13.0 (2026-02-25)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/ElicitLabs/elicitlabs-typescript-sdk/compare/v0.12.0...v0.13.0)
