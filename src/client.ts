@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
@@ -20,7 +21,6 @@ import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/a
 import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
 import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
-import { Inference } from './resources/inference';
 import {
   Modal,
   ModalLearnParams,
@@ -36,10 +36,15 @@ import {
   Personas,
 } from './resources/personas';
 import {
+  ProjectCloneParams,
+  ProjectCloneResponse,
   ProjectCreateParams,
   ProjectCreateResponse,
+  ProjectDeleteParams,
   ProjectDeleteResponse,
+  ProjectListParams,
   ProjectListResponse,
+  ProjectRetrieveParams,
   ProjectRetrieveResponse,
   Projects,
 } from './resources/projects';
@@ -244,21 +249,8 @@ export class ElicitClient {
   /**
    * Basic re-implementation of `qs.stringify` for primitive types.
    */
-  protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.ElicitClientError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
   }
 
   private getUserAgent(): string {
@@ -290,12 +282,13 @@ export class ElicitClient {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
-      url.search = this.stringifyQuery(query as Record<string, unknown>);
+      url.search = this.stringifyQuery(query);
     }
 
     return url.toString();
@@ -600,9 +593,9 @@ export class ElicitClient {
       }
     }
 
-    // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-    // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1000)) {
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -734,7 +727,7 @@ export class ElicitClient {
     ) {
       return {
         bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: this.stringifyQuery(body as Record<string, unknown>),
+        body: this.stringifyQuery(body),
       };
     } else {
       return this.#encoder({ body, headers });
@@ -766,7 +759,6 @@ export class ElicitClient {
   health: API.Health = new API.Health(this);
   auth: API.Auth = new API.Auth(this);
   personas: API.Personas = new API.Personas(this);
-  inference: API.Inference = new API.Inference(this);
   projects: API.Projects = new API.Projects(this);
   chat: API.Chat = new API.Chat(this);
   text: API.Text = new API.Text(this);
@@ -781,7 +773,6 @@ ElicitClient.Data = Data;
 ElicitClient.Health = Health;
 ElicitClient.Auth = Auth;
 ElicitClient.Personas = Personas;
-ElicitClient.Inference = Inference;
 ElicitClient.Projects = Projects;
 ElicitClient.Chat = Chat;
 ElicitClient.Text = Text;
@@ -824,15 +815,18 @@ export declare namespace ElicitClient {
     type PersonaCreateParams as PersonaCreateParams,
   };
 
-  export { Inference as Inference };
-
   export {
     Projects as Projects,
     type ProjectCreateResponse as ProjectCreateResponse,
     type ProjectRetrieveResponse as ProjectRetrieveResponse,
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
+    type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
+    type ProjectRetrieveParams as ProjectRetrieveParams,
+    type ProjectListParams as ProjectListParams,
+    type ProjectDeleteParams as ProjectDeleteParams,
+    type ProjectCloneParams as ProjectCloneParams,
   };
 
   export {

@@ -10,7 +10,7 @@ export class Audio extends APIResource {
    * parameters.
    *
    *     Supports three audio types:
-   *     - **speech**: Text-to-speech conversion
+   *     - **speech**: Multi-speaker TTS (auto-detects characters, designs unique voices per entity)
    *     - **music**: AI-generated music
    *     - **sfx**: AI-generated sound effects
    *
@@ -59,7 +59,7 @@ export class Audio extends APIResource {
  */
 export interface AudioGenerateResponse {
   /**
-   * Audio format (mp3, wav)
+   * Audio format, e.g. mp3, wav
    */
   audio_format: string;
 
@@ -69,13 +69,14 @@ export interface AudioGenerateResponse {
   audio_type: string;
 
   /**
-   * Base64 encoded audio content. Present when the output is under 32 MB.
+   * Base64 encoded audio content. Present when the payload is under ~30 MB. May be
+   * absent for very large outputs.
    */
   audio_base64?: string | null;
 
   /**
-   * Signed URL to download the audio. Present when the output is 32 MB or larger.
-   * Expires after 1 hour.
+   * Signed GCS URL to download the audio (expires after 24 h). Always present when
+   * the upload succeeds.
    */
   audio_url?: string | null;
 
@@ -85,7 +86,8 @@ export interface AudioGenerateResponse {
   duration_seconds?: number | null;
 
   /**
-   * Delivery method for the generated content: 'base64' or 'url'
+   * Delivery method: 'both' (base64 + url), 'url' (url only, base64 omitted due to
+   * size), or 'base64' (GCS upload failed).
    */
   output_type?: string;
 
@@ -112,7 +114,7 @@ export interface AudioGenerateParams {
   audio_base64?: string | null;
 
   /**
-   * Audio type: 'speech' (TTS), 'sfx', or 'music'
+   * Audio type: 'speech', 'sfx', or 'music'
    */
   audio_type?: 'speech' | 'sfx' | 'music';
 
@@ -122,7 +124,7 @@ export interface AudioGenerateParams {
   disabled_learning?: boolean;
 
   /**
-   * Max duration in seconds for music/sfx
+   * Max duration in seconds for music/sfx (Lyria 2 always generates 30s)
    */
   duration?: number | null;
 
@@ -132,7 +134,14 @@ export interface AudioGenerateParams {
   image_base64?: string | null;
 
   /**
-   * Audio generation model ID
+   * Max reasoning steps if reasoning is enabled
+   */
+  max_reasoning_iterations?: number;
+
+  /**
+   * Audio generation model: 'lyria-2' (Google Lyria 2 on Vertex AI, default for
+   * music — 30s 48kHz WAV), 'audiocraft' (MusicGen/AudioGen on Cloud Run), or
+   * 'eleven-turbo' (ElevenLabs TTS for speech)
    */
   model?: string;
 
@@ -147,7 +156,8 @@ export interface AudioGenerateParams {
   project_id?: string | null;
 
   /**
-   * Random seed for reproducibility
+   * Random seed for deterministic generation (Lyria 2 only, cannot be combined with
+   * sample_count)
    */
   seed?: number | null;
 
@@ -160,6 +170,11 @@ export interface AudioGenerateParams {
    * Playback speed (0.5-2.0), only for speech
    */
   speed?: number;
+
+  /**
+   * Enable Chain-of-Thought/Reasoning steps before answering
+   */
+  use_reasoning?: boolean;
 
   /**
    * Base64 encoded reference video for context

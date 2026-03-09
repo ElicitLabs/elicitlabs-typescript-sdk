@@ -47,14 +47,20 @@ export class Text extends APIResource {
  */
 export interface TextGenerateResponse {
   /**
-   * Generated text response
+   * Structured JSON output matching the requested output_schema (when output_schema
+   * is provided)
    */
-  text: string;
+  structured_output?: { [key: string]: unknown } | null;
 
   /**
    * Whether the request succeeded
    */
   success?: boolean;
+
+  /**
+   * Generated text response (when no output_schema is provided)
+   */
+  text?: string | null;
 }
 
 export interface TextGenerateParams {
@@ -87,6 +93,13 @@ export interface TextGenerateParams {
    * LLM model to use for generation
    */
   model?: string;
+
+  /**
+   * Optional JSON Schema describing the desired output structure. When provided, the
+   * LLM is forced to return a JSON object matching this schema instead of free-form
+   * text. The result is returned in the 'structured_output' field of the response.
+   */
+  output_schema?: { [key: string]: unknown } | null;
 
   /**
    * The specific system persona/voice to use

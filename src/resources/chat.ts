@@ -101,6 +101,11 @@ export namespace ChatCreateCompletionResponse {
       content?: string | null;
 
       /**
+       * Asset format, e.g. png, jpeg, mp3, wav, mp4
+       */
+      format?: string | null;
+
+      /**
        * Image URL object with 'url' key (can be data:image/... base64)
        */
       image_url?: { [key: string]: string } | null;
@@ -109,6 +114,11 @@ export namespace ChatCreateCompletionResponse {
        * Text content (when type='text')
        */
       text?: string | null;
+
+      /**
+       * Signed GCS URL to download the asset (expires after 24 h)
+       */
+      url?: string | null;
 
       /**
        * Video URL object with 'url' key
@@ -227,6 +237,11 @@ export namespace ChatCreateCompletionParams {
       content?: string | null;
 
       /**
+       * Asset format, e.g. png, jpeg, mp3, wav, mp4
+       */
+      format?: string | null;
+
+      /**
        * Image URL object with 'url' key (can be data:image/... base64)
        */
       image_url?: { [key: string]: string } | null;
@@ -235,6 +250,11 @@ export namespace ChatCreateCompletionParams {
        * Text content (when type='text')
        */
       text?: string | null;
+
+      /**
+       * Signed GCS URL to download the asset (expires after 24 h)
+       */
+      url?: string | null;
 
       /**
        * Video URL object with 'url' key
