@@ -28,6 +28,9 @@ export {
   type ProjectDeleteResponse,
   type ProjectCloneResponse,
   type ProjectCreateParams,
+  type ProjectRetrieveParams,
+  type ProjectListParams,
+  type ProjectDeleteParams,
   type ProjectCloneParams,
 } from './projects';
 export { Text, type TextGenerateResponse, type TextGenerateParams } from './text';

@@ -40,8 +40,11 @@ import {
   ProjectCloneResponse,
   ProjectCreateParams,
   ProjectCreateResponse,
+  ProjectDeleteParams,
   ProjectDeleteResponse,
+  ProjectListParams,
   ProjectListResponse,
+  ProjectRetrieveParams,
   ProjectRetrieveResponse,
   Projects,
 } from './resources/projects';
@@ -820,6 +823,9 @@ export declare namespace ElicitClient {
     type ProjectDeleteResponse as ProjectDeleteResponse,
     type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
+    type ProjectRetrieveParams as ProjectRetrieveParams,
+    type ProjectListParams as ProjectListParams,
+    type ProjectDeleteParams as ProjectDeleteParams,
     type ProjectCloneParams as ProjectCloneParams,
   };
 
