@@ -34,7 +34,7 @@ export class Projects extends APIResource {
    *     This endpoint:
    *     - Returns full project information including metadata
    *     - Includes user information for the project owner
-   *     - Verifies the authenticated user owns the project
+   *     - Verifies the authenticated user owns the project or belongs to the same org
    *     - Returns 404 if project is not found
    *
    *     **Authentication**: Requires valid API key or JWT token in Authorization header
@@ -46,17 +46,21 @@ export class Projects extends APIResource {
    * );
    * ```
    */
-  retrieve(projectID: string, options?: RequestOptions): APIPromise<ProjectRetrieveResponse> {
-    return this._client.get(path`/v1/projects/${projectID}`, options);
+  retrieve(
+    projectID: string,
+    query: ProjectRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProjectRetrieveResponse> {
+    return this._client.get(path`/v1/projects/${projectID}`, { query, ...options });
   }
 
   /**
-   * Get all projects belonging to the authenticated user.
+   * Get projects accessible to the caller.
    *
    *     This endpoint:
-   *     - Returns all projects created by the authenticated user
+   *     - **No user_id param** (or user_id == root user): root user → returns **all** projects across the org
+   *     - **user_id param** (sub-user): returns only that sub-user's projects
    *     - Includes project metadata (name, description, creation date)
-   *     - Projects inherit access to user's preferences, episodes, and identity
    *
    *     **Authentication**: Requires valid API key or JWT token
    *
@@ -65,8 +69,11 @@ export class Projects extends APIResource {
    * const projects = await client.projects.list();
    * ```
    */
-  list(options?: RequestOptions): APIPromise<ProjectListResponse> {
-    return this._client.get('/v1/projects', options);
+  list(
+    query: ProjectListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProjectListResponse> {
+    return this._client.get('/v1/projects', { query, ...options });
   }
 
   /**
@@ -86,8 +93,13 @@ export class Projects extends APIResource {
    * const project = await client.projects.delete('project_id');
    * ```
    */
-  delete(projectID: string, options?: RequestOptions): APIPromise<ProjectDeleteResponse> {
-    return this._client.delete(path`/v1/projects/${projectID}`, options);
+  delete(
+    projectID: string,
+    params: ProjectDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ProjectDeleteResponse> {
+    const { user_id } = params ?? {};
+    return this._client.delete(path`/v1/projects/${projectID}`, { query: { user_id }, ...options });
   }
 
   /**
@@ -163,30 +175,42 @@ export namespace ProjectCreateResponse {
 }
 
 /**
- * Response model for project information
+ * Response model for retrieving a single project (consistent with create/update)
  */
 export interface ProjectRetrieveResponse {
-  created_at: string;
-
-  description: string | null;
-
-  name: string;
-
-  project_id: string;
-
-  updated_at: string | null;
-
-  user_email: string | null;
-
-  user_id: string;
-
-  user_name: string | null;
-
   /**
-   * Project type override: 'creative_design' or 'general'. When set, skips LLM
-   * classification.
+   * The retrieved project
    */
-  project_type?: string | null;
+  project: ProjectRetrieveResponse.Project;
+}
+
+export namespace ProjectRetrieveResponse {
+  /**
+   * The retrieved project
+   */
+  export interface Project {
+    created_at: string;
+
+    description: string | null;
+
+    name: string;
+
+    project_id: string;
+
+    updated_at: string | null;
+
+    user_email: string | null;
+
+    user_id: string;
+
+    user_name: string | null;
+
+    /**
+     * Project type override: 'creative_design' or 'general'. When set, skips LLM
+     * classification.
+     */
+    project_type?: string | null;
+  }
 }
 
 /**
@@ -194,19 +218,24 @@ export interface ProjectRetrieveResponse {
  */
 export interface ProjectListResponse {
   /**
-   * List of projects for the user
+   * List of projects
    */
   projects: Array<ProjectListResponse.Project>;
 
   /**
-   * Total number of projects for the user
+   * Total number of projects
    */
   total_count: number;
 
   /**
-   * User ID
+   * Organization ID (set when returning org-wide projects)
    */
-  user_id: string;
+  org_id?: string | null;
+
+  /**
+   * User ID (set when filtering by user)
+   */
+  user_id?: string | null;
 }
 
 export namespace ProjectListResponse {
@@ -327,6 +356,18 @@ export interface ProjectCreateParams {
   user_id?: string | null;
 }
 
+export interface ProjectRetrieveParams {
+  user_id?: string | null;
+}
+
+export interface ProjectListParams {
+  user_id?: string | null;
+}
+
+export interface ProjectDeleteParams {
+  user_id?: string | null;
+}
+
 export interface ProjectCloneParams {
   /**
    * ID of the project to clone
@@ -364,6 +405,9 @@ export declare namespace Projects {
     type ProjectDeleteResponse as ProjectDeleteResponse,
     type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
+    type ProjectRetrieveParams as ProjectRetrieveParams,
+    type ProjectListParams as ProjectListParams,
+    type ProjectDeleteParams as ProjectDeleteParams,
     type ProjectCloneParams as ProjectCloneParams,
   };
 }

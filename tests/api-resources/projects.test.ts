@@ -43,6 +43,14 @@ describe('resource projects', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.projects.retrieve('project_id', { user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(ElicitClient.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.projects.list();
     const rawResponse = await responsePromise.asResponse();
@@ -55,6 +63,14 @@ describe('resource projects', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('list: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.projects.list({ user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(ElicitClient.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.projects.delete('project_id');
     const rawResponse = await responsePromise.asResponse();
@@ -64,6 +80,14 @@ describe('resource projects', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.projects.delete('project_id', { user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+    ).rejects.toThrow(ElicitClient.NotFoundError);
   });
 
   // Mock server tests are disabled

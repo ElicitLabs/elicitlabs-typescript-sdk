@@ -32,7 +32,7 @@ export class Personas extends APIResource {
    *
    *     This endpoint:
    *     - Returns full persona information including metadata
-   *     - Includes user information for the persona owner
+   *     - Any user in the same organization can access any persona
    *     - Returns 404 if persona is not found
    *
    *     **Authentication**: Requires valid API key or JWT token in Authorization header
@@ -49,12 +49,12 @@ export class Personas extends APIResource {
   }
 
   /**
-   * Get all personas belonging to the authenticated user.
+   * Get all personas accessible to the caller.
    *
    *     This endpoint:
-   *     - Returns all personas created by the authenticated user
+   *     - Returns **all** personas across the organization (personas are shared org-wide)
+   *     - All users in the org can see all org personas
    *     - Includes persona metadata (name, description, creation date)
-   *     - Provides user information for each persona
    *
    *     **Authentication**: Requires valid API key or JWT token
    *
@@ -105,42 +105,59 @@ export namespace PersonaCreateResponse {
 }
 
 /**
- * Response model for persona information
+ * Response model for retrieving a single persona (consistent with create/update)
  */
 export interface PersonaRetrieveResponse {
-  created_at: string;
+  /**
+   * The retrieved persona
+   */
+  persona: PersonaRetrieveResponse.Persona;
+}
 
-  description: string | null;
+export namespace PersonaRetrieveResponse {
+  /**
+   * The retrieved persona
+   */
+  export interface Persona {
+    created_at: string;
 
-  name: string;
+    description: string | null;
 
-  persona_id: string;
+    name: string;
 
-  user_email: string | null;
+    persona_id: string;
 
-  user_id: string;
+    user_email: string | null;
 
-  user_name: string | null;
+    user_id: string;
+
+    user_name: string | null;
+  }
 }
 
 /**
- * Response model for getting user personas
+ * Response model for getting personas
  */
 export interface PersonaListResponse {
   /**
-   * List of personas for the user
+   * List of personas
    */
   personas: Array<PersonaListResponse.Persona>;
 
   /**
-   * Total number of personas for the user
+   * Total number of personas
    */
   total_count: number;
 
   /**
-   * User ID
+   * Organization ID (set when returning org-wide personas)
    */
-  user_id: string;
+  org_id?: string | null;
+
+  /**
+   * User ID (set when filtering by user)
+   */
+  user_id?: string | null;
 }
 
 export namespace PersonaListResponse {
