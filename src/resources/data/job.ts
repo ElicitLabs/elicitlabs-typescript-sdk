@@ -52,9 +52,14 @@ export interface JobRetrieveStatusResponse {
   job_id: string;
 
   /**
-   * Current job status
+   * Current job status: done, partial, processing, not started, error
    */
   status: string;
+
+  /**
+   * Completion percentage (0-100)
+   */
+  completion?: number;
 }
 
 export interface JobRetrieveStatusParams {
