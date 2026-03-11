@@ -52,7 +52,7 @@ export interface JobRetrieveStatusResponse {
   job_id: string;
 
   /**
-   * Current job status: done, partial, processing, not started, error
+   * Current job status: done, partial, processing, not started, error, cancelled
    */
   status: string;
 
