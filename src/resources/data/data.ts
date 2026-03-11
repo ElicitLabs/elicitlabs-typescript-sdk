@@ -2,7 +2,13 @@
 
 import { APIResource } from '../../core/resource';
 import * as JobAPI from './job';
-import { Job, JobRetrieveStatusParams, JobRetrieveStatusResponse } from './job';
+import {
+  Job,
+  JobCancelParams,
+  JobCancelResponse,
+  JobRetrieveStatusParams,
+  JobRetrieveStatusResponse,
+} from './job';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -374,7 +380,9 @@ export declare namespace Data {
 
   export {
     Job as Job,
+    type JobCancelResponse as JobCancelResponse,
     type JobRetrieveStatusResponse as JobRetrieveStatusResponse,
+    type JobCancelParams as JobCancelParams,
     type JobRetrieveStatusParams as JobRetrieveStatusParams,
   };
 }

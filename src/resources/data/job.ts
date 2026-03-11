@@ -6,6 +6,33 @@ import { RequestOptions } from '../../internal/request-options';
 
 export class Job extends APIResource {
   /**
+   * Cancel a running or queued ingestion job and all of its descendant sub-jobs.
+   *
+   *     Jobs that are already completed ('done') or failed ('error') will not be affected.
+   *     Cancelled jobs will be skipped by the ingester when Cloud Tasks delivers them.
+   *
+   *     **Request Parameters:**
+   *     - job_id (str, required): The root job ID to cancel (returned from /ingest)
+   *
+   *     **Response:**
+   *     - job_id (str): The root job ID
+   *     - cancelled_count (int): Number of jobs cancelled (parent + descendants)
+   *     - status (str): 'cancelled' if any jobs were cancelled, 'already_terminal' if all were already done/error
+   *
+   *     Requires JWT authentication.
+   *
+   * @example
+   * ```ts
+   * const response = await client.data.job.cancel({
+   *   job_id: '456e7890-e89b-12d3-a456-426614174001',
+   * });
+   * ```
+   */
+  cancel(body: JobCancelParams, options?: RequestOptions): APIPromise<JobCancelResponse> {
+    return this._client.post('/v1/data/job/cancel', { body, ...options });
+  }
+
+  /**
    * Retrieve the current processing status of an ingestion job.
    *
    *     Use the job_id returned from /ingest to check if processing is complete.
@@ -43,6 +70,26 @@ export class Job extends APIResource {
 }
 
 /**
+ * Response model for job cancellation
+ */
+export interface JobCancelResponse {
+  /**
+   * Number of jobs cancelled (including descendants)
+   */
+  cancelled_count: number;
+
+  /**
+   * The root job ID that was cancelled
+   */
+  job_id: string;
+
+  /**
+   * Result status: 'cancelled' or 'already_terminal'
+   */
+  status: string;
+}
+
+/**
  * Response model for job completion percentage
  */
 export interface JobRetrieveStatusResponse {
@@ -62,6 +109,13 @@ export interface JobRetrieveStatusResponse {
   completion?: number;
 }
 
+export interface JobCancelParams {
+  /**
+   * Unique identifier for the job to cancel
+   */
+  job_id: string;
+}
+
 export interface JobRetrieveStatusParams {
   /**
    * Unique identifier for the job
@@ -71,7 +125,9 @@ export interface JobRetrieveStatusParams {
 
 export declare namespace Job {
   export {
+    type JobCancelResponse as JobCancelResponse,
     type JobRetrieveStatusResponse as JobRetrieveStatusResponse,
+    type JobCancelParams as JobCancelParams,
     type JobRetrieveStatusParams as JobRetrieveStatusParams,
   };
 }
