@@ -9,6 +9,23 @@ const client = new ElicitClient({
 
 describe('resource job', () => {
   // Mock server tests are disabled
+  test.skip('cancel: only required params', async () => {
+    const responsePromise = client.data.job.cancel({ job_id: '456e7890-e89b-12d3-a456-426614174001' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('cancel: required and optional params', async () => {
+    const response = await client.data.job.cancel({ job_id: '456e7890-e89b-12d3-a456-426614174001' });
+  });
+
+  // Mock server tests are disabled
   test.skip('retrieveStatus: only required params', async () => {
     const responsePromise = client.data.job.retrieveStatus({
       job_id: '456e7890-e89b-12d3-a456-426614174001',
