@@ -11,20 +11,24 @@ export class Video extends APIResource {
    *
    *     **Universal Base Schema:**
    *     - user_id (str, required): The end-user ID
-   *     - project_id (str, required): The project ID
+   *     - project_id (str, optional): The project ID
    *     - persona_id (str, optional): The specific system persona/voice to use
    *     - disabled_learning (bool, optional): If true, request is ignored by long-term memory
    *     - use_reasoning (bool, optional): Enable reasoning loop for constraint-satisfying generation
    *
    *     **Input:**
    *     - text_input (str, required): The prompt/description for video generation
-   *     - context (str, optional): Additional context
+   *     - session_id (str, optional): Session ID for conversation context
+   *
+   *     **Reference inputs:**
+   *     - image_base64 (str, optional): Base64 encoded reference image for context
+   *     - video_base64 (str, optional): Base64 encoded reference video for context
+   *     - audio_base64 (str, optional): Base64 encoded reference audio for context
    *
    *     **Video Params (Flat):**
-   *     - model (str, required): Model ID (e.g., gemini-3-flash)
-   *     - duration (float, optional): Target duration in seconds
-   *     - fps (int, optional): Frames per second (default: 24)
-   *     - size (str, optional): Video dimensions
+   *     - model (str, optional): Model ID (default: veo-3.0-generate-preview)
+   *     - duration (float, optional): Target duration in seconds (4, 6, or 8)
+   *     - aspect_ratio (str, optional): Aspect ratio: "16:9" or "9:16" (default: 16:9)
    *     - seed (int, optional): Random seed for reproducibility
    *
    *     **Authentication**: Requires valid API key or JWT token
@@ -88,6 +92,18 @@ export interface VideoGenerateParams {
   user_id: string;
 
   /**
+   * Enable first+last frame workflow: generates a starting frame and an ending frame
+   * via the image pipeline, then uses Veo's first-and-last-frame feature to animate
+   * the transition between them.
+   */
+  advanced_creative?: boolean;
+
+  /**
+   * Aspect ratio for the generated video: '16:9' or '9:16'.
+   */
+  aspect_ratio?: string;
+
+  /**
    * Base64 encoded reference audio for context
    */
   audio_base64?: string | null;
@@ -101,11 +117,6 @@ export interface VideoGenerateParams {
    * Target duration in seconds
    */
   duration?: number | null;
-
-  /**
-   * Frames per second
-   */
-  fps?: number;
 
   /**
    * Base64 encoded reference image for context (e.g., start frame)
@@ -141,11 +152,6 @@ export interface VideoGenerateParams {
    * Session ID for conversation context
    */
   session_id?: string | null;
-
-  /**
-   * Video dimensions (e.g., 1024x1024)
-   */
-  size?: string | null;
 
   /**
    * Enable Chain-of-Thought/Reasoning steps before generation
