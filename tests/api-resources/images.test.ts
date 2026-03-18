@@ -39,6 +39,7 @@ describe('resource images', () => {
       resolution: '2K',
       seed: 12345,
       session_id: 'session_id',
+      temperature: 0,
       use_reasoning: false,
       video_base64: 'video_base64',
     });

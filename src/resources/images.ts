@@ -146,6 +146,11 @@ export interface ImageGenerateParams {
   session_id?: string | null;
 
   /**
+   * Temperature for retrieval LLM calls (0.0-2.0). Lower = more deterministic.
+   */
+  temperature?: number | null;
+
+  /**
    * Enable Chain-of-Thought/Reasoning steps before generation
    */
   use_reasoning?: boolean;
