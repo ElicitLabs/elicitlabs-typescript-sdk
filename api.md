@@ -72,15 +72,29 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/personas.ts">PersonaCreateResponse</a></code>
-- <code><a href="./src/resources/personas.ts">PersonaRetrieveResponse</a></code>
-- <code><a href="./src/resources/personas.ts">PersonaListResponse</a></code>
+- <code><a href="./src/resources/personas/personas.ts">PersonaCreateResponse</a></code>
+- <code><a href="./src/resources/personas/personas.ts">PersonaRetrieveResponse</a></code>
+- <code><a href="./src/resources/personas/personas.ts">PersonaListResponse</a></code>
+- <code><a href="./src/resources/personas/personas.ts">PersonaListLinkedResponse</a></code>
 
 Methods:
 
-- <code title="post /v1/personas">client.personas.<a href="./src/resources/personas.ts">create</a>({ ...params }) -> PersonaCreateResponse</code>
-- <code title="get /v1/personas/{persona_id}">client.personas.<a href="./src/resources/personas.ts">retrieve</a>(personaID) -> PersonaRetrieveResponse</code>
-- <code title="get /v1/personas">client.personas.<a href="./src/resources/personas.ts">list</a>() -> PersonaListResponse</code>
+- <code title="post /v1/personas">client.personas.<a href="./src/resources/personas/personas.ts">create</a>({ ...params }) -> PersonaCreateResponse</code>
+- <code title="get /v1/personas/{persona_id}">client.personas.<a href="./src/resources/personas/personas.ts">retrieve</a>(personaID) -> PersonaRetrieveResponse</code>
+- <code title="get /v1/personas">client.personas.<a href="./src/resources/personas/personas.ts">list</a>() -> PersonaListResponse</code>
+- <code title="get /v1/personas/linked/{user_id}">client.personas.<a href="./src/resources/personas/personas.ts">listLinked</a>(userID) -> PersonaListLinkedResponse</code>
+
+## Link
+
+Types:
+
+- <code><a href="./src/resources/personas/link.ts">LinkCreateResponse</a></code>
+- <code><a href="./src/resources/personas/link.ts">LinkDeleteResponse</a></code>
+
+Methods:
+
+- <code title="post /v1/personas/{persona_id}/link">client.personas.link.<a href="./src/resources/personas/link.ts">create</a>(personaID, { ...params }) -> LinkCreateResponse</code>
+- <code title="delete /v1/personas/{persona_id}/link/{user_id}">client.personas.link.<a href="./src/resources/personas/link.ts">delete</a>(userID, { ...params }) -> LinkDeleteResponse</code>
 
 # Projects
 

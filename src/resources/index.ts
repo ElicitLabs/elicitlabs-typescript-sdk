@@ -18,8 +18,9 @@ export {
   type PersonaCreateResponse,
   type PersonaRetrieveResponse,
   type PersonaListResponse,
+  type PersonaListLinkedResponse,
   type PersonaCreateParams,
-} from './personas';
+} from './personas/personas';
 export {
   Projects,
   type ProjectCreateResponse,

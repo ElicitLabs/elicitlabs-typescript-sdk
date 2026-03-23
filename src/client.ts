@@ -29,13 +29,6 @@ import {
   ModalQueryResponse,
 } from './resources/modal';
 import {
-  PersonaCreateParams,
-  PersonaCreateResponse,
-  PersonaListResponse,
-  PersonaRetrieveResponse,
-  Personas,
-} from './resources/personas';
-import {
   ProjectCloneParams,
   ProjectCloneResponse,
   ProjectCreateParams,
@@ -53,6 +46,14 @@ import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resourc
 import { Video, VideoGenerateParams, VideoGenerateResponse } from './resources/video';
 import { Auth } from './resources/auth/auth';
 import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
+import {
+  PersonaCreateParams,
+  PersonaCreateResponse,
+  PersonaListLinkedResponse,
+  PersonaListResponse,
+  PersonaRetrieveResponse,
+  Personas,
+} from './resources/personas/personas';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -812,6 +813,7 @@ export declare namespace ElicitClient {
     type PersonaCreateResponse as PersonaCreateResponse,
     type PersonaRetrieveResponse as PersonaRetrieveResponse,
     type PersonaListResponse as PersonaListResponse,
+    type PersonaListLinkedResponse as PersonaListLinkedResponse,
     type PersonaCreateParams as PersonaCreateParams,
   };
 

@@ -26,7 +26,7 @@ export class Images extends APIResource {
    *     - audio_base64 (str, optional): Base64 encoded reference audio for context
    *
    *     **Image Params (Flat):**
-   *     - model (str, optional): Model ID (default: gemini-3.1-flash). Available image models: gemini-3.1-flash, gemini-3-flash, gemini-3-pro, gemini-3.1-pro
+   *     - model (str, optional): Model ID (default: gemini-3.1-flash). Available image models: gemini-3.1-flash, gemini-3-flash, gemini-3.1-pro
    *     - aspect_ratio (str, optional): Aspect ratio, e.g. "1:1", "16:9", "9:16" (default: 1:1).
    *     - resolution (str, optional): Resolution tier: "1K", "2K", or "4K" (default: 4K).
    *     - seed (int, optional): Random seed for reproducibility
@@ -144,6 +144,11 @@ export interface ImageGenerateParams {
    * Session ID for conversation context
    */
   session_id?: string | null;
+
+  /**
+   * Temperature for retrieval LLM calls (0.0-2.0). Lower = more deterministic.
+   */
+  temperature?: number | null;
 
   /**
    * Enable Chain-of-Thought/Reasoning steps before generation

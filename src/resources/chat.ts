@@ -14,11 +14,12 @@ export class Chat extends APIResource {
    *
    *     **Flow:**
    *     1. Extracts text + multimodal content from the messages array
-   *     2. Classifies the desired output modality via LLM (text / image / audio)
-   *     3. Delegates to the appropriate generation endpoint handler:
+   *     2. Classifies the desired output modality via LLM (text / image / audio / agent)
+   *     3. Delegates to the appropriate handler:
    *        - text  → POST /v1/text/generations
    *        - image → POST /v1/images/generations
    *        - audio → POST /v1/audio/generations
+   *        - agent → Agent tool-calling loop (multi-step orchestration)
    *     4. Returns unified response with text + optional image/audio
    *
    *     All validation, memory retrieval, and generation logic lives in the
@@ -57,6 +58,18 @@ export interface ChatCreateCompletionResponse {
    * Session ID for conversation context
    */
   session_id: string;
+
+  /**
+   * Agent execution trace — present only when the request was handled by the agent
+   * service
+   */
+  agent_trace?: Array<{ [key: string]: unknown }> | null;
+
+  /**
+   * Convenience extraction of just the assistant's reply — useful for stateless
+   * integrations like Instagram that only need the response.
+   */
+  assistant_output?: ChatCreateCompletionResponse.AssistantOutput | null;
 }
 
 export namespace ChatCreateCompletionResponse {
@@ -126,6 +139,37 @@ export namespace ChatCreateCompletionResponse {
       video_url?: { [key: string]: string } | null;
     }
   }
+
+  /**
+   * Convenience extraction of just the assistant's reply — useful for stateless
+   * integrations like Instagram that only need the response.
+   */
+  export interface AssistantOutput {
+    /**
+     * Base64-encoded audio (if any)
+     */
+    audio_base64?: string | null;
+
+    /**
+     * Signed URL for the audio (if any)
+     */
+    audio_url?: string | null;
+
+    /**
+     * Base64-encoded image (if any)
+     */
+    image_base64?: string | null;
+
+    /**
+     * Signed URL for the image (if any)
+     */
+    image_url?: string | null;
+
+    /**
+     * Plain-text portion of the reply
+     */
+    text?: string | null;
+  }
 }
 
 export interface ChatCreateCompletionParams {
@@ -140,9 +184,24 @@ export interface ChatCreateCompletionParams {
   user_id: string;
 
   /**
+   * Enable agent mode for multi-step tool-calling workflows. When True (or when the
+   * classifier detects agentic intent), the request is handled by the agent service
+   * which can orchestrate memory retrieval, video analysis, segmentation, image
+   * generation, and more.
+   */
+  agent_mode?: boolean;
+
+  /**
    * Configuration overrides for audio generation
    */
   audio_config?: ChatCreateCompletionParams.AudioConfig | null;
+
+  /**
+   * When True (default), the modality classifier may auto-route to agent mode even
+   * if not explicitly requested. Set to False for deterministic routing (e.g.
+   * Instagram integration) where you want only the modalities you specify.
+   */
+  auto_detect_agent?: boolean;
 
   /**
    * If true, this request is ignored by long-term memory
@@ -150,9 +209,22 @@ export interface ChatCreateCompletionParams {
   disabled_learning?: boolean;
 
   /**
+   * Maximum number of prior turns to load when load_history is True
+   */
+  history_limit?: number;
+
+  /**
    * Configuration overrides for image generation
    */
   image_config?: ChatCreateCompletionParams.ImageConfig | null;
+
+  /**
+   * When True, loads prior conversation turns from the database using session_id and
+   * prepends them to messages. Use this for stateless callers (e.g. Instagram
+   * webhooks) that send only the latest message and rely on server-side history.
+   * Requires session_id to be set.
+   */
+  load_history?: boolean;
 
   /**
    * Max reasoning steps if reasoning is enabled
@@ -160,7 +232,8 @@ export interface ChatCreateCompletionParams {
   max_reasoning_iterations?: number;
 
   /**
-   * List of desired outputs: 'text', 'image', 'audio'
+   * List of desired outputs: 'text', 'image', 'audio'. When 'agent' is included or
+   * agent_mode is True, the agent loop handles the request.
    */
   modalities?: Array<string>;
 
@@ -185,6 +258,14 @@ export interface ChatCreateCompletionParams {
   session_id?: string | null;
 
   /**
+   * When True, the agent skips the automatic memory retrieval at the start of each
+   * turn. Use this when the caller has already embedded user context in the system
+   * prompt (e.g. Instagram integration) and wants the agent to retrieve memories
+   * on-demand via the tool instead.
+   */
+  skip_initial_retrieval?: boolean;
+
+  /**
    * Enable streaming response (SSE)
    */
   stream?: boolean;
@@ -193,6 +274,12 @@ export interface ChatCreateCompletionParams {
    * Enable Chain-of-Thought/Reasoning steps before answering
    */
   use_reasoning?: boolean;
+
+  /**
+   * Map of video labels (video_0, video_1, …) to GCS S3 keys from conversation
+   * history.
+   */
+  video_refs?: { [key: string]: string } | null;
 }
 
 export namespace ChatCreateCompletionParams {
@@ -288,7 +375,8 @@ export namespace ChatCreateCompletionParams {
     speed?: number;
 
     /**
-     * Voice to use (alloy, echo, fable, onyx, nova, shimmer)
+     * Voice to use — ElevenLabs voices (Rachel, Drew, Clyde, etc.) or OpenAI voices
+     * (alloy, echo, fable, onyx, nova, shimmer)
      */
     voice?: string;
   }
