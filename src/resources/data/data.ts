@@ -111,6 +111,13 @@ export interface DataIngestParams {
   user_id: string;
 
   /**
+   * Optional URL the server will POST to when the job reaches a terminal state
+   * (done, error, cancelled). The payload will match the /v1/data/job/status
+   * response shape.
+   */
+  callback_url?: string | null;
+
+  /**
    * Optional description of the content being ingested (e.g., 'Logo design
    * concepts', 'Meeting notes')
    */
@@ -126,6 +133,11 @@ export interface DataIngestParams {
    * Filename of the uploaded file
    */
   filename?: string | null;
+
+  /**
+   * Optional email address to notify when the job reaches a terminal state.
+   */
+  notification_email?: string | null;
 
   /**
    * Optional persona ID. If provided, data is ingested to this persona instead of
