@@ -254,6 +254,61 @@ function _arrayBufferToBase64(buffer: ArrayBuffer): string {
 /**
  * Response model for data ingestion
  */
+export interface DataConfirmUploadResponse {
+  /**
+   * Unique job identifier for tracking
+   */
+  job_id: string;
+
+  /**
+   * Processing status ('accepted', 'queued', 'failed')
+   */
+  status: string;
+
+  /**
+   * Additional status or error message
+   */
+  message?: string | null;
+
+  /**
+   * Whether the request was accepted successfully
+   */
+  success?: boolean;
+}
+
+/**
+ * Response model for signed upload URL
+ */
+export interface DataGetUploadURLResponse {
+  /**
+   * Seconds until the upload URL expires
+   */
+  expires_in: number;
+
+  /**
+   * Job ID to use when confirming the upload
+   */
+  job_id: string;
+
+  /**
+   * GCS object key where the file will live
+   */
+  object_key: string;
+
+  /**
+   * Signed URL for uploading the file via HTTP PUT
+   */
+  upload_url: string;
+
+  /**
+   * Whether the URL was generated
+   */
+  success?: boolean;
+}
+
+/**
+ * Response model for data ingestion
+ */
 export interface DataIngestResponse {
   /**
    * Unique job identifier for tracking
@@ -274,6 +329,103 @@ export interface DataIngestResponse {
    * Whether the request was accepted successfully
    */
   success?: boolean;
+}
+
+export interface DataConfirmUploadParams {
+  /**
+   * Job ID returned by /ingest/upload-url
+   */
+  job_id: string;
+
+  /**
+   * GCS object key returned by /ingest/upload-url
+   */
+  object_key: string;
+
+  /**
+   * User ID (must match the upload-url request)
+   */
+  user_id: string;
+
+  /**
+   * Optional URL the server will POST to when the job reaches a terminal state.
+   */
+  callback_url?: string | null;
+
+  content_description?: string | null;
+
+  /**
+   * Content category (auto-detected from file bytes if omitted)
+   */
+  content_type?: string | null;
+
+  filename?: string | null;
+
+  /**
+   * Optional email address to notify when the job reaches a terminal state.
+   */
+  notification_email?: string | null;
+
+  persona_id?: string | null;
+
+  project_id?: string | null;
+
+  session_id?: string | null;
+
+  timestamp?: string | null;
+}
+
+export interface DataGetUploadURLParams {
+  /**
+   * User ID (always required)
+   */
+  user_id: string;
+
+  /**
+   * Optional URL the server will POST to when the job reaches a terminal state.
+   */
+  callback_url?: string | null;
+
+  /**
+   * Optional description of the content being ingested
+   */
+  content_description?: string | null;
+
+  /**
+   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
+   * If omitted, the category is auto-detected after the file is uploaded.
+   */
+  content_type?: string | null;
+
+  /**
+   * Filename of the file to upload
+   */
+  filename?: string | null;
+
+  /**
+   * Optional email address to notify when the job reaches a terminal state.
+   */
+  notification_email?: string | null;
+
+  /**
+   * Optional persona ID. If provided, data is ingested to this persona
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, data is ingested to this project
+   */
+  project_id?: string | null;
+
+  /**
+   * Session ID for grouping related ingested content
+   */
+  session_id?: string | null;
+
+  /**
+   * ISO-8601 timestamp to preserve original data moment
+   */
+  timestamp?: string | null;
 }
 
 /**
@@ -388,7 +540,14 @@ interface DataConfirmUploadParams {
 Data.Job = Job;
 
 export declare namespace Data {
-  export { type DataIngestResponse as DataIngestResponse, type DataIngestParams as DataIngestParams };
+  export {
+    type DataConfirmUploadResponse as DataConfirmUploadResponse,
+    type DataGetUploadURLResponse as DataGetUploadURLResponse,
+    type DataIngestResponse as DataIngestResponse,
+    type DataConfirmUploadParams as DataConfirmUploadParams,
+    type DataGetUploadURLParams as DataGetUploadURLParams,
+    type DataIngestParams as DataIngestParams,
+  };
 
   export {
     Job as Job,
