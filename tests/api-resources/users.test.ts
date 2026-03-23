@@ -26,6 +26,7 @@ describe('resource users', () => {
       email: 'user@example.com',
       name: 'John Doe',
       org_user_id: 'org_123456',
+      persona_id: 'persona_id',
     });
   });
 });

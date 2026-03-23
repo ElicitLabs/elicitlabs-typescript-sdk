@@ -79,6 +79,12 @@ export interface UserCreateOrGetParams {
    * Organization-specific user ID
    */
   org_user_id?: string | null;
+
+  /**
+   * If provided, the new user is automatically linked to this persona (cloning its
+   * knowledge graph).
+   */
+  persona_id?: string | null;
 }
 
 export declare namespace Users {

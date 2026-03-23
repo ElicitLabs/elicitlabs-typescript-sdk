@@ -28,6 +28,7 @@ describe('resource chat', () => {
     const response = await client.chat.createCompletion({
       messages: [{ content: 'string', role: 'role' }],
       user_id: 'user_id',
+      agent_mode: true,
       audio_config: {
         audio_type: 'audio_type',
         duration: 0,
@@ -35,20 +36,25 @@ describe('resource chat', () => {
         speed: 0.25,
         voice: 'voice',
       },
+      auto_detect_agent: true,
       disabled_learning: true,
+      history_limit: 1,
       image_config: {
         model: 'model',
         seed: 0,
         size: 'size',
       },
+      load_history: true,
       max_reasoning_iterations: 1,
       modalities: ['string'],
       model: 'model',
       persona_id: 'persona_id',
       project_id: 'project_id',
       session_id: 'session_id',
+      skip_initial_retrieval: true,
       stream: true,
       use_reasoning: true,
+      video_refs: { foo: 'string' },
     });
   });
 });
