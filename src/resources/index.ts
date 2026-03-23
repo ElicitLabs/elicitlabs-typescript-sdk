@@ -3,7 +3,15 @@
 export { Audio, type AudioGenerateResponse, type AudioGenerateParams } from './audio';
 export { Auth } from './auth/auth';
 export { Chat, type ChatCreateCompletionResponse, type ChatCreateCompletionParams } from './chat';
-export { Data, type DataIngestResponse, type DataIngestParams } from './data/data';
+export {
+  Data,
+  type DataConfirmUploadResponse,
+  type DataGetUploadURLResponse,
+  type DataIngestResponse,
+  type DataConfirmUploadParams,
+  type DataGetUploadURLParams,
+  type DataIngestParams,
+} from './data/data';
 export { Health, type HealthCheckResponse } from './health';
 export { Images, type ImageGenerateResponse, type ImageGenerateParams } from './images';
 export {
