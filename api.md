@@ -24,10 +24,14 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/data/data.ts">DataConfirmUploadResponse</a></code>
+- <code><a href="./src/resources/data/data.ts">DataGetUploadURLResponse</a></code>
 - <code><a href="./src/resources/data/data.ts">DataIngestResponse</a></code>
 
 Methods:
 
+- <code title="post /v1/data/ingest/confirm-upload">client.data.<a href="./src/resources/data/data.ts">confirmUpload</a>({ ...params }) -> DataConfirmUploadResponse</code>
+- <code title="post /v1/data/ingest/upload-url">client.data.<a href="./src/resources/data/data.ts">getUploadURL</a>({ ...params }) -> DataGetUploadURLResponse</code>
 - <code title="post /v1/data/ingest">client.data.<a href="./src/resources/data/data.ts">ingest</a>({ ...params }) -> DataIngestResponse</code>
 
 ## Job

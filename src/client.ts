@@ -45,7 +45,15 @@ import { Text, TextGenerateParams, TextGenerateResponse } from './resources/text
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
 import { Video, VideoGenerateParams, VideoGenerateResponse } from './resources/video';
 import { Auth } from './resources/auth/auth';
-import { Data, DataIngestParams, DataIngestResponse } from './resources/data/data';
+import {
+  Data,
+  DataConfirmUploadParams,
+  DataConfirmUploadResponse,
+  DataGetUploadURLParams,
+  DataGetUploadURLResponse,
+  DataIngestParams,
+  DataIngestResponse,
+} from './resources/data/data';
 import {
   PersonaCreateParams,
   PersonaCreateResponse,
@@ -800,7 +808,11 @@ export declare namespace ElicitClient {
 
   export {
     Data as Data,
+    type DataConfirmUploadResponse as DataConfirmUploadResponse,
+    type DataGetUploadURLResponse as DataGetUploadURLResponse,
     type DataIngestResponse as DataIngestResponse,
+    type DataConfirmUploadParams as DataConfirmUploadParams,
+    type DataGetUploadURLParams as DataGetUploadURLParams,
     type DataIngestParams as DataIngestParams,
   };
 

@@ -16,6 +16,57 @@ export class Data extends APIResource {
   job: JobAPI.Job = new JobAPI.Job(this._client);
 
   /**
+   * **Step 2 of 2** — After uploading the file to the signed URL obtained from
+   * `/ingest/upload-url`, call this endpoint to trigger the ingest pipeline.
+   *
+   *     The server verifies the file exists in GCS, auto-detects the content type
+   *     if it was not provided, and queues the processing job.
+   *
+   *     Returns the same `IngestResponse` as the regular `/ingest` endpoint.
+   *
+   * @example
+   * ```ts
+   * const response = await client.data.confirmUpload({
+   *   job_id: 'job_id',
+   *   object_key: 'object_key',
+   *   user_id: 'user_id',
+   * });
+   * ```
+   */
+  confirmUpload(
+    body: DataConfirmUploadParams,
+    options?: RequestOptions,
+  ): APIPromise<DataConfirmUploadResponse> {
+    return this._client.post('/v1/data/ingest/confirm-upload', { body, ...options });
+  }
+
+  /**
+   * **Step 1 of 2** — Obtain a time-limited signed URL for uploading a file directly
+   * to cloud storage (GCS).
+   *
+   *     Use this instead of `/ingest` when the payload is large (e.g. > 32 MB)
+   *     to avoid sending the entire file through the API server.
+   *
+   *     **Flow:**
+   *     1. Call this endpoint → receive `upload_url`, `job_id`, `object_key`
+   *     2. HTTP **PUT** the raw file bytes to `upload_url`
+   *     3. Call `/ingest/confirm-upload` with the `job_id` and `object_key`
+   *        to kick off the processing pipeline
+   *
+   *     The signed URL expires after the time indicated by `expires_in` (default 1 hour).
+   *
+   * @example
+   * ```ts
+   * const response = await client.data.getUploadURL({
+   *   user_id: 'user_id',
+   * });
+   * ```
+   */
+  getUploadURL(body: DataGetUploadURLParams, options?: RequestOptions): APIPromise<DataGetUploadURLResponse> {
+    return this._client.post('/v1/data/ingest/upload-url', { body, ...options });
+  }
+
+  /**
    * Ingest data for asynchronous processing
    *
    *     Accepts various content types (text, messages, files) and processes them to extract information
@@ -77,6 +128,61 @@ export class Data extends APIResource {
 /**
  * Response model for data ingestion
  */
+export interface DataConfirmUploadResponse {
+  /**
+   * Unique job identifier for tracking
+   */
+  job_id: string;
+
+  /**
+   * Processing status ('accepted', 'queued', 'failed')
+   */
+  status: string;
+
+  /**
+   * Additional status or error message
+   */
+  message?: string | null;
+
+  /**
+   * Whether the request was accepted successfully
+   */
+  success?: boolean;
+}
+
+/**
+ * Response model for signed upload URL
+ */
+export interface DataGetUploadURLResponse {
+  /**
+   * Seconds until the upload URL expires
+   */
+  expires_in: number;
+
+  /**
+   * Job ID to use when confirming the upload
+   */
+  job_id: string;
+
+  /**
+   * GCS object key where the file will live
+   */
+  object_key: string;
+
+  /**
+   * Signed URL for uploading the file via HTTP PUT
+   */
+  upload_url: string;
+
+  /**
+   * Whether the URL was generated
+   */
+  success?: boolean;
+}
+
+/**
+ * Response model for data ingestion
+ */
 export interface DataIngestResponse {
   /**
    * Unique job identifier for tracking
@@ -97,6 +203,103 @@ export interface DataIngestResponse {
    * Whether the request was accepted successfully
    */
   success?: boolean;
+}
+
+export interface DataConfirmUploadParams {
+  /**
+   * Job ID returned by /ingest/upload-url
+   */
+  job_id: string;
+
+  /**
+   * GCS object key returned by /ingest/upload-url
+   */
+  object_key: string;
+
+  /**
+   * User ID (must match the upload-url request)
+   */
+  user_id: string;
+
+  /**
+   * Optional URL the server will POST to when the job reaches a terminal state.
+   */
+  callback_url?: string | null;
+
+  content_description?: string | null;
+
+  /**
+   * Content category (auto-detected from file bytes if omitted)
+   */
+  content_type?: string | null;
+
+  filename?: string | null;
+
+  /**
+   * Optional email address to notify when the job reaches a terminal state.
+   */
+  notification_email?: string | null;
+
+  persona_id?: string | null;
+
+  project_id?: string | null;
+
+  session_id?: string | null;
+
+  timestamp?: string | null;
+}
+
+export interface DataGetUploadURLParams {
+  /**
+   * User ID (always required)
+   */
+  user_id: string;
+
+  /**
+   * Optional URL the server will POST to when the job reaches a terminal state.
+   */
+  callback_url?: string | null;
+
+  /**
+   * Optional description of the content being ingested
+   */
+  content_description?: string | null;
+
+  /**
+   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
+   * If omitted, the category is auto-detected after the file is uploaded.
+   */
+  content_type?: string | null;
+
+  /**
+   * Filename of the file to upload
+   */
+  filename?: string | null;
+
+  /**
+   * Optional email address to notify when the job reaches a terminal state.
+   */
+  notification_email?: string | null;
+
+  /**
+   * Optional persona ID. If provided, data is ingested to this persona
+   */
+  persona_id?: string | null;
+
+  /**
+   * Optional project ID. If provided, data is ingested to this project
+   */
+  project_id?: string | null;
+
+  /**
+   * Session ID for grouping related ingested content
+   */
+  session_id?: string | null;
+
+  /**
+   * ISO-8601 timestamp to preserve original data moment
+   */
+  timestamp?: string | null;
 }
 
 export interface DataIngestParams {
@@ -166,7 +369,14 @@ export interface DataIngestParams {
 Data.Job = Job;
 
 export declare namespace Data {
-  export { type DataIngestResponse as DataIngestResponse, type DataIngestParams as DataIngestParams };
+  export {
+    type DataConfirmUploadResponse as DataConfirmUploadResponse,
+    type DataGetUploadURLResponse as DataGetUploadURLResponse,
+    type DataIngestResponse as DataIngestResponse,
+    type DataConfirmUploadParams as DataConfirmUploadParams,
+    type DataGetUploadURLParams as DataGetUploadURLParams,
+    type DataIngestParams as DataIngestParams,
+  };
 
   export {
     Job as Job,

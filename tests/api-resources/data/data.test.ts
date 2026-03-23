@@ -9,6 +9,68 @@ const client = new ElicitClient({
 
 describe('resource data', () => {
   // Mock server tests are disabled
+  test.skip('confirmUpload: only required params', async () => {
+    const responsePromise = client.data.confirmUpload({
+      job_id: 'job_id',
+      object_key: 'object_key',
+      user_id: 'user_id',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('confirmUpload: required and optional params', async () => {
+    const response = await client.data.confirmUpload({
+      job_id: 'job_id',
+      object_key: 'object_key',
+      user_id: 'user_id',
+      callback_url: 'callback_url',
+      content_description: 'content_description',
+      content_type: 'content_type',
+      filename: 'filename',
+      notification_email: 'dev@stainless.com',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
+      session_id: 'session_id',
+      timestamp: 'timestamp',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('getUploadURL: only required params', async () => {
+    const responsePromise = client.data.getUploadURL({ user_id: 'user_id' });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('getUploadURL: required and optional params', async () => {
+    const response = await client.data.getUploadURL({
+      user_id: 'user_id',
+      callback_url: 'callback_url',
+      content_description: 'content_description',
+      content_type: 'content_type',
+      filename: 'filename',
+      notification_email: 'dev@stainless.com',
+      persona_id: 'persona_id',
+      project_id: 'project_id',
+      session_id: 'session_id',
+      timestamp: 'timestamp',
+    });
+  });
+
+  // Mock server tests are disabled
   test.skip('ingest: only required params', async () => {
     const responsePromise = client.data.ingest({
       payload: 'From: john@example.com\nTo: jane@example.com\nSubject: Hello\n\nHello Jane!',
