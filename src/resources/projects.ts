@@ -287,6 +287,11 @@ export interface ProjectDeleteResponse {
  */
 export interface ProjectCloneResponse {
   /**
+   * Job ID for tracking the clone operation status via /v1/data/job/status
+   */
+  job_id: string;
+
+  /**
    * Success message
    */
   message: string;
@@ -375,6 +380,12 @@ export interface ProjectCloneParams {
   project_id: string;
 
   /**
+   * Optional URL the server will POST to when the clone job reaches a terminal
+   * state.
+   */
+  callback_url?: string | null;
+
+  /**
    * Description for the cloned project. Defaults to the original's description.
    */
   description?: string | null;
@@ -383,6 +394,11 @@ export interface ProjectCloneParams {
    * Name for the cloned project. Defaults to '{original_name} (Copy)'.
    */
   name?: string | null;
+
+  /**
+   * Optional email address to notify when the clone job completes.
+   */
+  notification_email?: string | null;
 
   /**
    * User ID of the source project owner. If not provided, uses the authenticated

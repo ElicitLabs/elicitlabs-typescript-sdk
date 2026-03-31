@@ -22,7 +22,11 @@ describe('resource link', () => {
 
   // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.personas.link.create('persona_id', { user_id: 'user_id' });
+    const response = await client.personas.link.create('persona_id', {
+      user_id: 'user_id',
+      callback_url: 'callback_url',
+      notification_email: 'dev@stainless.com',
+    });
   });
 
   // Mock server tests are disabled

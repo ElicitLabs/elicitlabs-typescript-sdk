@@ -106,8 +106,10 @@ describe('resource projects', () => {
   test.skip('clone: required and optional params', async () => {
     const response = await client.projects.clone({
       project_id: 'project_id',
+      callback_url: 'callback_url',
       description: 'description',
       name: 'x',
+      notification_email: 'dev@stainless.com',
       source_user_id: 'source_user_id',
       target_user_id: 'target_user_id',
     });

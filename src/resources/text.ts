@@ -70,9 +70,19 @@ export interface TextGenerateParams {
   user_id: string;
 
   /**
+   * If true, return a job_id immediately and process in the background
+   */
+  async_mode?: boolean;
+
+  /**
    * Base64 encoded reference audio for context
    */
   audio_base64?: string | null;
+
+  /**
+   * Optional URL the server will POST to when generation completes.
+   */
+  callback_url?: string | null;
 
   /**
    * If true, this request is ignored by long-term memory
@@ -93,6 +103,11 @@ export interface TextGenerateParams {
    * LLM model to use for generation
    */
   model?: string;
+
+  /**
+   * Optional email address to notify when generation completes.
+   */
+  notification_email?: string | null;
 
   /**
    * Optional JSON Schema describing the desired output structure. When provided, the

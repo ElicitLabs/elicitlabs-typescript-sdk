@@ -58,6 +58,11 @@ export interface LinkCreateResponse {
   user_id: string;
 
   cloned_persona_id?: string | null;
+
+  /**
+   * Job ID for tracking the clone operation status via /v1/data/job/status
+   */
+  job_id?: string | null;
 }
 
 /**
@@ -71,6 +76,11 @@ export interface LinkDeleteResponse {
   user_id: string;
 
   cloned_persona_id?: string | null;
+
+  /**
+   * Job ID for tracking the clone operation status via /v1/data/job/status
+   */
+  job_id?: string | null;
 }
 
 export interface LinkCreateParams {
@@ -78,6 +88,17 @@ export interface LinkCreateParams {
    * The user ID to link
    */
   user_id: string;
+
+  /**
+   * Optional URL the server will POST to when the clone job reaches a terminal
+   * state.
+   */
+  callback_url?: string | null;
+
+  /**
+   * Optional email address to notify when the clone job completes.
+   */
+  notification_email?: string | null;
 }
 
 export interface LinkDeleteParams {

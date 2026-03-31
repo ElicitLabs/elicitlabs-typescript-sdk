@@ -24,11 +24,14 @@ describe('resource text', () => {
   test.skip('generate: required and optional params', async () => {
     const response = await client.text.generate({
       user_id: 'user_123',
+      async_mode: true,
       audio_base64: 'audio_base64',
+      callback_url: 'callback_url',
       disabled_learning: true,
       image_base64: 'image_base64',
       max_reasoning_iterations: 1,
       model: 'gpt-4.1-mini',
+      notification_email: 'notification_email',
       output_schema: { foo: 'bar' },
       persona_id: 'persona_id',
       project_id: 'proj_ABC',

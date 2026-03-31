@@ -96,9 +96,19 @@ export interface ImageGenerateParams {
   aspect_ratio?: string;
 
   /**
+   * If true, return a job_id immediately and process in the background
+   */
+  async_mode?: boolean;
+
+  /**
    * Base64 encoded reference audio for context
    */
   audio_base64?: string | null;
+
+  /**
+   * Optional URL the server will POST to when generation completes.
+   */
+  callback_url?: string | null;
 
   /**
    * If true, this request is ignored by long-term memory
@@ -119,6 +129,11 @@ export interface ImageGenerateParams {
    * Image generation model ID
    */
   model?: string;
+
+  /**
+   * Optional email address to notify when generation completes.
+   */
+  notification_email?: string | null;
 
   /**
    * The specific system persona/voice to use

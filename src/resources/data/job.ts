@@ -107,6 +107,21 @@ export interface JobRetrieveStatusResponse {
    * Completion percentage (0-100)
    */
   completion?: number;
+
+  /**
+   * Error details (available when status is 'error')
+   */
+  error_details?: string | null;
+
+  /**
+   * Type of job (e.g. 'ingest', 'clone_project', 'generation_image')
+   */
+  job_type?: string | null;
+
+  /**
+   * Job result data (available when status is 'done')
+   */
+  result?: { [key: string]: unknown } | null;
 }
 
 export interface JobCancelParams {
