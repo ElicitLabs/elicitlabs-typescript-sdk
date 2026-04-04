@@ -171,6 +171,12 @@ export namespace ProjectCreateResponse {
      * classification.
      */
     project_type?: string | null;
+
+    /**
+     * When True, creative_design projects use hierarchical ingestion. When False, uses
+     * creative ingest directly.
+     */
+    use_hierarchical?: boolean;
   }
 }
 
@@ -210,6 +216,12 @@ export namespace ProjectRetrieveResponse {
      * classification.
      */
     project_type?: string | null;
+
+    /**
+     * When True, creative_design projects use hierarchical ingestion. When False, uses
+     * creative ingest directly.
+     */
+    use_hierarchical?: boolean;
   }
 }
 
@@ -264,6 +276,12 @@ export namespace ProjectListResponse {
      * classification.
      */
     project_type?: string | null;
+
+    /**
+     * When True, creative_design projects use hierarchical ingestion. When False, uses
+     * creative ingest directly.
+     */
+    use_hierarchical?: boolean;
   }
 }
 
@@ -333,6 +351,12 @@ export namespace ProjectCloneResponse {
      * classification.
      */
     project_type?: string | null;
+
+    /**
+     * When True, creative_design projects use hierarchical ingestion. When False, uses
+     * creative ingest directly.
+     */
+    use_hierarchical?: boolean;
   }
 }
 
@@ -353,6 +377,12 @@ export interface ProjectCreateParams {
    * documentation/business content.
    */
   project_type?: 'creative_design' | 'general';
+
+  /**
+   * When True (default), creative_design projects use the hierarchical ingestion
+   * pipeline. Set to False to skip hierarchical and go directly to creative ingest.
+   */
+  use_hierarchical?: boolean;
 
   /**
    * User ID to associate the project with. If not provided, uses the authenticated

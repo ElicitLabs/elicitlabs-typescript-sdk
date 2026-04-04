@@ -35,6 +35,7 @@ describe('resource images', () => {
       disabled_learning: true,
       image_base64: 'image_base64',
       max_reasoning_iterations: 1,
+      mode: 'fast',
       model: 'gemini-3.1-flash',
       notification_email: 'notification_email',
       persona_id: 'persona_id',

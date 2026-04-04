@@ -26,7 +26,7 @@ export class Images extends APIResource {
    *     - audio_base64 (str, optional): Base64 encoded reference audio for context
    *
    *     **Image Params (Flat):**
-   *     - model (str, optional): Model ID (default: gemini-3.1-flash). Available image models: gemini-3.1-flash, gemini-3-flash, gemini-3.1-pro
+   *     - model (str, optional): Model ID (default: gemini-3.1-flash). Available models: gemini-3.1-flash, gemini-3-flash, gemini-3.1-pro, gpt-image-1, gpt-image-1.5, flux-2-max, flux-2-pro, flux-2-klein-9b, flux-2-schnell, flux-pro-1.1, flux-pro-1.1-ultra, flux-kontext-pro, imagen-4-fast, imagen-4-ultra
    *     - aspect_ratio (str, optional): Aspect ratio, e.g. "1:1", "16:9", "9:16" (default: 1:1).
    *     - resolution (str, optional): Resolution tier: "1K", "2K", or "4K" (default: 4K).
    *     - seed (int, optional): Random seed for reproducibility
@@ -124,6 +124,17 @@ export interface ImageGenerateParams {
    * Max reasoning steps if reasoning is enabled
    */
   max_reasoning_iterations?: number;
+
+  /**
+   * Generation mode controlling speed vs quality tradeoff and how reference images
+   * are used. None or 'default': Standard pipeline with memory retrieval and
+   * context. 'fast': Skip memory retrieval entirely, prompt goes straight to model.
+   * Fastest. 'faithful': Exact visual reproduction of reference images (entity
+   * features, colors, proportions). 'style_transfer': Creative adaptation — captures
+   * entity identity but with creative latitude. 'create_new': Full creative freedom,
+   * references only inform art style/aesthetic.
+   */
+  mode?: 'fast' | 'default' | 'faithful' | 'style_transfer' | 'create_new' | null;
 
   /**
    * Image generation model ID
