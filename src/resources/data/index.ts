@@ -9,10 +9,4 @@ export {
   type DataGetUploadURLParams,
   type DataIngestParams,
 } from './data';
-export {
-  Job,
-  type JobCancelResponse,
-  type JobRetrieveStatusResponse,
-  type JobCancelParams,
-  type JobRetrieveStatusParams,
-} from './job';
+export { Job, type JobCancelResponse, type JobCancelParams } from './job';

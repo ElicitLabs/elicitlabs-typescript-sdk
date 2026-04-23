@@ -39,12 +39,10 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/data/job.ts">JobCancelResponse</a></code>
-- <code><a href="./src/resources/data/job.ts">JobRetrieveStatusResponse</a></code>
 
 Methods:
 
 - <code title="post /v1/data/job/cancel">client.data.job.<a href="./src/resources/data/job.ts">cancel</a>({ ...params }) -> JobCancelResponse</code>
-- <code title="post /v1/data/job/status">client.data.job.<a href="./src/resources/data/job.ts">retrieveStatus</a>({ ...params }) -> JobRetrieveStatusResponse</code>
 
 # Health
 
