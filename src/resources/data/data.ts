@@ -327,6 +327,13 @@ export interface DataIngestParams {
   content_type?: string | null;
 
   /**
+   * Only used when content_type='website'. Optional knobs for the discovery + LLM
+   * filter step: max_sub_pages (default 50), include_subdomains, search,
+   * include_paths, exclude_paths, map_limit.
+   */
+  crawl_options?: { [key: string]: unknown } | null;
+
+  /**
    * Filename of the uploaded file
    */
   filename?: string | null;

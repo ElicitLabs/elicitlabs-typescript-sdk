@@ -51,6 +51,12 @@ export class Images extends APIResource {
  */
 export interface ImageGenerateResponse {
   /**
+   * ID of the persisted upl.generations row for this output. Pass this back as
+   * source_generation_id with mode='edit' to refine it.
+   */
+  generation_id?: string | null;
+
+  /**
    * Base64 encoded image. Present when the payload is under ~30 MB. May be absent
    * for very large outputs.
    */
@@ -121,6 +127,13 @@ export interface ImageGenerateParams {
   image_base64?: string | null;
 
   /**
+   * Optional base64 PNG mask for inpainting (only honored on gpt-image-\* models).
+   * Transparent pixels = edit region, opaque pixels = keep. Silently ignored by
+   * Flux/Imagen/Gemini providers.
+   */
+  mask_base64?: string | null;
+
+  /**
    * Max reasoning steps if reasoning is enabled
    */
   max_reasoning_iterations?: number;
@@ -132,9 +145,11 @@ export interface ImageGenerateParams {
    * Fastest. 'faithful': Exact visual reproduction of reference images (entity
    * features, colors, proportions). 'style_transfer': Creative adaptation — captures
    * entity identity but with creative latitude. 'create_new': Full creative freedom,
-   * references only inform art style/aesthetic.
+   * references only inform art style/aesthetic. 'edit': Edit a prior generation
+   * referenced by source_generation_id; text_input is the feedback / change
+   * instruction. Skips memory retrieval — the source image IS the context.
    */
-  mode?: 'fast' | 'default' | 'faithful' | 'style_transfer' | 'create_new' | null;
+  mode?: 'fast' | 'default' | 'faithful' | 'style_transfer' | 'create_new' | 'edit' | null;
 
   /**
    * Image generation model ID
@@ -170,6 +185,13 @@ export interface ImageGenerateParams {
    * Session ID for conversation context
    */
   session_id?: string | null;
+
+  /**
+   * ID of a previously generated image (row in upl.generations) to edit. Required
+   * when mode='edit'. The server fetches the source from GCS — no upload needed.
+   * Must belong to the requesting user.
+   */
+  source_generation_id?: string | null;
 
   /**
    * Temperature for retrieval LLM calls (0.0-2.0). Lower = more deterministic.

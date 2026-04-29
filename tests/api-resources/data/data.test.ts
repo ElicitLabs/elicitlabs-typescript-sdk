@@ -93,6 +93,7 @@ describe('resource data', () => {
       callback_url: 'callback_url',
       content_description: 'Email correspondence about project updates',
       content_type: 'text',
+      crawl_options: { foo: 'bar' },
       filename: 'filename',
       notification_email: 'dev@stainless.com',
       persona_id: 'persona_id',
