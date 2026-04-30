@@ -122,6 +122,32 @@ export interface ImageGenerateParams {
   disabled_learning?: boolean;
 
   /**
+   * List of base64-encoded PNG/JPG images showing the desired font (e.g., a
+   * typography specimen). Honored only when mode='edit'.
+   */
+  font_reference_image_base64?: Array<string> | null;
+
+  /**
+   * List of HTTPS or gs:// URLs to images showing the desired font. Server downloads
+   * them. Honored only when mode='edit'.
+   */
+  font_reference_image_url?: Array<string> | null;
+
+  /**
+   * List of base64-encoded TTF/OTF font file bytes (drag-and-drop support — no
+   * upload endpoint required). The server decodes, renders a typography sample, and
+   * passes the rendered image as a reference. Honored only when mode='edit'.
+   */
+  font_reference_ttf_base64?: Array<string> | null;
+
+  /**
+   * List of HTTPS or gs:// URLs to TTF/OTF font files. The server renders a
+   * typography sample in each font and passes the rendered image as a reference.
+   * Honored only when mode='edit'.
+   */
+  font_reference_ttf_url?: Array<string> | null;
+
+  /**
    * Base64 encoded reference image for context
    */
   image_base64?: string | null;
