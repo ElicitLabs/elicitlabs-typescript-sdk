@@ -44,6 +44,8 @@ describe('resource images', () => {
       model: 'gemini-3.1-flash',
       notification_email: 'notification_email',
       persona_id: 'persona_id',
+      pinned_entity_ids: ['string'],
+      pinned_folder_ids: ['string'],
       project_id: 'proj_ABC',
       resolution: '2K',
       seed: 12345,

@@ -193,6 +193,20 @@ export interface ImageGenerateParams {
   persona_id?: string | null;
 
   /**
+   * OBJECTS entity node IDs to anchor flat memory retrieval. When set, memory
+   * retrieval focuses on episodes/memories connected to these specific entities
+   * instead of fully autonomous semantic search.
+   */
+  pinned_entity_ids?: Array<string> | null;
+
+  /**
+   * HierarchicalFolder node IDs to anchor hierarchical retrieval. When set, the
+   * retrieval pipeline targets these folders directly instead of using LLM path
+   * selection.
+   */
+  pinned_folder_ids?: Array<string> | null;
+
+  /**
    * The project ID
    */
   project_id?: string | null;
