@@ -32,6 +32,7 @@ describe('resource images', () => {
       async_mode: true,
       audio_base64: 'audio_base64',
       callback_url: 'callback_url',
+      debug: true,
       disabled_learning: true,
       font_reference_image_base64: ['string'],
       font_reference_image_url: ['string'],
