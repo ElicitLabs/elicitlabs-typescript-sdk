@@ -34,6 +34,7 @@ describe('resource images', () => {
       callback_url: 'callback_url',
       debug: true,
       disabled_learning: true,
+      fan_out_group_id: 'fan_out_group_id',
       font_reference_image_base64: ['string'],
       font_reference_image_url: ['string'],
       font_reference_ttf_base64: ['string'],
@@ -53,6 +54,7 @@ describe('resource images', () => {
       session_id: 'session_id',
       source_generation_id: 'source_generation_id',
       temperature: 0,
+      text_strategy: 'overlay',
       use_reasoning: false,
       video_base64: 'video_base64',
     });

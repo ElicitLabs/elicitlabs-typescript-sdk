@@ -94,6 +94,7 @@ describe('resource data', () => {
       content_description: 'Email correspondence about project updates',
       content_type: 'text',
       crawl_options: { foo: 'bar' },
+      enable_planner: true,
       filename: 'filename',
       notification_email: 'dev@stainless.com',
       persona_id: 'persona_id',
