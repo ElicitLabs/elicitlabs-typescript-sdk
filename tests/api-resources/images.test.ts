@@ -54,7 +54,7 @@ describe('resource images', () => {
       session_id: 'session_id',
       source_generation_id: 'source_generation_id',
       temperature: 0,
-      text_strategy: 'overlay',
+      text_strategy: 'IG_1',
       use_reasoning: false,
       video_base64: 'video_base64',
     });
