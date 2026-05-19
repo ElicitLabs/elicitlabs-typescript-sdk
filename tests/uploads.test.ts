@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from 'elicit-labs/internal/to-file';
 import { toFile } from 'elicit-labs/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
