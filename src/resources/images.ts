@@ -97,6 +97,12 @@ export interface ImageGenerateParams {
   user_id: string;
 
   /**
+   * Relayout mode only: the reference ad's ObjectNode node_id to recreate. Either
+   * this OR `auto_select_ad` must be set.
+   */
+  ad_id?: string | null;
+
+  /**
    * Aspect ratio for the generated image, e.g. '1:1', '16:9', '9:16', '4:3', '3:4'.
    */
   aspect_ratio?: string;
@@ -110,6 +116,12 @@ export interface ImageGenerateParams {
    * Base64 encoded reference audio for context
    */
   audio_base64?: string | null;
+
+  /**
+   * Relayout mode only: when true and `ad_id` is null, a VLM judge picks the best
+   * analyzed ad from the project.
+   */
+  auto_select_ad?: boolean;
 
   /**
    * Optional URL the server will POST to when generation completes.
@@ -129,14 +141,6 @@ export interface ImageGenerateParams {
    * If true, this request is ignored by long-term memory
    */
   disabled_learning?: boolean;
-
-  /**
-   * Frontend-generated UUID shared across the 3 parallel generations the playground
-   * fires per fan-out (one per text_strategy). Persisted on every generation row so
-   * the client can re-group siblings after page refresh. Send the SAME value on all
-   * 3 of the calls in one comparison; omit (null) for non-fan-out generations.
-   */
-  fan_out_group_id?: string | null;
 
   /**
    * List of base64-encoded PNG/JPG images showing the desired font (e.g., a
@@ -191,11 +195,16 @@ export interface ImageGenerateParams {
    * in this mode (the model's own text rendering is trusted). 'fast': Skip
    * hierarchical retrieval, single-call block selector. 'edit': Edit a prior
    * generation referenced by source_generation_id; text_input is the change
-   * instruction. Skips memory retrieval — the source image IS the context. Legacy
-   * values 'faithful', 'style_transfer', 'create_new' are auto-coerced
-   * ('faithful'→'consistency', the other two→'exploration').
+   * instruction. Skips memory retrieval — the source image IS the context.
+   * 'relayout': Recreate a successful-example ad through the full wireframer →
+   * typesetter → synthesizer → refiner pipeline using the LayoutAnalysis ingested
+   * for the chosen ad. Provide `ad_id` or set `auto_select_ad=true` to let a VLM
+   * pick the best ad from the project. Per-stage progress lands in
+   * `metadata.relayout_steps` for FE polling. Legacy values 'faithful',
+   * 'style_transfer', 'create_new' are auto-coerced ('faithful'→'consistency', the
+   * other two→'exploration').
    */
-  mode?: 'fast' | 'default' | 'consistency' | 'exploration' | 'edit' | null;
+  mode?: 'fast' | 'default' | 'consistency' | 'exploration' | 'edit' | 'relayout' | null;
 
   /**
    * Image generation model ID
@@ -254,23 +263,15 @@ export interface ImageGenerateParams {
   source_generation_id?: string | null;
 
   /**
+   * Relayout mode only: comma-separable list of target aspect ratios (e.g. ['1:1',
+   * '9:16']). Defaults to ['1:1'] when omitted.
+   */
+  target_aspect_ratios?: Array<string> | null;
+
+  /**
    * Temperature for retrieval LLM calls (0.0-2.0). Lower = more deterministic.
    */
   temperature?: number | null;
-
-  /**
-   * Typography strategy for mode='consistency'. 'IG_1' (default — PIL overlay path,
-   * formerly 'overlay'): HTML text-overlay rendered by Playwright and
-   * alpha-composited on top of Gemini's no-text render, with a Claude refinement
-   * loop. Best typography fidelity. 'IG_2' (text-baked path, formerly 'baked'):
-   * Claude synthesizes the typography reference, then Gemini paints that text into
-   * the final pixels in one call — best balance of typography fidelity and scene
-   * integration. 'IG_3' (single-Gemini path, formerly 'single_gemini'): one Gemini
-   * call generates the full image (text included) using the consistency-flavored
-   * prompt — fast and cheap, but Gemini may hallucinate fonts. Ignored when mode is
-   * not 'consistency'.
-   */
-  text_strategy?: 'IG_1' | 'IG_2' | 'IG_3' | null;
 
   /**
    * Enable Chain-of-Thought/Reasoning steps before generation
