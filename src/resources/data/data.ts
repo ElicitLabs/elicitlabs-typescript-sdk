@@ -372,6 +372,16 @@ export interface DataIngestParams {
   session_id?: string | null;
 
   /**
+   * When set, the ingest is interpreted as a free-form correction targeting an
+   * existing analyzed ad's LayoutAnalysis. `payload` must be a string (markdown /
+   * JSON / HTML / prose — any format). Claude reconciles the corrections against the
+   * ad's current four artifact JSONs (typography, sections, claude_labels,
+   * layout_metrics) with the user taking priority on every field they mention.
+   * Per-ad scope only — no fan-out to other ads in the project.
+   */
+  target_ad_id?: string | null;
+
+  /**
    * ISO-8601 timestamp to preserve original data moment
    */
   timestamp?: string | null;
