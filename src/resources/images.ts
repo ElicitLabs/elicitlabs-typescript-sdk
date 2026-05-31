@@ -47,42 +47,28 @@ export class Images extends APIResource {
 }
 
 /**
- * Response model for image generation
+ * Returned when an image generation job has been enqueued.
  */
 export interface ImageGenerateResponse {
   /**
-   * ID of the persisted upl.generations row for this output. Pass this back as
-   * source_generation_id with mode='edit' to refine it.
+   * Persisted upl.generations row ID for this image
    */
-  generation_id?: string | null;
+  generation_id: string;
 
   /**
-   * Base64 encoded image. Present when the payload is under ~30 MB. May be absent
-   * for very large outputs.
+   * Job ID for /v1/data/job/status polling
    */
-  image_base64?: string | null;
+  job_id: string;
 
   /**
-   * Image format, e.g. png, jpeg, webp
+   * Polling guidance for the caller
    */
-  image_format?: string;
+  message?: string;
 
   /**
-   * Signed GCS URL to download the image (expires after 24 h). Always present when
-   * the upload succeeds.
+   * Initial queued status
    */
-  image_url?: string | null;
-
-  /**
-   * Delivery method: 'both' (base64 + url), 'url' (url only, base64 omitted due to
-   * size), or 'base64' (GCS upload failed).
-   */
-  output_type?: string;
-
-  /**
-   * Whether the request succeeded
-   */
-  success?: boolean;
+  status?: string;
 }
 
 export interface ImageGenerateParams {
@@ -108,11 +94,6 @@ export interface ImageGenerateParams {
   aspect_ratio?: string;
 
   /**
-   * If true, return a job_id immediately and process in the background
-   */
-  async_mode?: boolean;
-
-  /**
    * Base64 encoded reference audio for context
    */
   audio_base64?: string | null;
@@ -122,11 +103,6 @@ export interface ImageGenerateParams {
    * analyzed ad from the project.
    */
   auto_select_ad?: boolean;
-
-  /**
-   * Optional URL the server will POST to when generation completes.
-   */
-  callback_url?: string | null;
 
   /**
    * If true, capture a self-contained HTML trace of every pipeline step (retrieval
@@ -210,11 +186,6 @@ export interface ImageGenerateParams {
    * Image generation model ID
    */
   model?: string;
-
-  /**
-   * Optional email address to notify when generation completes.
-   */
-  notification_email?: string | null;
 
   /**
    * The specific system persona/voice to use
