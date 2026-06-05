@@ -227,6 +227,12 @@ export interface DataConfirmUploadParams {
    */
   content_type?: string | null;
 
+  /**
+   * Deprecated and ignored. Ingest-time planner questions are disabled; caption/ad
+   * analysis now happens in the caption-generation flow.
+   */
+  enable_planner?: boolean;
+
   filename?: string | null;
 
   /**
@@ -264,6 +270,12 @@ export interface DataGetUploadURLParams {
    * If omitted, the category is auto-detected after the file is uploaded.
    */
   content_type?: string | null;
+
+  /**
+   * Deprecated and ignored. Ingest-time planner questions are disabled; caption/ad
+   * analysis now happens in the caption-generation flow.
+   */
+  enable_planner?: boolean;
 
   /**
    * Filename of the file to upload
@@ -334,12 +346,8 @@ export interface DataIngestParams {
   crawl_options?: { [key: string]: unknown } | null;
 
   /**
-   * Opt-in: when true, the ingester pauses after content prep and asks the user
-   * clarifying questions about ambiguous intent (e.g. 'is this a successful ad?',
-   * 'should we retain product references?'). The job transitions to
-   * status='awaiting_planner_input' with planner_questions in the status response;
-   * the user submits answers via POST /v1/data/ingest/{job_id}/answer-planner. The
-   * planner can self-skip when the content is unambiguous.
+   * Deprecated and ignored. Ingest-time planner questions are disabled; caption/ad
+   * analysis now happens in the caption-generation flow.
    */
   enable_planner?: boolean;
 
