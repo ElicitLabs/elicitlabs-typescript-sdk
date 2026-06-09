@@ -105,11 +105,7 @@ export interface ImageGenerateParams {
   auto_select_ad?: boolean;
 
   /**
-   * If true, capture a self-contained HTML trace of every pipeline step (retrieval
-   * LLM calls, synthesis, prompt assembly, image LLM, post-gen text fix, edit-text
-   * refinement loop) to data/temp/<ts>\_pipeline_trace.html. Also activates
-   * automatically when the server is started with the `DEBUG` environment variable
-   * set to a truthy value (true/1/yes).
+   * Deprecated no-op. Generation pipeline HTML tracing has been removed.
    */
   debug?: boolean;
 
@@ -148,6 +144,13 @@ export interface ImageGenerateParams {
    * Base64 encoded reference image for context
    */
   image_base64?: string | null;
+
+  /**
+   * When true, the response includes `gemini_base_url` — the raw Gemini recreation
+   * before any text overlay is composited. Applies to relayout and consistency
+   * modes. When false or omitted, only the final output is returned.
+   */
+  make_editable?: boolean | null;
 
   /**
    * Optional base64 PNG mask for inpainting (only honored on gpt-image-\* models).

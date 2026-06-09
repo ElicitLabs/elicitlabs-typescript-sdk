@@ -39,6 +39,7 @@ describe('resource images', () => {
       font_reference_ttf_base64: ['string'],
       font_reference_ttf_url: ['string'],
       image_base64: 'image_base64',
+      make_editable: true,
       mask_base64: 'mask_base64',
       max_reasoning_iterations: 1,
       mode: 'fast',

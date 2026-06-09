@@ -100,7 +100,7 @@ describe('resource data', () => {
       filename: 'filename',
       notification_email: 'dev@stainless.com',
       persona_id: 'persona_id',
-      project_id: 'project_id',
+      project_id: 'project-456',
       session_id: 'session_id',
       target_ad_id: 'target_ad_id',
       timestamp: '2024-01-01T12:00:00Z',

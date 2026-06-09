@@ -17,17 +17,11 @@ import * as Errors from './core/error';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import { Audio, AudioGenerateParams, AudioGenerateResponse } from './resources/audio';
-import { Chat, ChatCreateCompletionParams, ChatCreateCompletionResponse } from './resources/chat';
+import { Audio } from './resources/audio';
+import { Chat } from './resources/chat';
 import { Health, HealthCheckResponse } from './resources/health';
 import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
-import {
-  Modal,
-  ModalLearnParams,
-  ModalLearnResponse,
-  ModalQueryParams,
-  ModalQueryResponse,
-} from './resources/modal';
+import { Modal } from './resources/modal';
 import {
   ProjectCloneParams,
   ProjectCloneResponse,
@@ -41,9 +35,9 @@ import {
   ProjectRetrieveResponse,
   Projects,
 } from './resources/projects';
-import { Text, TextGenerateParams, TextGenerateResponse } from './resources/text';
+import { Text } from './resources/text';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
-import { Video, VideoGenerateParams, VideoGenerateResponse } from './resources/video';
+import { Video } from './resources/video';
 import { Auth } from './resources/auth/auth';
 import {
   Data,
@@ -54,14 +48,7 @@ import {
   DataIngestParams,
   DataIngestResponse,
 } from './resources/data/data';
-import {
-  PersonaCreateParams,
-  PersonaCreateResponse,
-  PersonaListLinkedResponse,
-  PersonaListResponse,
-  PersonaRetrieveResponse,
-  Personas,
-} from './resources/personas/personas';
+import { Personas } from './resources/personas/personas';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -804,13 +791,7 @@ ElicitClient.Video = Video;
 export declare namespace ElicitClient {
   export type RequestOptions = Opts.RequestOptions;
 
-  export {
-    Modal as Modal,
-    type ModalLearnResponse as ModalLearnResponse,
-    type ModalQueryResponse as ModalQueryResponse,
-    type ModalLearnParams as ModalLearnParams,
-    type ModalQueryParams as ModalQueryParams,
-  };
+  export { Modal as Modal };
 
   export {
     Users as Users,
@@ -832,14 +813,7 @@ export declare namespace ElicitClient {
 
   export { Auth as Auth };
 
-  export {
-    Personas as Personas,
-    type PersonaCreateResponse as PersonaCreateResponse,
-    type PersonaRetrieveResponse as PersonaRetrieveResponse,
-    type PersonaListResponse as PersonaListResponse,
-    type PersonaListLinkedResponse as PersonaListLinkedResponse,
-    type PersonaCreateParams as PersonaCreateParams,
-  };
+  export { Personas as Personas };
 
   export {
     Projects as Projects,
@@ -855,17 +829,9 @@ export declare namespace ElicitClient {
     type ProjectCloneParams as ProjectCloneParams,
   };
 
-  export {
-    Chat as Chat,
-    type ChatCreateCompletionResponse as ChatCreateCompletionResponse,
-    type ChatCreateCompletionParams as ChatCreateCompletionParams,
-  };
+  export { Chat as Chat };
 
-  export {
-    Text as Text,
-    type TextGenerateResponse as TextGenerateResponse,
-    type TextGenerateParams as TextGenerateParams,
-  };
+  export { Text as Text };
 
   export {
     Images as Images,
@@ -873,15 +839,7 @@ export declare namespace ElicitClient {
     type ImageGenerateParams as ImageGenerateParams,
   };
 
-  export {
-    Audio as Audio,
-    type AudioGenerateResponse as AudioGenerateResponse,
-    type AudioGenerateParams as AudioGenerateParams,
-  };
+  export { Audio as Audio };
 
-  export {
-    Video as Video,
-    type VideoGenerateResponse as VideoGenerateResponse,
-    type VideoGenerateParams as VideoGenerateParams,
-  };
+  export { Video as Video };
 }

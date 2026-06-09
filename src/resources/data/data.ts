@@ -63,18 +63,15 @@ export class Data extends APIResource {
   /**
    * Ingest data for asynchronous processing
    *
-   *     Accepts various content types (text, messages, files) and processes them to extract information
-   *     and integrate it into the user's memory system. Returns a job_id for tracking status.
+   *     Accepts creative project content and processes it through the hierarchical
+   *     memory pipeline. Returns a job_id for tracking status.
    *
    *     **Entity Resolution:**
    *     - user_id (str, required): Always required - the main user identifier
-   *     - persona_id (str, optional): If provided, data is ingested to this persona instead of user
-   *     - project_id (str, optional): If provided, data is ingested to this project (inherits from user)
-   *
-   *     Priority: persona_id > project_id > user_id
+   *     - project_id (str, required): Must refer to a creative_design project with use_hierarchical=true
    *
    *     **Request Parameters:**
-   *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "audio", "file"
+   *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "file", "font", "website"
    *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
    *     - content_description (str, optional): Description of the content being ingested (e.g., 'Logo design concepts', 'Meeting notes')
    *     - session_id (str, optional): Groups related content for session-based retrieval
@@ -266,8 +263,9 @@ export interface DataGetUploadURLParams {
   content_description?: string | null;
 
   /**
-   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
-   * If omitted, the category is auto-detected after the file is uploaded.
+   * Content category: 'text', 'image', 'video', 'pdf', 'messages', 'file', 'font',
+   * or 'website'. If omitted, the category is auto-detected after the file is
+   * uploaded.
    */
   content_type?: string | null;
 
@@ -333,8 +331,9 @@ export interface DataIngestParams {
   content_description?: string | null;
 
   /**
-   * Content category: 'text', 'image', 'video', 'pdf', 'audio', 'messages', 'file'.
-   * If omitted, the category is auto-detected from the uploaded file bytes.
+   * Content category: 'text', 'image', 'video', 'pdf', 'messages', 'file', 'font',
+   * or 'website'. If omitted, the category is auto-detected from the uploaded file
+   * bytes.
    */
   content_type?: string | null;
 

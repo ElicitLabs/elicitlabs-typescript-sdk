@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Audio, type AudioGenerateResponse, type AudioGenerateParams } from './audio';
+export { Audio } from './audio';
 export { Auth } from './auth/auth';
-export { Chat, type ChatCreateCompletionResponse, type ChatCreateCompletionParams } from './chat';
+export { Chat } from './chat';
 export {
   Data,
   type DataConfirmUploadResponse,
@@ -14,21 +14,8 @@ export {
 } from './data/data';
 export { Health, type HealthCheckResponse } from './health';
 export { Images, type ImageGenerateResponse, type ImageGenerateParams } from './images';
-export {
-  Modal,
-  type ModalLearnResponse,
-  type ModalQueryResponse,
-  type ModalLearnParams,
-  type ModalQueryParams,
-} from './modal';
-export {
-  Personas,
-  type PersonaCreateResponse,
-  type PersonaRetrieveResponse,
-  type PersonaListResponse,
-  type PersonaListLinkedResponse,
-  type PersonaCreateParams,
-} from './personas/personas';
+export { Modal } from './modal';
+export { Personas } from './personas/personas';
 export {
   Projects,
   type ProjectCreateResponse,
@@ -42,6 +29,6 @@ export {
   type ProjectDeleteParams,
   type ProjectCloneParams,
 } from './projects';
-export { Text, type TextGenerateResponse, type TextGenerateParams } from './text';
+export { Text } from './text';
 export { Users, type UserCreateOrGetResponse, type UserCreateOrGetParams } from './users';
-export { Video, type VideoGenerateResponse, type VideoGenerateParams } from './video';
+export { Video } from './video';

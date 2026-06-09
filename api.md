@@ -1,15 +1,5 @@
 # Modal
 
-Types:
-
-- <code><a href="./src/resources/modal.ts">ModalLearnResponse</a></code>
-- <code><a href="./src/resources/modal.ts">ModalQueryResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/modal/learn">client.modal.<a href="./src/resources/modal.ts">learn</a>({ ...params }) -> ModalLearnResponse</code>
-- <code title="post /v1/modal/query">client.modal.<a href="./src/resources/modal.ts">query</a>({ ...params }) -> ModalQueryResponse</code>
-
 # Users
 
 Types:
@@ -72,31 +62,7 @@ Methods:
 
 # Personas
 
-Types:
-
-- <code><a href="./src/resources/personas/personas.ts">PersonaCreateResponse</a></code>
-- <code><a href="./src/resources/personas/personas.ts">PersonaRetrieveResponse</a></code>
-- <code><a href="./src/resources/personas/personas.ts">PersonaListResponse</a></code>
-- <code><a href="./src/resources/personas/personas.ts">PersonaListLinkedResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/personas">client.personas.<a href="./src/resources/personas/personas.ts">create</a>({ ...params }) -> PersonaCreateResponse</code>
-- <code title="get /v1/personas/{persona_id}">client.personas.<a href="./src/resources/personas/personas.ts">retrieve</a>(personaID) -> PersonaRetrieveResponse</code>
-- <code title="get /v1/personas">client.personas.<a href="./src/resources/personas/personas.ts">list</a>() -> PersonaListResponse</code>
-- <code title="get /v1/personas/linked/{user_id}">client.personas.<a href="./src/resources/personas/personas.ts">listLinked</a>(userID) -> PersonaListLinkedResponse</code>
-
 ## Link
-
-Types:
-
-- <code><a href="./src/resources/personas/link.ts">LinkCreateResponse</a></code>
-- <code><a href="./src/resources/personas/link.ts">LinkDeleteResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/personas/{persona_id}/link">client.personas.link.<a href="./src/resources/personas/link.ts">create</a>(personaID, { ...params }) -> LinkCreateResponse</code>
-- <code title="delete /v1/personas/{persona_id}/link/{user_id}">client.personas.link.<a href="./src/resources/personas/link.ts">delete</a>(userID, { ...params }) -> LinkDeleteResponse</code>
 
 # Projects
 
@@ -118,23 +84,7 @@ Methods:
 
 # Chat
 
-Types:
-
-- <code><a href="./src/resources/chat.ts">ChatCreateCompletionResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/chat/completions">client.chat.<a href="./src/resources/chat.ts">createCompletion</a>({ ...params }) -> ChatCreateCompletionResponse</code>
-
 # Text
-
-Types:
-
-- <code><a href="./src/resources/text.ts">TextGenerateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/text/generations">client.text.<a href="./src/resources/text.ts">generate</a>({ ...params }) -> TextGenerateResponse</code>
 
 # Images
 
@@ -148,20 +98,4 @@ Methods:
 
 # Audio
 
-Types:
-
-- <code><a href="./src/resources/audio.ts">AudioGenerateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/audio/generations">client.audio.<a href="./src/resources/audio.ts">generate</a>({ ...params }) -> AudioGenerateResponse</code>
-
 # Video
-
-Types:
-
-- <code><a href="./src/resources/video.ts">VideoGenerateResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/video/generations">client.video.<a href="./src/resources/video.ts">generate</a>({ ...params }) -> VideoGenerateResponse</code>

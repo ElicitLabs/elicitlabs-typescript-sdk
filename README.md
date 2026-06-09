@@ -26,12 +26,9 @@ const client = new ElicitClient({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const response = await client.chat.createCompletion({
-  messages: [{ content: 'string', role: 'role' }],
-  user_id: 'user_id',
-});
+const response = await client.users.createOrGet({ email: 'user@example.com', name: 'John Doe' });
 
-console.log(response.session_id);
+console.log(response.user_id);
 ```
 
 ### Request & Response types
@@ -46,13 +43,8 @@ const client = new ElicitClient({
   apiKey: process.env['ELICIT_LABS_API_KEY'], // This is the default and can be omitted
 });
 
-const params: ElicitClient.ChatCreateCompletionParams = {
-  messages: [{ content: 'string', role: 'role' }],
-  user_id: 'user_id',
-};
-const response: ElicitClient.ChatCreateCompletionResponse = await client.chat.createCompletion(
-  params,
-);
+const params: ElicitClient.UserCreateOrGetParams = { email: 'user@example.com', name: 'John Doe' };
+const response: ElicitClient.UserCreateOrGetResponse = await client.users.createOrGet(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -65,8 +57,8 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const response = await client.chat
-  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
+const response = await client.users
+  .createOrGet({ email: 'user@example.com', name: 'John Doe' })
   .catch(async (err) => {
     if (err instanceof ElicitClient.APIError) {
       console.log(err.status); // 400
@@ -107,7 +99,7 @@ const client = new ElicitClient({
 });
 
 // Or, configure per-request:
-await client.chat.createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' }, {
+await client.users.createOrGet({ email: 'user@example.com', name: 'John Doe' }, {
   maxRetries: 5,
 });
 ```
@@ -124,7 +116,7 @@ const client = new ElicitClient({
 });
 
 // Override per-request:
-await client.chat.createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' }, {
+await client.users.createOrGet({ email: 'user@example.com', name: 'John Doe' }, {
   timeout: 5 * 1000,
 });
 ```
@@ -147,17 +139,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new ElicitClient();
 
-const response = await client.chat
-  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
+const response = await client.users
+  .createOrGet({ email: 'user@example.com', name: 'John Doe' })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: response, response: raw } = await client.chat
-  .createCompletion({ messages: [{ content: 'string', role: 'role' }], user_id: 'user_id' })
+const { data: response, response: raw } = await client.users
+  .createOrGet({ email: 'user@example.com', name: 'John Doe' })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(response.session_id);
+console.log(response.user_id);
 ```
 
 ### Logging
@@ -237,7 +229,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.chat.createCompletion({
+client.users.createOrGet({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
