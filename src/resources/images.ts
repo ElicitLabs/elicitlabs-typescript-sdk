@@ -83,8 +83,8 @@ export interface ImageGenerateParams {
   user_id: string;
 
   /**
-   * Relayout mode only: the reference ad's ObjectNode node_id to recreate. Either
-   * this OR `auto_select_ad` must be set.
+   * Relayout mode only: the reference ad asset's node_id to recreate. Either this OR
+   * `auto_select_ad` must be set.
    */
   ad_id?: string | null;
 

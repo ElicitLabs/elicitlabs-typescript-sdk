@@ -98,6 +98,7 @@ describe('resource data', () => {
       crawl_options: { foo: 'bar' },
       enable_planner: true,
       filename: 'filename',
+      html_options: { foo: 'bar' },
       notification_email: 'dev@stainless.com',
       persona_id: 'persona_id',
       project_id: 'project-456',

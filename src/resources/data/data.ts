@@ -71,7 +71,7 @@ export class Data extends APIResource {
    *     - project_id (str, required): Must refer to a creative_design project with use_hierarchical=true
    *
    *     **Request Parameters:**
-   *     - content_type (str, required): One of: "text", "messages", "pdf", "word", "image", "video", "file", "font", "website"
+   *     - content_type (str, required): One of: "text", "html", "messages", "pdf", "word", "image", "video", "file", "font", "website"
    *     - payload (str|dict|list, required): Content data (text string, message list, or base64 for files)
    *     - content_description (str, optional): Description of the content being ingested (e.g., 'Logo design concepts', 'Meeting notes')
    *     - session_id (str, optional): Groups related content for session-based retrieval
@@ -263,9 +263,9 @@ export interface DataGetUploadURLParams {
   content_description?: string | null;
 
   /**
-   * Content category: 'text', 'image', 'video', 'pdf', 'messages', 'file', 'font',
-   * or 'website'. If omitted, the category is auto-detected after the file is
-   * uploaded.
+   * Content category: 'text', 'html', 'image', 'video', 'pdf', 'messages', 'file',
+   * 'font', or 'website'. If omitted, the category is auto-detected after the file
+   * is uploaded.
    */
   content_type?: string | null;
 
@@ -331,9 +331,9 @@ export interface DataIngestParams {
   content_description?: string | null;
 
   /**
-   * Content category: 'text', 'image', 'video', 'pdf', 'messages', 'file', 'font',
-   * or 'website'. If omitted, the category is auto-detected from the uploaded file
-   * bytes.
+   * Content category: 'text', 'html', 'image', 'video', 'pdf', 'messages', 'file',
+   * 'font', or 'website'. If omitted, the category is auto-detected from the
+   * uploaded file bytes.
    */
   content_type?: string | null;
 
@@ -354,6 +354,12 @@ export interface DataIngestParams {
    * Filename of the uploaded file
    */
   filename?: string | null;
+
+  /**
+   * Only used when content_type='html'. Optional render knobs: viewport_width,
+   * viewport_height, timeout_ms, omit_background.
+   */
+  html_options?: { [key: string]: unknown } | null;
 
   /**
    * Optional email address to notify when the job reaches a terminal state.
