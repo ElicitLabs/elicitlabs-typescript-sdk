@@ -12,27 +12,7 @@ Methods:
 
 # Data
 
-Types:
-
-- <code><a href="./src/resources/data/data.ts">DataConfirmUploadResponse</a></code>
-- <code><a href="./src/resources/data/data.ts">DataGetUploadURLResponse</a></code>
-- <code><a href="./src/resources/data/data.ts">DataIngestResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/data/ingest/confirm-upload">client.data.<a href="./src/resources/data/data.ts">confirmUpload</a>({ ...params }) -> DataConfirmUploadResponse</code>
-- <code title="post /v1/data/ingest/upload-url">client.data.<a href="./src/resources/data/data.ts">getUploadURL</a>({ ...params }) -> DataGetUploadURLResponse</code>
-- <code title="post /v1/data/ingest">client.data.<a href="./src/resources/data/data.ts">ingest</a>({ ...params }) -> DataIngestResponse</code>
-
 ## Job
-
-Types:
-
-- <code><a href="./src/resources/data/job.ts">JobCancelResponse</a></code>
-
-Methods:
-
-- <code title="post /v1/data/job/cancel">client.data.job.<a href="./src/resources/data/job.ts">cancel</a>({ ...params }) -> JobCancelResponse</code>
 
 # Health
 
@@ -72,7 +52,6 @@ Types:
 - <code><a href="./src/resources/projects.ts">ProjectRetrieveResponse</a></code>
 - <code><a href="./src/resources/projects.ts">ProjectListResponse</a></code>
 - <code><a href="./src/resources/projects.ts">ProjectDeleteResponse</a></code>
-- <code><a href="./src/resources/projects.ts">ProjectCloneResponse</a></code>
 
 Methods:
 
@@ -80,7 +59,6 @@ Methods:
 - <code title="get /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">retrieve</a>(projectID, { ...params }) -> ProjectRetrieveResponse</code>
 - <code title="get /v1/projects">client.projects.<a href="./src/resources/projects.ts">list</a>({ ...params }) -> ProjectListResponse</code>
 - <code title="delete /v1/projects/{project_id}">client.projects.<a href="./src/resources/projects.ts">delete</a>(projectID, { ...params }) -> ProjectDeleteResponse</code>
-- <code title="post /v1/projects/clone">client.projects.<a href="./src/resources/projects.ts">clone</a>({ ...params }) -> ProjectCloneResponse</code>
 
 # Chat
 

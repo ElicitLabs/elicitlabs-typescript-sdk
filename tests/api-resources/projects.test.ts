@@ -90,29 +90,4 @@ describe('resource projects', () => {
       client.projects.delete('project_id', { user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(ElicitClient.NotFoundError);
   });
-
-  // Mock server tests are disabled
-  test.skip('clone: only required params', async () => {
-    const responsePromise = client.projects.clone({ project_id: 'project_id' });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('clone: required and optional params', async () => {
-    const response = await client.projects.clone({
-      project_id: 'project_id',
-      callback_url: 'callback_url',
-      description: 'description',
-      name: 'x',
-      notification_email: 'dev@stainless.com',
-      source_user_id: 'source_user_id',
-      target_user_id: 'target_user_id',
-    });
-  });
 });

@@ -10,10 +10,7 @@ const client = new ElicitClient({
 describe('resource images', () => {
   // Mock server tests are disabled
   test.skip('generate: only required params', async () => {
-    const responsePromise = client.images.generate({
-      text_input: 'A golden retriever in a space suit',
-      user_id: 'user_123',
-    });
+    const responsePromise = client.images.generate({ text_input: 'text_input', user_id: 'user_id' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -26,36 +23,17 @@ describe('resource images', () => {
   // Mock server tests are disabled
   test.skip('generate: required and optional params', async () => {
     const response = await client.images.generate({
-      text_input: 'A golden retriever in a space suit',
-      user_id: 'user_123',
-      ad_id: 'ad_id',
-      aspect_ratio: '1:1',
-      audio_base64: 'audio_base64',
-      auto_select_ad: true,
-      debug: true,
-      disabled_learning: true,
-      font_reference_image_base64: ['string'],
-      font_reference_image_url: ['string'],
-      font_reference_ttf_base64: ['string'],
-      font_reference_ttf_url: ['string'],
-      image_base64: 'image_base64',
+      text_input: 'text_input',
+      user_id: 'user_id',
+      aspect_ratio: 'aspect_ratio',
+      edit: { source_generation_id: 'source_generation_id' },
       make_editable: true,
-      mask_base64: 'mask_base64',
-      max_reasoning_iterations: 1,
-      mode: 'fast',
-      model: 'gemini-3.1-flash',
-      persona_id: 'persona_id',
-      pinned_entity_ids: ['string'],
-      pinned_folder_ids: ['string'],
-      project_id: 'proj_ABC',
-      resolution: '2K',
-      seed: 12345,
-      session_id: 'session_id',
-      source_generation_id: 'source_generation_id',
-      target_aspect_ratios: ['string'],
-      temperature: 0,
-      use_reasoning: false,
-      video_base64: 'video_base64',
+      mode: 'default',
+      model: 'model',
+      project_id: 'project_id',
+      relayout: { ad_id: 'ad_id', target_aspect_ratios: ['string'] },
+      resolution: '1K',
+      seed: 0,
     });
   });
 });

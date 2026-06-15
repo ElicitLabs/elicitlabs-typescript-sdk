@@ -23,8 +23,6 @@ import { Health, HealthCheckResponse } from './resources/health';
 import { ImageGenerateParams, ImageGenerateResponse, Images } from './resources/images';
 import { Modal } from './resources/modal';
 import {
-  ProjectCloneParams,
-  ProjectCloneResponse,
   ProjectCreateParams,
   ProjectCreateResponse,
   ProjectDeleteParams,
@@ -39,15 +37,7 @@ import { Text } from './resources/text';
 import { UserCreateOrGetParams, UserCreateOrGetResponse, Users } from './resources/users';
 import { Video } from './resources/video';
 import { Auth } from './resources/auth/auth';
-import {
-  Data,
-  DataConfirmUploadParams,
-  DataConfirmUploadResponse,
-  DataGetUploadURLParams,
-  DataGetUploadURLResponse,
-  DataIngestParams,
-  DataIngestResponse,
-} from './resources/data/data';
+import { Data } from './resources/data/data';
 import { Personas } from './resources/personas/personas';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
@@ -799,15 +789,7 @@ export declare namespace ElicitClient {
     type UserCreateOrGetParams as UserCreateOrGetParams,
   };
 
-  export {
-    Data as Data,
-    type DataConfirmUploadResponse as DataConfirmUploadResponse,
-    type DataGetUploadURLResponse as DataGetUploadURLResponse,
-    type DataIngestResponse as DataIngestResponse,
-    type DataConfirmUploadParams as DataConfirmUploadParams,
-    type DataGetUploadURLParams as DataGetUploadURLParams,
-    type DataIngestParams as DataIngestParams,
-  };
+  export { Data as Data };
 
   export { Health as Health, type HealthCheckResponse as HealthCheckResponse };
 
@@ -821,12 +803,10 @@ export declare namespace ElicitClient {
     type ProjectRetrieveResponse as ProjectRetrieveResponse,
     type ProjectListResponse as ProjectListResponse,
     type ProjectDeleteResponse as ProjectDeleteResponse,
-    type ProjectCloneResponse as ProjectCloneResponse,
     type ProjectCreateParams as ProjectCreateParams,
     type ProjectRetrieveParams as ProjectRetrieveParams,
     type ProjectListParams as ProjectListParams,
     type ProjectDeleteParams as ProjectDeleteParams,
-    type ProjectCloneParams as ProjectCloneParams,
   };
 
   export { Chat as Chat };
