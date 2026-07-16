@@ -88,6 +88,11 @@ export interface ImageGenerateParams {
   aspect_ratio?: string;
 
   /**
+   * Optional explicit visual references for consistency generation.
+   */
+  consistency?: ImageGenerateParams.Consistency | null;
+
+  /**
    * Options accepted only when `mode='edit'`.
    */
   edit?: ImageGenerateParams.Edit | null;
@@ -136,6 +141,15 @@ export interface ImageGenerateParams {
 
 export namespace ImageGenerateParams {
   /**
+   * Optional explicit visual references for consistency generation.
+   */
+  export interface Consistency {
+    reference_ad_ids?: Array<string>;
+
+    reference_generation_ids?: Array<string>;
+  }
+
+  /**
    * Options accepted only when `mode='edit'`.
    */
   export interface Edit {
@@ -153,7 +167,22 @@ export namespace ImageGenerateParams {
     /**
      * The reference AdAsset node_id to recreate.
      */
-    ad_id: string;
+    ad_id?: string | null;
+
+    /**
+     * Exact per-section copy to typeset for this localized output.
+     */
+    copy_overrides?: { [key: string]: string };
+
+    /**
+     * Optional BCP-47 locale for this output.
+     */
+    locale?: string | null;
+
+    /**
+     * Optional completed relayout generation to reuse as this variant's source.
+     */
+    reuse_base_generation_id?: string | null;
 
     /**
      * List of target aspect ratios (e.g. ['1:1', '9:16']). Defaults to ['1:1'] when

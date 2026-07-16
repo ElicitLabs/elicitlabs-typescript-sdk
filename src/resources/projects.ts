@@ -140,6 +140,21 @@ export namespace ProjectCreateResponse {
     user_name: string | null;
 
     /**
+     * Optional: project belongs to this campaign. Drives co-branded rule fan-out.
+     */
+    campaign_id?: string | null;
+
+    /**
+     * Optional: used by ingest when an upload omits brand_ids.
+     */
+    default_brand_id?: string | null;
+
+    /**
+     * Whether uncertain brand/campaign/DAM placement asks for confirmation.
+     */
+    ingest_autonomy_mode?: 'assisted' | 'autonomous';
+
+    /**
      * Project type override: 'creative_design' or 'general'. When set, skips LLM
      * classification.
      */
@@ -183,6 +198,21 @@ export namespace ProjectRetrieveResponse {
     user_id: string;
 
     user_name: string | null;
+
+    /**
+     * Optional: project belongs to this campaign. Drives co-branded rule fan-out.
+     */
+    campaign_id?: string | null;
+
+    /**
+     * Optional: used by ingest when an upload omits brand_ids.
+     */
+    default_brand_id?: string | null;
+
+    /**
+     * Whether uncertain brand/campaign/DAM placement asks for confirmation.
+     */
+    ingest_autonomy_mode?: 'assisted' | 'autonomous';
 
     /**
      * Project type override: 'creative_design' or 'general'. When set, skips LLM
@@ -245,6 +275,21 @@ export namespace ProjectListResponse {
     user_name: string | null;
 
     /**
+     * Optional: project belongs to this campaign. Drives co-branded rule fan-out.
+     */
+    campaign_id?: string | null;
+
+    /**
+     * Optional: used by ingest when an upload omits brand_ids.
+     */
+    default_brand_id?: string | null;
+
+    /**
+     * Whether uncertain brand/campaign/DAM placement asks for confirmation.
+     */
+    ingest_autonomy_mode?: 'assisted' | 'autonomous';
+
+    /**
      * Project type override: 'creative_design' or 'general'. When set, skips LLM
      * classification.
      */
@@ -278,6 +323,16 @@ export interface ProjectCreateParams {
    * Project name
    */
   name: string;
+
+  /**
+   * Optional: campaign this project belongs to (drives co-branded rule fan-out).
+   */
+  campaign_id?: string | null;
+
+  /**
+   * Optional: brand used by ingest when an upload omits brand_ids.
+   */
+  default_brand_id?: string | null;
 
   /**
    * Optional project description

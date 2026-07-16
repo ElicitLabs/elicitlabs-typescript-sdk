@@ -24,6 +24,8 @@ describe('resource projects', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.projects.create({
       name: 'My Research Project',
+      campaign_id: 'campaign_id',
+      default_brand_id: 'default_brand_id',
       description: 'A project for organizing research notes and findings',
       project_type: 'general',
       use_hierarchical: true,
