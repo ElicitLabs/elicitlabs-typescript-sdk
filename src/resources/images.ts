@@ -170,6 +170,12 @@ export namespace ImageGenerateParams {
     ad_id?: string | null;
 
     /**
+     * When true and locale is set, translate source section copy automatically.
+     * Explicit copy_overrides take precedence per section.
+     */
+    auto_translate_copy?: boolean;
+
+    /**
      * Exact per-section copy to typeset for this localized output.
      */
     copy_overrides?: { [key: string]: string };
@@ -178,6 +184,13 @@ export namespace ImageGenerateParams {
      * Optional BCP-47 locale for this output.
      */
     locale?: string | null;
+
+    /**
+     * 'standard' preserves the existing relayout output. 'full_editable' adds a
+     * design-compatible HTML reproduction, matching browser-rendered PNG, and Figma
+     * layer manifest after the normal relayout completes.
+     */
+    output_editability?: 'standard' | 'full_editable';
 
     /**
      * Optional completed relayout generation to reuse as this variant's source.

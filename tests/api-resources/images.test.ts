@@ -34,8 +34,10 @@ describe('resource images', () => {
       project_id: 'project_id',
       relayout: {
         ad_id: 'ad_id',
+        auto_translate_copy: true,
         copy_overrides: { foo: 'string' },
         locale: 'locale',
+        output_editability: 'standard',
         reuse_base_generation_id: 'reuse_base_generation_id',
         target_aspect_ratios: ['string'],
       },
