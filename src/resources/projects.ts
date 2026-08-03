@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -24,8 +25,16 @@ export class Projects extends APIResource {
    * });
    * ```
    */
-  create(body: ProjectCreateParams, options?: RequestOptions): APIPromise<ProjectCreateResponse> {
-    return this._client.post('/v1/projects', { body, ...options });
+  create(params: ProjectCreateParams, options?: RequestOptions): APIPromise<ProjectCreateResponse> {
+    const { 'X-Organization-ID': xOrganizationID, ...body } = params;
+    return this._client.post('/v1/projects', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(xOrganizationID != null ? { 'X-Organization-ID': xOrganizationID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -48,10 +57,18 @@ export class Projects extends APIResource {
    */
   retrieve(
     projectID: string,
-    query: ProjectRetrieveParams | null | undefined = {},
+    params: ProjectRetrieveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ProjectRetrieveResponse> {
-    return this._client.get(path`/v1/projects/${projectID}`, { query, ...options });
+    const { 'X-Organization-ID': xOrganizationID, ...query } = params ?? {};
+    return this._client.get(path`/v1/projects/${projectID}`, {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xOrganizationID != null ? { 'X-Organization-ID': xOrganizationID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -70,10 +87,18 @@ export class Projects extends APIResource {
    * ```
    */
   list(
-    query: ProjectListParams | null | undefined = {},
+    params: ProjectListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ProjectListResponse> {
-    return this._client.get('/v1/projects', { query, ...options });
+    const { 'X-Organization-ID': xOrganizationID, ...query } = params ?? {};
+    return this._client.get('/v1/projects', {
+      query,
+      ...options,
+      headers: buildHeaders([
+        { ...(xOrganizationID != null ? { 'X-Organization-ID': xOrganizationID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -98,8 +123,15 @@ export class Projects extends APIResource {
     params: ProjectDeleteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ProjectDeleteResponse> {
-    const { user_id } = params ?? {};
-    return this._client.delete(path`/v1/projects/${projectID}`, { query: { user_id }, ...options });
+    const { user_id, 'X-Organization-ID': xOrganizationID } = params ?? {};
+    return this._client.delete(path`/v1/projects/${projectID}`, {
+      query: { user_id },
+      ...options,
+      headers: buildHeaders([
+        { ...(xOrganizationID != null ? { 'X-Organization-ID': xOrganizationID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -320,55 +352,86 @@ export interface ProjectDeleteResponse {
 
 export interface ProjectCreateParams {
   /**
-   * Project name
+   * Body param: Project name
    */
   name: string;
 
   /**
-   * Optional: campaign this project belongs to (drives co-branded rule fan-out).
+   * Body param: Optional: campaign this project belongs to (drives co-branded rule
+   * fan-out).
    */
   campaign_id?: string | null;
 
   /**
-   * Optional: brand used by ingest when an upload omits brand_ids.
+   * Body param: Optional: brand used by ingest when an upload omits brand_ids.
    */
   default_brand_id?: string | null;
 
   /**
-   * Optional project description
+   * Body param: Optional project description
    */
   description?: string | null;
 
   /**
-   * Project type override. When set, skips LLM classification during content
-   * ingestion. Use 'creative_design' for artistic/design projects, 'general' for
-   * documentation/business content.
+   * Body param: Project type override. When set, skips LLM classification during
+   * content ingestion. Use 'creative_design' for artistic/design projects, 'general'
+   * for documentation/business content.
    */
   project_type?: 'creative_design' | 'general';
 
   /**
-   * When True (default), creative_design projects use the hierarchical ingestion
-   * pipeline. Set to False to skip hierarchical and go directly to creative ingest.
+   * Body param: When True (default), creative_design projects use the hierarchical
+   * ingestion pipeline. Set to False to skip hierarchical and go directly to
+   * creative ingest.
    */
   use_hierarchical?: boolean;
 
   /**
-   * User ID to associate the project with. If not provided, uses the authenticated
-   * user's ID.
+   * Body param: User ID to associate the project with. If not provided, uses the
+   * authenticated user's ID.
    */
   user_id?: string | null;
+
+  /**
+   * Header param
+   */
+  'X-Organization-ID'?: string;
 }
 
 export interface ProjectRetrieveParams {
+  /**
+   * Query param
+   */
   user_id?: string | null;
+
+  /**
+   * Header param
+   */
+  'X-Organization-ID'?: string;
 }
 
 export interface ProjectListParams {
+  /**
+   * Query param
+   */
   user_id?: string | null;
+
+  /**
+   * Header param
+   */
+  'X-Organization-ID'?: string;
 }
 
 export interface ProjectDeleteParams {
+  /**
+   * Query param
+   */
   user_id?: string | null;
+
+  /**
+   * Header param
+   */
+  'X-Organization-ID'?: string;
 }
 
 export declare namespace Projects {

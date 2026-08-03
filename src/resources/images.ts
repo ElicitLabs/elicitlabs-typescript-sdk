@@ -186,9 +186,9 @@ export namespace ImageGenerateParams {
     locale?: string | null;
 
     /**
-     * 'standard' preserves the existing relayout output. 'full_editable' adds a
-     * design-compatible HTML reproduction, matching browser-rendered PNG, and Figma
-     * layer manifest after the normal relayout completes.
+     * 'standard' preserves the existing relayout output. 'full_editable' repositions
+     * the original editable components without regenerating their content or styling,
+     * and returns matching HTML, PNG, and Figma layers.
      */
     output_editability?: 'standard' | 'full_editable';
 

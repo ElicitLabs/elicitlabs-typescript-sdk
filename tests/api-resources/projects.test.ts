@@ -30,6 +30,7 @@ describe('resource projects', () => {
       project_type: 'general',
       use_hierarchical: true,
       user_id: '456e7890-e89b-12d3-a456-426614174001',
+      'X-Organization-ID': 'X-Organization-ID',
     });
   });
 
@@ -49,7 +50,11 @@ describe('resource projects', () => {
   test.skip('retrieve: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.projects.retrieve('project_id', { user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+      client.projects.retrieve(
+        'project_id',
+        { user_id: 'user_id', 'X-Organization-ID': 'X-Organization-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(ElicitClient.NotFoundError);
   });
 
@@ -69,7 +74,10 @@ describe('resource projects', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.projects.list({ user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+      client.projects.list(
+        { user_id: 'user_id', 'X-Organization-ID': 'X-Organization-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(ElicitClient.NotFoundError);
   });
 
@@ -89,7 +97,11 @@ describe('resource projects', () => {
   test.skip('delete: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.projects.delete('project_id', { user_id: 'user_id' }, { path: '/_stainless_unknown_path' }),
+      client.projects.delete(
+        'project_id',
+        { user_id: 'user_id', 'X-Organization-ID': 'X-Organization-ID' },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(ElicitClient.NotFoundError);
   });
 });
